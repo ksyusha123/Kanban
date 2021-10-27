@@ -6,7 +6,8 @@ namespace Kanban
     {
         static void Main(string[] args)
         {
-            Console.WriteLine("Hello World!");
+            var designTimeDbContextFactory = new DesignTimeDbContextFactory();
+            var kanbanDbContext = designTimeDbContextFactory.CreateDbContext(Array.Empty<string>());
         }
     }
 }
