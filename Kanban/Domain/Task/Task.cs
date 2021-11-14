@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using FluentSpecification.Composite;
 using FluentSpecification.Conclusion;
 using FluentSpecification.Embedded;
@@ -9,11 +10,13 @@ namespace Domain
     {
         private string name = string.Empty;
         private string description = string.Empty;
+        
+        public List<Comment> Comments { get; set; }
 
-        private Task(Guid id, string name, IExecutor? executor, string description, IState state) =>
+        private Task(Guid id, string name, IExecutor? executor, string description, State state) =>
             (Id, this.name, Executor, this.description, State) = (id, name, executor, description, state);
 
-        public Task(string name, IExecutor? executor, string description, IState state) =>
+        public Task(string name, IExecutor? executor, string description, State state) =>
             (Id, Name, Executor, Description, State) = (Guid.NewGuid(), name, executor, description, state);
 
         public Guid Id { get; }
@@ -54,6 +57,6 @@ namespace Domain
             }
         }
 
-        public IState State { get; set; }
+        public State State { get; set; }
     }
 }

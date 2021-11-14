@@ -17,7 +17,7 @@ namespace Persistence
             modelBuilder.Entity<Task>().Property(t => t.Name).HasMaxLength(100);
             modelBuilder.Entity<Task>().HasOne<IExecutor>().WithMany();
             modelBuilder.Entity<Task>().Property(t => t.Description).HasMaxLength(250);
-            modelBuilder.Entity<Task>().HasOne<IState>().WithMany();
+            modelBuilder.Entity<Task>().HasOne<State>().WithMany();
         }
     }
 }

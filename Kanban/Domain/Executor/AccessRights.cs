@@ -4,6 +4,7 @@
     {
         Read,
         Comment,
-        Write
+        Edit, 
+        Admin
     }
 }

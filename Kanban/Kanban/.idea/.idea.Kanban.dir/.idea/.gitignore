@@ -1,0 +1,13 @@
+﻿# Default ignored files
+/shelf/
+/workspace.xml
+# Rider ignored files
+/modules.xml
+/contentModel.xml
+/projectSettingsUpdater.xml
+/.idea.Kanban.iml
+# Datasource local storage ignored files
+/../../../../../../../../../../../:\Users\Пользователь\OneDrive\Рабочий стол\Kanban\Kanban\Kanban\.idea\.idea.Kanban.dir\.idea/dataSources/
+/dataSources.local.xml
+# Editor-based HTTP Client requests
+/httpRequests/
