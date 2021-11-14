@@ -11,8 +11,9 @@ namespace Domain
     {
         private string name = string.Empty;
         private string description = string.Empty;
+        private readonly List<Comment> comments = new();
 
-        public List<Comment> Comments { get; set; }
+        public IReadOnlyCollection<Comment> Comments => comments;
 
         private Task(Guid id, string name, IExecutor? executor, string description, State state) =>
             (Id, this.name, Executor, this.description, State) = (id, name, executor, description, state);
@@ -62,5 +63,7 @@ namespace Domain
 
         public State State { get; set; }
         public DateTime CreationTime { get; }
+
+        public void AddComment(Comment comment) => comments.Add(comment);
     }
 }
