@@ -4,6 +4,7 @@ using System.Linq;
 using FluentSpecification.Composite;
 using FluentSpecification.Conclusion;
 using FluentSpecification.Embedded;
+using Infrastucture;
 
 namespace Domain
 {

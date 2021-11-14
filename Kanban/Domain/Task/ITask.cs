@@ -1,4 +1,7 @@
-﻿namespace Domain
+﻿using System;
+using Infrastucture;
+
+namespace Domain
 {
     public interface ITask : IEntity
     {
@@ -6,5 +9,6 @@
         IExecutor? Executor { get; set; }
         string Description { get; set; }
         State State { get; set; }
+        DateTime CreationTime { get; }
     }
 }

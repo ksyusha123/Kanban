@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using FluentSpecification.Composite;
 using FluentSpecification.Conclusion;
 using FluentSpecification.Embedded;
+using Infrastucture;
 
 namespace Domain
 {
@@ -10,14 +11,16 @@ namespace Domain
     {
         private string name = string.Empty;
         private string description = string.Empty;
-        
+
         public List<Comment> Comments { get; set; }
 
         private Task(Guid id, string name, IExecutor? executor, string description, State state) =>
             (Id, this.name, Executor, this.description, State) = (id, name, executor, description, state);
 
-        public Task(string name, IExecutor? executor, string description, State state) =>
-            (Id, Name, Executor, Description, State) = (Guid.NewGuid(), name, executor, description, state);
+        public Task(string name, IExecutor? executor, string description, State state,
+            IDateTimeProvider dateTimeProvider) =>
+            (Id, Name, Executor, Description, State, CreationTime) =
+            (Guid.NewGuid(), name, executor, description, state, dateTimeProvider.GetCurrent());
 
         public Guid Id { get; }
 
@@ -58,5 +61,6 @@ namespace Domain
         }
 
         public State State { get; set; }
+        public DateTime CreationTime { get; }
     }
 }

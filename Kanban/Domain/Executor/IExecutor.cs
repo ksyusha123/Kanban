@@ -1,4 +1,6 @@
-﻿namespace Domain
+﻿using Infrastucture;
+
+namespace Domain
 {
     public interface IExecutor : IEntity
     {
