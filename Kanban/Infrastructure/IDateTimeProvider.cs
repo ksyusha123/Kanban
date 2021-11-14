@@ -1,9 +1,9 @@
 ﻿using System;
 
-namespace Infrastucture
+namespace Infrastructure
 {
     public interface IDateTimeProvider
     {
-        public DateTime GetCurrent();
+        DateTime GetCurrent();
     }
 }

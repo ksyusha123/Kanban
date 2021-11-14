@@ -1,9 +1,10 @@
 ﻿using System;
 using System.Threading.Tasks;
+using Infrastructure;
 
 namespace Application
 {
-    public interface IRepository<T>
+    public interface IRepository<T> where T : class, IEntity
     {
         Task<T> GetAsync(Guid id);
 

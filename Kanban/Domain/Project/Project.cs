@@ -4,7 +4,7 @@ using System.Linq;
 using FluentSpecification.Composite;
 using FluentSpecification.Conclusion;
 using FluentSpecification.Embedded;
-using Infrastucture;
+using Infrastructure;
 
 namespace Domain
 {
@@ -12,6 +12,17 @@ namespace Domain
     {
         private string _name = string.Empty;
         private string _description = string.Empty;
+        private readonly List<Table> _tables = new();
+
+        private Project()
+        {
+        }
+
+        public Project(string name, string description, IEnumerable<Table> tables) =>
+            (Id, Name, Description, _tables) = (Guid.NewGuid(), name, description, tables.ToList());
+
+        public Guid Id { get; }
+
         public string Name
         {
             get => _name;
@@ -28,7 +39,7 @@ namespace Domain
                     .ThrowIfNotSatisfied(this);
             }
         }
-        
+
         public string Description
         {
             get => _description;
@@ -45,16 +56,9 @@ namespace Domain
                     .ThrowIfNotSatisfied(this);
             }
         }
-        public Project(Guid id, IList<Table> tables) => (Id, _tables) = (id, tables);
 
-        public Guid Id { get; }
-        private readonly IList<Table> _tables;
+        public IEnumerable<Table> Tables => _tables.ToArray();
 
-        public IReadOnlyCollection<Table> Tables => _tables.ToArray();
-
-        public void AddTable(Table table)
-        {
-            _tables.Add(table);
-        }
+        public void AddTable(Table table) => _tables.Add(table);
     }
 }
