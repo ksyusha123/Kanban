@@ -10,28 +10,28 @@ namespace Persistence
 {
     public class Repository<T> : IRepository<T> where T : class, IEntity
     {
-        private readonly KanbanDbContext _context;
+        private readonly KanbanDbContext context;
 
-        public Repository(KanbanDbContext context) => this._context = context;
+        public Repository(KanbanDbContext context) => this.context = context;
 
         public async Task AddAsync(T entity)
         {
-            await _context.Set<T>().AddAsync(entity);
-            await _context.SaveChangesAsync();
+            await context.Set<T>().AddAsync(entity);
+            await context.SaveChangesAsync();
         }
 
         public async Task DeleteAsync(T entity)
         {
-            _context.Set<T>().Remove(entity);
-            await _context.SaveChangesAsync();
+            context.Set<T>().Remove(entity);
+            await context.SaveChangesAsync();
         }
 
-        public async Task<T> GetAsync(Guid id) => await _context.Set<T>().FirstOrDefaultAsync(e => e.Id == id);
+        public async Task<T> GetAsync(Guid id) => await context.Set<T>().FirstOrDefaultAsync(e => e.Id == id);
 
         public async Task UpdateAsync(T entity)
         {
-            _context.Set<T>().Update(entity);
-            await _context.SaveChangesAsync();
+            context.Set<T>().Update(entity);
+            await context.SaveChangesAsync();
         }
     }
 }

@@ -9,14 +9,14 @@ namespace Domain
 {
     public class Task : ITask
     {
-        private string _name = string.Empty;
-        private string _description = string.Empty;
-        private readonly List<Comment> _comments = new();
+        private string name = string.Empty;
+        private string description = string.Empty;
+        private readonly List<Comment> comments = new();
 
-        public IReadOnlyCollection<Comment> Comments => _comments;
+        public IReadOnlyCollection<Comment> Comments => comments;
 
         private Task(Guid id, string name, IExecutor? executor, string description, State state) =>
-            (Id, _name, Executor, _description, State) = (id, name, executor, description, state);
+            (Id, this.name, Executor, this.description, State) = (id, name, executor, description, state);
 
         public Task(string name, IExecutor? executor, string description, State state,
             IDateTimeProvider dateTimeProvider) =>
@@ -27,10 +27,10 @@ namespace Domain
 
         public string Name
         {
-            get => _name;
+            get => name;
             set
             {
-                _name = value;
+                name = value;
 
                 Specs
                     .For<ITask>()
@@ -46,10 +46,10 @@ namespace Domain
 
         public string Description
         {
-            get => _description;
+            get => description;
             set
             {
-                _description = value;
+                description = value;
 
                 Specs
                     .For<ITask>()
@@ -64,6 +64,6 @@ namespace Domain
         public State State { get; set; }
         public DateTime CreationTime { get; }
 
-        public void AddComment(Comment comment) => _comments.Add(comment);
+        public void AddComment(Comment comment) => comments.Add(comment);
     }
 }
