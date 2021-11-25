@@ -3,12 +3,12 @@ using Domain;
 
 namespace Application
 {
-    public class TaskAddInteractor
+    public class AssignExecutorToTaskInteractor
     {
         private readonly IRepository<Executor> _executorRepository;
         private readonly IRepository<Task> _taskRepository;
 
-        public TaskAddInteractor(IRepository<Executor> executorRepository, IRepository<Task> taskRepository) =>
+        public AssignExecutorToTaskInteractor(IRepository<Executor> executorRepository, IRepository<Task> taskRepository) =>
             (_executorRepository, _taskRepository) = (executorRepository, taskRepository);
 
         public async System.Threading.Tasks.Task AssignAsync(Guid executorId, Guid taskId)
