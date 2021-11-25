@@ -9,7 +9,5 @@ namespace Kanban
         public string Name { get; }
 
         public Task Execute(Message message, TelegramBotClient botClient);
-
-        // public bool Contains(Message message);
     }
 }
