@@ -1,19 +1,21 @@
 ﻿using System;
-using Infrastucture;
+using Infrastructure;
 
 namespace Domain
 {
-    public class Comment
+    public class Comment : IEntity
     {
-        public IExecutor Author { get; }
-        public string Message { get; }
-        public DateTime CreationTime { get; }
-
-        public Comment(IExecutor author, string message, IDateTimeProvider dateTimeProvider)
+        // ReSharper disable once UnusedMember.Local
+        private Comment()
         {
-            Author = author;
-            Message = message;
-            CreationTime = dateTimeProvider.GetCurrent();
         }
+
+        public Comment(Executor author, string message, IDateTimeProvider dateTimeProvider) =>
+            (Id, Author, Message, CreationTime) = (Guid.NewGuid(), author, message, dateTimeProvider.GetCurrent());
+
+        public Guid Id { get; }
+        public Executor Author { get; } = null!;
+        public string Message { get; } = null!;
+        public DateTime CreationTime { get; }
     }
 }

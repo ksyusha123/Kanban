@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Infrastucture
+namespace Infrastructure
 {
     public class StandardDateTimeProvider : IDateTimeProvider
     {

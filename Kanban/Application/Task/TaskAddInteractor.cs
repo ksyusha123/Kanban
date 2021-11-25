@@ -1,27 +1,23 @@
 ﻿using System;
 using Domain;
-using Task = System.Threading.Tasks.Task;
 
 namespace Application
 {
     public class TaskAddInteractor
     {
-        private readonly IRepository<IExecutor> executorRepository;
-        private readonly IRepository<ITask> taskRepository;
+        private readonly IRepository<Executor> _executorRepository;
+        private readonly IRepository<Task> _taskRepository;
 
-        public TaskAddInteractor(IRepository<IExecutor> executorRepository, IRepository<ITask> taskRepository)
-        {
-            this.executorRepository = executorRepository;
-            this.taskRepository = taskRepository;
-        }
+        public TaskAddInteractor(IRepository<Executor> executorRepository, IRepository<Task> taskRepository) =>
+            (_executorRepository, _taskRepository) = (executorRepository, taskRepository);
 
-        public async Task AssignAsync(Guid executorId, Guid taskId)
+        public async System.Threading.Tasks.Task AssignAsync(Guid executorId, Guid taskId)
         {
-            var executor = await executorRepository.GetAsync(executorId);
-            var task = await taskRepository.GetAsync(taskId);
+            var executor = await _executorRepository.GetAsync(executorId);
+            var task = await _taskRepository.GetAsync(taskId);
 
             task.Executor = executor;
-            await taskRepository.UpdateAsync(task);
+            await _taskRepository.UpdateAsync(task);
         }
     }
 }

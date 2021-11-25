@@ -1,38 +1,51 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Infrastructure;
 
 namespace Domain
 {
-    public class Table
+    public class Table : IEntity
     {
-        private IEnumerable<ITask> _tasks = new List<ITask>();
-        private IEnumerable<IExecutor> _teamMembers = new List<IExecutor>();
-        private Dictionary<IExecutor, AccessRights> _users = new Dictionary<IExecutor, AccessRights>();
-        private IEnumerable<State> _states = new List<State>();
+        private readonly List<Task> _tasks;
+        private readonly Dictionary<Guid, AccessRights> _team = new();
+        private readonly List<State> _states;
+
+        public Table(List<Task> tasks, Dictionary<Guid, AccessRights> team, List<State> states) =>
+            (Id, _tasks, _team, _states) = (Guid.NewGuid(), tasks, team, states);
+
+        private Table(Guid id, List<Task> tasks, IEnumerable<ExecutorsWithRights> executors, List<State> states)
+        {
+            (Id, _tasks, _states) = (id, tasks, states);
+
+            foreach (var i in executors) _team[i.ExecutorId] = i.Rights;
+        }
+
+        private Table()
+        {
+        }
+
+        public Guid Id { get; }
+
         public IReadOnlyCollection<State> States => _states.ToArray();
-        public IReadOnlyCollection<ITask> Tasks => _tasks.ToArray();
-        public IReadOnlyCollection<IExecutor> Team => _teamMembers.ToArray(); // по дефолту есть права на редактирование
+        public IReadOnlyCollection<Task> Tasks => _tasks.ToArray();
+        public IEnumerable<Guid> Team => _team.Keys;
+        public IEnumerable<Guid> Readers => FilterExecutors(AccessRights.Read);
+        public IEnumerable<Guid> Commentators => FilterExecutors(AccessRights.Comment);
+        public IEnumerable<Guid> Editors => FilterExecutors(AccessRights.Edit);
+        public IEnumerable<Guid> Admins => FilterExecutors(AccessRights.Admin);
 
-        public void AddTask(ITask task)
-        {
-            _tasks = _tasks.Append(task);
-        }
+        private IEnumerable<ExecutorsWithRights> ExecutorsWithRights =>
+            _team.Select(i => new ExecutorsWithRights(i.Key, i.Value));
 
-        public void AddTeamMember(IExecutor executor)
-        {
-            _teamMembers = _teamMembers.Append(executor);
-            _users.Add(executor, AccessRights.Edit);
-        }
+        public void AddTask(Task task) => _tasks.Add(task);
 
-        public void AddExecutorWithAccessRights(IExecutor executor, AccessRights accessRights)
-        {
-            _users.Add(executor, accessRights);
-        }
+        public void AddExecutor(Executor executor, AccessRights accessRights = AccessRights.Read) =>
+            _team.Add(executor.Id, accessRights);
 
-        public void AddState(State state)
-        {
-            _states = _states.Append(state);
-        }
+        private IEnumerable<Guid> FilterExecutors(AccessRights accessRights) =>
+            _team
+                .Where(p => p.Value == accessRights)
+                .Select(p => p.Key);
     }
 }

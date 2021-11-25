@@ -3,33 +3,34 @@ using System.Collections.Generic;
 using FluentSpecification.Composite;
 using FluentSpecification.Conclusion;
 using FluentSpecification.Embedded;
-using Infrastucture;
+using Infrastructure;
 
 namespace Domain
 {
     public class Task : ITask
     {
-        private string name = string.Empty;
-        private string description = string.Empty;
+        private string _name = string.Empty;
+        private string _description = string.Empty;
+        private readonly List<Comment> _comments = new();
 
-        public List<Comment> Comments { get; set; }
+        // ReSharper disable once UnusedMember.Local
+        private Task()
+        {
+        }
 
-        private Task(Guid id, string name, IExecutor? executor, string description, State state) =>
-            (Id, this.name, Executor, this.description, State) = (id, name, executor, description, state);
-
-        public Task(string name, IExecutor? executor, string description, State state,
+        public Task(string name, string description, Executor executor, State state,
             IDateTimeProvider dateTimeProvider) =>
-            (Id, Name, Executor, Description, State, CreationTime) =
-            (Guid.NewGuid(), name, executor, description, state, dateTimeProvider.GetCurrent());
+            (Id, Name, Description, Executor, State, CreationTime) =
+            (Guid.NewGuid(), name, description, executor, state, dateTimeProvider.GetCurrent());
 
         public Guid Id { get; }
 
         public string Name
         {
-            get => name;
+            get => _name;
             set
             {
-                name = value;
+                _name = value;
 
                 Specs
                     .For<ITask>()
@@ -41,14 +42,12 @@ namespace Domain
             }
         }
 
-        public IExecutor? Executor { get; set; }
-
         public string Description
         {
-            get => description;
+            get => _description;
             set
             {
-                description = value;
+                _description = value;
 
                 Specs
                     .For<ITask>()
@@ -60,7 +59,11 @@ namespace Domain
             }
         }
 
-        public State State { get; set; }
+        public Executor? Executor { get; set; }
+        public State State { get; set; } = null!;
+        public IEnumerable<Comment> Comments => _comments;
         public DateTime CreationTime { get; }
+
+        public void AddComment(Comment comment) => _comments.Add(comment);
     }
 }
