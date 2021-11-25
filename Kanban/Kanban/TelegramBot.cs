@@ -26,12 +26,12 @@ namespace Kanban
         public void Start()
         {
             _client.StartReceiving();
-            _client.OnMessage += ClientOnOnMessage;
+            _client.OnMessage += ClientOnMessage;
             Console.ReadLine();
             _client.StopReceiving();
         }
 
-        private async void ClientOnOnMessage(object sender, MessageEventArgs e)
+        private async void ClientOnMessage(object sender, MessageEventArgs e)
         {
             var message = e.Message;
             var command = message.Text;
