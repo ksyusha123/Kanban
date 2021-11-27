@@ -43,6 +43,9 @@ namespace Domain
         public void AddExecutor(Executor executor, AccessRights accessRights = AccessRights.Read) =>
             _team.Add(executor.Id, accessRights);
 
+        public void ChangeExecutorRights(Executor executor, AccessRights accessRights) =>
+            _team[executor.Id] = accessRights;
+
         private IEnumerable<Guid> FilterExecutors(AccessRights accessRights) =>
             _team
                 .Where(p => p.Value == accessRights)
