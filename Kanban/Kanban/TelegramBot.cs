@@ -20,7 +20,7 @@ namespace Kanban
 
         public TelegramBot()
         {
-            _client = new TelegramBotClient("2082708776:AAFcnwKk7Fh0HNibqfVkaNIMQ5Z0-cqIT_4");
+            _client = new TelegramBotClient(Program._configuration.GetSection("botToken").Value);
         }
 
         public void Start()
