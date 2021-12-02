@@ -1,4 +1,6 @@
 ﻿using System;
+using System.IO;
+using System.Reflection;
 using Application;
 using Domain;
 using Microsoft.Extensions.Configuration;
@@ -19,7 +21,10 @@ namespace Kanban
             var container = new Container();
             container.RegisterSingleton<IConfiguration>(() => 
                 new ConfigurationBuilder()
-                    .AddJsonFile("C:\\Users\\Пользователь\\OneDrive\\Рабочий стол\\Kanban\\Kanban\\Kanban\\config.json", true)
+                    .AddJsonFile(
+                        Path.Combine(Directory.GetParent(Directory.GetCurrentDirectory()).Parent.Parent.FullName,
+                            "config.json"), 
+                        true)
                     .Build());
             container.Register<TelegramBot>();
             container.RegisterInitializer<TelegramBot>(bot => bot.Start());
