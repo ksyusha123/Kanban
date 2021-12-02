@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Microsoft.Extensions.Configuration;
 using Telegram.Bot;
 using Telegram.Bot.Args;
 
@@ -18,9 +19,9 @@ namespace Kanban
             {"/help", new HelpCommand()}
         };
 
-        public TelegramBot()
+        public TelegramBot(IConfiguration configuration)
         {
-            _client = new TelegramBotClient(Program._configuration.GetSection("botToken").Value);
+            _client = new TelegramBotClient(configuration.GetSection("botToken").Value);
         }
 
         public void Start()
