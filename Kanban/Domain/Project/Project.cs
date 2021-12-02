@@ -60,5 +60,7 @@ namespace Domain
         public IEnumerable<Table> Tables => _tables.ToArray();
 
         public void AddTable(Table table) => _tables.Add(table);
+
+        public void RemoveTable(Table table) => _tables.Remove(table);
     }
 }

@@ -40,6 +40,8 @@ namespace Domain
 
         public void AddTask(Task task) => _tasks.Add(task);
 
+        public void RemoveTask(Task task) => _tasks.Remove(task);
+
         public void AddExecutor(Executor executor, AccessRights accessRights = AccessRights.Read) =>
             _team.Add(executor.Id, accessRights);
 
