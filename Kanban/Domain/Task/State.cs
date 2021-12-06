@@ -7,7 +7,7 @@ using Infrastructure;
 
 namespace Domain
 {
-    public class State : IEntity
+    public class State : IEntity<Guid>
     {
         private string _name = string.Empty;
 

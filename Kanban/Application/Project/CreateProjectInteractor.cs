@@ -1,12 +1,13 @@
-﻿using Domain;
+﻿using System;
+using Domain;
 
 namespace Application
 {
     public class CreateProjectInteractor
     {
-        private readonly IRepository<Project> _projectRepository;
+        private readonly IRepository<Project, Guid> _projectRepository;
 
-        public CreateProjectInteractor(IRepository<Project> projectRepository) 
+        public CreateProjectInteractor(IRepository<Project, Guid> projectRepository) 
             => _projectRepository = projectRepository;
 
         public async System.Threading.Tasks.Task CreateProjectAsync(Project project)

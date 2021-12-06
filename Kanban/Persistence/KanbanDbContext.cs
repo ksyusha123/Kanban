@@ -41,19 +41,24 @@ namespace Persistence
             modelBuilder.Entity<Project>().Property(p => p.Id).ValueGeneratedNever();
             modelBuilder.Entity<Project>().Property(p => p.Name).HasMaxLength(100);
             modelBuilder.Entity<Project>().Property(p => p.Description).HasMaxLength(250);
-            modelBuilder.Entity<Project>().HasMany<Table>("_tables").WithOne();
+            modelBuilder.Entity<Project>().HasMany<Board>("_tables").WithOne();
 
-            modelBuilder.Entity<Table>().HasKey(p => p.Id);
-            modelBuilder.Entity<Table>().Property(p => p.Id).ValueGeneratedNever();
-            modelBuilder.Entity<Table>().HasMany(t => t.Tasks);
-            modelBuilder.Entity<Table>().HasMany(t => t.States);
-            modelBuilder.Entity<Table>().OwnsMany<ExecutorsWithRights>("ExecutorsWithRights", er =>
+            modelBuilder.Entity<Board>().HasKey(p => p.Id);
+            modelBuilder.Entity<Board>().Property(p => p.Id).ValueGeneratedNever();
+            modelBuilder.Entity<Board>().HasMany(t => t.Tasks);
+            modelBuilder.Entity<Board>().HasMany(t => t.States);
+            modelBuilder.Entity<Board>().OwnsMany<ExecutorsWithRights>("ExecutorsWithRights", er =>
             {
                 er.HasKey(e => e.Id);
                 er.Property(e => e.Id).ValueGeneratedNever();
                 er.Property(e => e.ExecutorId);
                 er.Property(e => e.Rights);
             });
+
+            modelBuilder.Entity<Chat>().HasKey(c => c.Id);
+            modelBuilder.Entity<Chat>().Property(c => c.Id).ValueGeneratedNever();
+            modelBuilder.Entity<Chat>().Property(c => c.App);
+            modelBuilder.Entity<Chat>().Property(c => c.ProjectId);
         }
     }
 }

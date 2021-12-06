@@ -3,7 +3,7 @@ using Infrastructure;
 
 namespace Domain
 {
-    public class Comment : IEntity
+    public class Comment : IEntity<Guid>
     {
         // ReSharper disable once UnusedMember.Local
         private Comment()

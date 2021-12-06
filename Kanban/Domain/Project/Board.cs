@@ -5,23 +5,23 @@ using Infrastructure;
 
 namespace Domain
 {
-    public class Table : IEntity
+    public class Board : IEntity<Guid>
     {
         private readonly List<Task> _tasks;
         private readonly Dictionary<Guid, AccessRights> _team = new();
         private readonly List<State> _states;
 
-        public Table(List<Task> tasks, Dictionary<Guid, AccessRights> team, List<State> states) =>
+        public Board(List<Task> tasks, Dictionary<Guid, AccessRights> team, List<State> states) =>
             (Id, _tasks, _team, _states) = (Guid.NewGuid(), tasks, team, states);
 
-        private Table(Guid id, List<Task> tasks, IEnumerable<ExecutorsWithRights> executors, List<State> states)
+        private Board(Guid id, List<Task> tasks, IEnumerable<ExecutorsWithRights> executors, List<State> states)
         {
             (Id, _tasks, _states) = (id, tasks, states);
 
             foreach (var i in executors) _team[i.ExecutorId] = i.Rights;
         }
 
-        private Table()
+        private Board()
         {
         }
 
