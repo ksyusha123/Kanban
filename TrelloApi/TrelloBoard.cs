@@ -49,5 +49,57 @@ namespace TrelloApi
                 new[] {("Accept", "application/json")}, new[] {("name", name)});
             return TrelloClient.DeserializeJson<TrelloList>(response).Id;
         }
+
+        /// <returns>Returns created board as TrelloBoard class object</returns>
+        public static TrelloBoard CreateBoard(string name)
+        {
+            var response = TrelloClient.GetResponseByWebRequest("https://api.trello.com/1/boards/", "POST",
+                parameters: new[] {("name", name)});
+            return TrelloClient.DeserializeJson<TrelloBoard>(response);
+        }
+
+        public IEnumerable<TrelloAction> GetAllActions()
+        {
+            var response = TrelloClient.GetResponseByWebRequest($"https://api.trello.com/1/boards/{Id}/actions", "GET");
+            return TrelloClient.DeserializeJson<IEnumerable<TrelloAction>>(response);
+        }
+
+        public IEnumerable<TrelloMember> GetAllMembers()
+        {
+            var response = TrelloClient.GetResponseByWebRequest($"https://api.trello.com/1/boards/{Id}/members", "GET");
+            return TrelloClient.DeserializeJson<IEnumerable<TrelloMember>>(response);
+        }
+
+        public void AddMember(string memberUsername, TrelloMemberTypes privilageType, string memberId = null)
+        {
+            if (memberUsername is null && memberId is null)
+                throw new ArgumentNullException(memberUsername,"Enter members's memberUsername or id");
+            var prms = new[] {("type", "")};
+            switch (privilageType)
+            {
+                case TrelloMemberTypes.Admin:
+                    prms[0].Item2 = "admin";
+                    break;
+                case TrelloMemberTypes.Normal:
+                    prms[0].Item2 = "normal";
+                    break;
+                case TrelloMemberTypes.Observer:
+                    prms[0].Item2 = "observer";
+                    break;
+            }
+
+            var finalMemberId = memberId ?? TrelloClient.DeserializeJson<TrelloMember>(TrelloClient.GetResponseByWebRequest(
+                    $"https://api.trello.com/1/members/{memberUsername}", "GET",
+                    new[] {("Accept", "application/json")}))
+                .Id;
+            try
+            {
+                TrelloClient.GetResponseByWebRequest($"https://api.trello.com/1/boards/{Id}/members/{finalMemberId}", "PUT", parameters: prms);
+            }
+            catch (WebException)
+            {
+                throw new ArgumentException();
+            }
+        }
     }
 }

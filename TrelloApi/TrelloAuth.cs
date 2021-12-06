@@ -19,8 +19,11 @@ namespace TrelloApi
             IEnumerable<(string title, string value)> headers = null, IEnumerable<(string title, string value)> parameters = null)
         {
             var request = (HttpWebRequest) WebRequest.Create(url);
-            foreach (var (title, value) in headers)
-                request.Headers.Add(title, value);
+
+            if (headers != null)
+                foreach (var (title, value) in headers)
+                    request.Headers.Add(title, value);
+            
             request.Method = method;
             request.Headers.Add("Authorization", $"OAuth oauth_consumer_key =\"{ApiKey}\", oauth_token=\"{Token}\"");
             if (!(parameters is null))
