@@ -12,5 +12,12 @@ namespace TrelloApi
         public int Pos { get; set; }
         public string IdBoard { get; set; }
         public bool Subscribed { get; set; }
+        
+        internal TrelloList() { }
+
+        public TrelloList(string id)
+        {
+            //TODO
+        }
     }
 }
