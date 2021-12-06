@@ -5,10 +5,10 @@ namespace Application
 {
     public class AddTeamMemberInteractor
     {
-        private readonly IRepository<Table, Guid> _tableRepository;
+        private readonly IRepository<Board, Guid> _tableRepository;
         private readonly IRepository<Executor, Guid> _executorRepository;
 
-        public AddTeamMemberInteractor(IRepository<Table, Guid> tableRepository, IRepository<Executor, Guid> executorRepository)
+        public AddTeamMemberInteractor(IRepository<Board, Guid> tableRepository, IRepository<Executor, Guid> executorRepository)
             => (_tableRepository, _executorRepository) = (tableRepository, executorRepository);
 
         public async System.Threading.Tasks.Task AddTeamMemberAsync(Guid executorId, Guid tableId)

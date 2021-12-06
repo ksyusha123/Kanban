@@ -6,8 +6,8 @@ namespace Domain
     {
         public int Id { get; }
         public App App { get; }
-        public int ProjectId { get; }
+        public string ProjectId { get; }
 
-        public Chat(int id, App app, int boardId) => (Id, App, ProjectId) = (id, app, boardId);
+        public Chat(int id, App app, string projectId) => (Id, App, ProjectId) = (id, app, projectId);
     }
 }

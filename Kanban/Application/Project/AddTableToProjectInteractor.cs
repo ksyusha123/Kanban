@@ -6,9 +6,9 @@ namespace Application
     public class AddTableToProjectInteractor
     {
         private readonly IRepository<Project, Guid> _projectRepository;
-        private readonly IRepository<Table, Guid> _tableRepository;
+        private readonly IRepository<Board, Guid> _tableRepository;
 
-        public AddTableToProjectInteractor(IRepository<Project, Guid> projectRepository, IRepository<Table, Guid> tableRepository)
+        public AddTableToProjectInteractor(IRepository<Project, Guid> projectRepository, IRepository<Board, Guid> tableRepository)
             => (_projectRepository, _tableRepository) = (projectRepository, tableRepository);
 
         public async System.Threading.Tasks.Task AddTableToProjectAsync(Guid tableId, Guid projectId)

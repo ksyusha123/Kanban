@@ -3,7 +3,6 @@
 namespace Infrastructure
 {
     public interface IEntity<T> : IEquatable<IEntity<T>>
-    where T: struct
     {
         T Id { get; }
 

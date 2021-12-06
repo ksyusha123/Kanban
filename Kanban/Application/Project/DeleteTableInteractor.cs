@@ -5,10 +5,10 @@ namespace Application
 {
     public class DeleteTableInteractor
     {
-        private readonly IRepository<Table, Guid> _tableRepository;
+        private readonly IRepository<Board, Guid> _tableRepository;
         private readonly IRepository<Project, Guid> _projectRepository;
 
-        public DeleteTableInteractor(IRepository<Table, Guid> tableRepository, IRepository<Project, Guid> projectRepository) => 
+        public DeleteTableInteractor(IRepository<Board, Guid> tableRepository, IRepository<Project, Guid> projectRepository) => 
             (_tableRepository, _projectRepository) = (tableRepository, projectRepository);
 
         public async System.Threading.Tasks.Task DeleteTableAsync(Guid tableId, Guid projectId)

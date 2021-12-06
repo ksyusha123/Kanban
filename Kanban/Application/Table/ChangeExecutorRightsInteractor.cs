@@ -5,10 +5,10 @@ namespace Application
 {
     public class ChangeExecutorRightsInteractor
     {
-        private readonly IRepository<Table, Guid> _tableRepository;
+        private readonly IRepository<Board, Guid> _tableRepository;
         private readonly IRepository<Executor, Guid> _executorRepository;
 
-        public ChangeExecutorRightsInteractor(IRepository<Table, Guid> tableRepository, IRepository<Executor, Guid> executorRepository)
+        public ChangeExecutorRightsInteractor(IRepository<Board, Guid> tableRepository, IRepository<Executor, Guid> executorRepository)
             => (_tableRepository, _executorRepository) = (tableRepository, executorRepository);
 
         public async System.Threading.Tasks.Task GiveRightsToExecutorAsync(Guid tableId, Guid executorId, AccessRights accessRights)
