@@ -28,8 +28,6 @@ namespace Kanban
                     .Build());
             container.Register<TelegramBot>();
             container.RegisterInitializer<TelegramBot>(bot => bot.Start());
-            // container.Register<IExecutor, Executor>();  // здесь нужен guid
-            // container.Register<ITask, Domain.Task>();
             // container.Register<EditTaskInteractor>();   // здесь нужен repository
             // container.Register<CreateTaskInteractor>();
             // container.Register<CreateProjectInteractor>();

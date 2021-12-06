@@ -54,6 +54,11 @@ namespace Persistence
                 er.Property(e => e.ExecutorId);
                 er.Property(e => e.Rights);
             });
+
+            modelBuilder.Entity<Chat>().HasKey(c => c.Id);
+            modelBuilder.Entity<Chat>().Property(c => c.Id).ValueGeneratedNever();
+            modelBuilder.Entity<Chat>().Property(c => c.App);
+            modelBuilder.Entity<Chat>().Property(c => c.ProjectId);
         }
     }
 }

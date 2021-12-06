@@ -5,10 +5,10 @@ namespace Application
 {
     public class AssignExecutorToTaskInteractor
     {
-        private readonly IRepository<Executor> _executorRepository;
-        private readonly IRepository<Task> _taskRepository;
+        private readonly IRepository<Executor, Guid> _executorRepository;
+        private readonly IRepository<Task, Guid> _taskRepository;
 
-        public AssignExecutorToTaskInteractor(IRepository<Executor> executorRepository, IRepository<Task> taskRepository) =>
+        public AssignExecutorToTaskInteractor(IRepository<Executor, Guid> executorRepository, IRepository<Task, Guid> taskRepository) =>
             (_executorRepository, _taskRepository) = (executorRepository, taskRepository);
 
         public async System.Threading.Tasks.Task AssignAsync(Guid executorId, Guid taskId)

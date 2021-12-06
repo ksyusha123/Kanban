@@ -3,7 +3,7 @@ using Infrastructure;
 
 namespace Domain
 {
-    public class ExecutorsWithRights : IEntity
+    public class ExecutorsWithRights : IEntity<Guid>
     {
         public ExecutorsWithRights(Guid executorId, AccessRights rights) =>
             (Id, ExecutorId, Rights) = (Guid.NewGuid(), executorId, rights);

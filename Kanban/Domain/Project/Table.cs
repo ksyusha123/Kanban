@@ -5,7 +5,7 @@ using Infrastructure;
 
 namespace Domain
 {
-    public class Table : IEntity
+    public class Table : IEntity<Guid>
     {
         private readonly List<Task> _tasks;
         private readonly Dictionary<Guid, AccessRights> _team = new();

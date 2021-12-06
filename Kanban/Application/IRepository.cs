@@ -4,7 +4,7 @@ using Infrastructure;
 
 namespace Application
 {
-    public interface IRepository<T> where T : class, IEntity
+    public interface IRepository<T, TId> where T : class, IEntity<TId> where TId: struct
     {
         Task<T> GetAsync(Guid id);
 

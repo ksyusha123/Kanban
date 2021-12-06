@@ -8,7 +8,7 @@ using Infrastructure;
 
 namespace Domain
 {
-    public class Project : IEntity
+    public class Project : IEntity<Guid>
     {
         private string _name = string.Empty;
         private string _description = string.Empty;

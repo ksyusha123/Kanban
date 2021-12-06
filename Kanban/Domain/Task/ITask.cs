@@ -3,7 +3,7 @@ using Infrastructure;
 
 namespace Domain
 {
-    public interface ITask : IEntity
+    public interface ITask : IEntity<Guid>
     {
         string Name { get; set; }
         Executor? Executor { get; set; }

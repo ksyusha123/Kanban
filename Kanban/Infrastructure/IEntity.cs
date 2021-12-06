@@ -2,10 +2,11 @@
 
 namespace Infrastructure
 {
-    public interface IEntity : IEquatable<IEntity>
+    public interface IEntity<T> : IEquatable<IEntity<T>>
+    where T: struct
     {
-        Guid Id { get; }
+        T Id { get; }
 
-        bool IEquatable<IEntity>.Equals(IEntity other) => other is { } && Id == other.Id;
+        bool IEquatable<IEntity<T>>.Equals(IEntity<T> other) => other is { } && Id.Equals(other.Id);
     }
 }

@@ -5,9 +5,9 @@ namespace Application
 {
     public class UnassignExecutorInteractor
     {
-        private readonly IRepository<Task> _taskRepository;
+        private readonly IRepository<Task, Guid> _taskRepository;
 
-        public UnassignExecutorInteractor(IRepository<Task> taskRepository) =>
+        public UnassignExecutorInteractor(IRepository<Task, Guid> taskRepository) =>
             _taskRepository = taskRepository;
 
         public async System.Threading.Tasks.Task AssignAsync(Guid taskId)

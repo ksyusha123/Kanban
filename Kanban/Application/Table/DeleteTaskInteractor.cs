@@ -5,10 +5,10 @@ namespace Application
 {
     public class DeleteTaskInteractor
     {
-        private readonly IRepository<Task> _taskRepository;
-        private readonly IRepository<Table> _tableRepository;
+        private readonly IRepository<Task, Guid> _taskRepository;
+        private readonly IRepository<Table, Guid> _tableRepository;
 
-        public DeleteTaskInteractor(IRepository<Task> taskRepository, IRepository<Table> tableRepository)
+        public DeleteTaskInteractor(IRepository<Task, Guid> taskRepository, IRepository<Table, Guid> tableRepository)
             => (_taskRepository, _tableRepository) = (taskRepository, tableRepository);
 
         public async System.Threading.Tasks.Task DeleteTaskAsync(Guid taskId, Guid tableId)

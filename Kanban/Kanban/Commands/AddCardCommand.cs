@@ -4,9 +4,9 @@ using Telegram.Bot.Types;
 
 namespace Kanban
 {
-    public class CreateBoardCommand : ICommand
+    public class AddCardCommand : ICommand
     {
-        public string Name => "/createBoard";
+        public string Name => "/addCard";
         public Task Execute(Message message, TelegramBotClient botClient)
         {
             throw new System.NotImplementedException();
