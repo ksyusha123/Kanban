@@ -1,14 +1,19 @@
-﻿using System.Collections.Generic;
-using Domain;
+﻿using Domain;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
 
 namespace Persistence
 {
     public class KanbanDbContext : DbContext
     {
-        public KanbanDbContext(DbContextOptions<KanbanDbContext> options) : base(options)
-        {
-        }
+        private readonly string _connectionString;
+
+        public KanbanDbContext(DbContextOptions<KanbanDbContext> options, IConfiguration configuration) :
+            base(options) => 
+            _connectionString = configuration.GetSection("connectionString").Value;
+
+        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder) =>
+            optionsBuilder.UseNpgsql(_connectionString);
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -59,11 +64,6 @@ namespace Persistence
             modelBuilder.Entity<Chat>().Property(c => c.Id).ValueGeneratedNever();
             modelBuilder.Entity<Chat>().Property(c => c.App);
             modelBuilder.Entity<Chat>().Property(c => c.ProjectId);
-        }
-        
-        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-        {
-            optionsBuilder.UseNpgsql("Host=localhost;Port=5432;Database=postgres;Username=postgres;Password=mysecretpassword");
         }
     }
 }

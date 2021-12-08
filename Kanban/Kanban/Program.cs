@@ -1,6 +1,5 @@
 ﻿using System;
 using System.IO;
-using System.Linq;
 using System.Reflection;
 using Application;
 using Domain;
@@ -11,30 +10,23 @@ using SimpleInjector;
 
 namespace Kanban
 {
-    class Program
+    internal static class Program
     {
-        static void Main(string[] args)
-        {
-            ConfigureContainer().GetInstance<TelegramBot>();
-        }
+        private static void Main(string[] args) => ConfigureContainer().GetInstance<TelegramBot>();
 
         private static Container ConfigureContainer()
         {
             var container = new Container();
-            container.RegisterSingleton<IConfiguration>(() => 
+            container.RegisterSingleton<IConfiguration>(() =>
                 new ConfigurationBuilder()
                     .AddJsonFile(
-                        Path.Combine(Directory.GetParent(Directory.GetCurrentDirectory()).Parent.Parent.FullName,
-                            "config.json"), 
+                        Path.Combine(Directory.GetParent(Directory.GetCurrentDirectory())!.Parent!.Parent!.FullName,
+                            "config.json"),
                         true)
                     .Build());
-            RegisterCommands(container);
-            container.Register((() => new DbContextOptionsBuilder()));
-            container.Register(() =>
-            {
-                var options = new DbContextOptions<KanbanDbContext>();
-                return new KanbanDbContext(options);
-            });
+            container.RegisterCommands();
+            container.Register(() => new DbContextOptionsBuilder<KanbanDbContext>().Options);
+            container.Register<KanbanDbContext>();
             container.Register<Repository<Board, Guid>>();
             container.Register<IRepository<Board, Guid>, Repository<Board, Guid>>();
             container.Register<TelegramBot>();
@@ -42,13 +34,7 @@ namespace Kanban
             return container;
         }
 
-        private static void RegisterCommands(Container container)
-        {
-            var commands = Assembly
-                .GetExecutingAssembly()
-                .GetTypes()
-                .Where(t => t.IsInstanceOfType(typeof(ICommand)));
+        private static void RegisterCommands(this Container container) =>
             container.Collection.Register<ICommand>(Assembly.GetCallingAssembly());
-        }
     }
 }
