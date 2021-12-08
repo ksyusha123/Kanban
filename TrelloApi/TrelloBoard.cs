@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Net;
 
 namespace TrelloApi
@@ -22,11 +23,7 @@ namespace TrelloApi
             var response = TrelloClient.GetResponseByWebRequest($"https://api.trello.com/1/boards/{id}", "GET",
                 new List<(string title, string value)>{("Accept", "application/json")});
             var proxy = TrelloClient.DeserializeJson<TrelloBoard>(response);
-            var properties = typeof(TrelloBoard).GetProperties();
-            foreach (var prop in properties)
-            {
-                prop.SetValue(this, prop.GetValue(proxy));
-            }
+            TrelloClient.Copy(proxy, this);
         }
 
         public void Delete()
@@ -50,6 +47,14 @@ namespace TrelloApi
             return TrelloClient.DeserializeJson<TrelloList>(response).Id;
         }
 
+        public void ArchiveList(string name = null, string id = null)
+        {
+            var list = GetAllLists().FirstOrDefault(x => x.Id != null && x.Id == id || x.Name != null && x.Name == name);
+            if (list is null)
+                throw new ArgumentException("List not found");
+            TrelloClient.GetResponseByWebRequest($"https://api.trello.com/1/lists/{list.Id}/closed", "PUT", parameters: new []{("value", "true")});
+        }
+
         /// <returns>Returns created board as TrelloBoard class object</returns>
         public static TrelloBoard CreateBoard(string name)
         {
@@ -70,10 +75,12 @@ namespace TrelloApi
             return TrelloClient.DeserializeJson<IEnumerable<TrelloMember>>(response);
         }
 
-        public void AddMember(string memberUsername, TrelloMemberTypes privilageType, string memberId = null)
+        /// <param name="privilageType">Type of user privilage for board (Observer available only with the premium version of your account)</param>
+        /// <exception cref="ArgumentNullException">username and id cannot be null at the same time</exception>
+        public void AddMember(TrelloMemberTypes privilageType, string id = null, string username = null)
         {
-            if (memberUsername is null && memberId is null)
-                throw new ArgumentNullException(memberUsername,"Enter members's memberUsername or id");
+            if (username is null && id is null)
+                throw new ArgumentNullException(username,"Enter member username or id");
             var prms = new[] {("type", "")};
             switch (privilageType)
             {
@@ -88,10 +95,7 @@ namespace TrelloApi
                     break;
             }
 
-            var finalMemberId = memberId ?? TrelloClient.DeserializeJson<TrelloMember>(TrelloClient.GetResponseByWebRequest(
-                    $"https://api.trello.com/1/members/{memberUsername}", "GET",
-                    new[] {("Accept", "application/json")}))
-                .Id;
+            var finalMemberId = id ?? new TrelloMember(username).Id;
             try
             {
                 TrelloClient.GetResponseByWebRequest($"https://api.trello.com/1/boards/{Id}/members/{finalMemberId}", "PUT", parameters: prms);
@@ -100,6 +104,17 @@ namespace TrelloApi
             {
                 throw new ArgumentException();
             }
+        }
+
+        public void DeleteMember(string username = null, string id = null)
+        {
+            if (username is null && id is null)
+                throw new ArgumentNullException(username, "Enter member username or id");
+            
+            var finalMemberId = id ?? new TrelloMember(username).Id;
+
+            TrelloClient.GetResponseByWebRequest($"https://api.trello.com/1/boards/{Id}/members/{finalMemberId}",
+                "DELETE");
         }
     }
 }

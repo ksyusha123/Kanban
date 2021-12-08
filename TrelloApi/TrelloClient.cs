@@ -24,7 +24,7 @@ namespace TrelloApi
                 foreach (var (title, value) in headers)
                     request.Headers.Add(title, value);
             
-            request.Method = method;
+            request.Method = method.ToUpper();
             request.Headers.Add("Authorization", $"OAuth oauth_consumer_key =\"{ApiKey}\", oauth_token=\"{Token}\"");
             if (!(parameters is null))
             {
@@ -61,6 +61,15 @@ namespace TrelloApi
             var settings = new JsonSerializerSettings();
             settings.ConstructorHandling = ConstructorHandling.AllowNonPublicDefaultConstructor;
             return JsonConvert.DeserializeObject<T>(builderJson.ToString(), settings);
+        }
+
+        internal static void Copy<T>(T fromObject, T toObject)
+        {
+            var properties = typeof(T).GetProperties();
+            foreach (var prop in properties)
+            {
+                prop.SetValue(toObject, prop.GetValue(fromObject));
+            }
         }
     }
 }
