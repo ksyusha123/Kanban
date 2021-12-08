@@ -60,5 +60,10 @@ namespace Persistence
             modelBuilder.Entity<Chat>().Property(c => c.App);
             modelBuilder.Entity<Chat>().Property(c => c.ProjectId);
         }
+        
+        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+        {
+            optionsBuilder.UseNpgsql("Host=localhost;Port=5432;Database=postgres;Username=postgres;Password=mysecretpassword");
+        }
     }
 }

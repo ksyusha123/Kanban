@@ -8,7 +8,7 @@ namespace Kanban
     {
         public string Name => @"/start";
 
-        public async Task Execute(Message message, TelegramBotClient botClient)
+        public async Task ExecuteAsync(Message message, TelegramBotClient botClient)
         {
             var chatId = message.Chat.Id;
             await botClient.SendTextMessageAsync(chatId, "Hello, it's start command");
