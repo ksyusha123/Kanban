@@ -7,14 +7,14 @@ namespace Domain
 {
     public class Board : IEntity<Guid>
     {
-        private readonly List<Task> _tasks;
+        private readonly List<Card> _tasks;
         private readonly Dictionary<Guid, AccessRights> _team = new();
         private readonly List<State> _states;
 
-        public Board(List<Task> tasks, Dictionary<Guid, AccessRights> team, List<State> states) =>
+        public Board(List<Card> tasks, Dictionary<Guid, AccessRights> team, List<State> states) =>
             (Id, _tasks, _team, _states) = (Guid.NewGuid(), tasks, team, states);
 
-        private Board(Guid id, List<Task> tasks, IEnumerable<ExecutorsWithRights> executors, List<State> states)
+        private Board(Guid id, List<Card> tasks, IEnumerable<ExecutorsWithRights> executors, List<State> states)
         {
             (Id, _tasks, _states) = (id, tasks, states);
 
@@ -28,7 +28,7 @@ namespace Domain
         public Guid Id { get; }
 
         public IReadOnlyCollection<State> States => _states.ToArray();
-        public IReadOnlyCollection<Task> Tasks => _tasks.ToArray();
+        public IReadOnlyCollection<Card> Tasks => _tasks.ToArray();
         public IEnumerable<Guid> Team => _team.Keys;
         public IEnumerable<Guid> Readers => FilterExecutors(AccessRights.Read);
         public IEnumerable<Guid> Commentators => FilterExecutors(AccessRights.Comment);
@@ -38,9 +38,9 @@ namespace Domain
         private IEnumerable<ExecutorsWithRights> ExecutorsWithRights =>
             _team.Select(i => new ExecutorsWithRights(i.Key, i.Value));
 
-        public void AddTask(Task task) => _tasks.Add(task);
+        public void AddTask(Card card) => _tasks.Add(card);
 
-        public void RemoveTask(Task task) => _tasks.Remove(task);
+        public void RemoveTask(Card card) => _tasks.Remove(card);
 
         public void AddExecutor(Executor executor, AccessRights accessRights = AccessRights.Read) =>
             _team.Add(executor.Id, accessRights);

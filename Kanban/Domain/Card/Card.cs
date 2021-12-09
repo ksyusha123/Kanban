@@ -7,18 +7,18 @@ using Infrastructure;
 
 namespace Domain
 {
-    public class Task : ITask
+    public class Card : ICard
     {
         private string _name = string.Empty;
         private string _description = string.Empty;
         private readonly List<Comment> _comments = new();
 
         // ReSharper disable once UnusedMember.Local
-        private Task()
+        private Card()
         {
         }
 
-        public Task(string name, string description, Executor executor, State state,
+        public Card(string name, string description, Executor executor, State state,
             IDateTimeProvider dateTimeProvider) =>
             (Id, Name, Description, Executor, State, CreationTime) =
             (Guid.NewGuid(), name, description, executor, state, dateTimeProvider.GetCurrent());
@@ -33,7 +33,7 @@ namespace Domain
                 _name = value;
 
                 Specs
-                    .For<ITask>()
+                    .For<ICard>()
                     .Member(t => t.Name, new StringNotEmptySpec()
                         .And(new StringMaxLengthSpec(100))
                         .And(new StringNotContinuousSpacesSpec())
@@ -50,7 +50,7 @@ namespace Domain
                 _description = value;
 
                 Specs
-                    .For<ITask>()
+                    .For<ICard>()
                     .Member(t => t.Description, new StringMaxLengthSpec(250)
                         .And(new StringNotContinuousSpacesSpec())
                         .And(new StringNotEdgeSpaceSpec())
