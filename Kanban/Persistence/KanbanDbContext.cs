@@ -6,14 +6,9 @@ namespace Persistence
 {
     public class KanbanDbContext : DbContext
     {
-        private readonly string _connectionString;
-
-        public KanbanDbContext(DbContextOptions<KanbanDbContext> options, IConfiguration configuration) :
-            base(options) => 
-            _connectionString = configuration.GetSection("connectionString").Value;
-
-        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder) =>
-            optionsBuilder.UseNpgsql(_connectionString);
+        public KanbanDbContext(DbContextOptions<KanbanDbContext> options) : base(options)
+        {
+        }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -41,12 +36,6 @@ namespace Persistence
             modelBuilder.Entity<Comment>().HasOne(c => c.Author).WithMany();
             modelBuilder.Entity<Comment>().Property(c => c.Message).HasMaxLength(250);
             modelBuilder.Entity<Comment>().Property(c => c.CreationTime);
-
-            modelBuilder.Entity<Project>().HasKey(p => p.Id);
-            modelBuilder.Entity<Project>().Property(p => p.Id).ValueGeneratedNever();
-            modelBuilder.Entity<Project>().Property(p => p.Name).HasMaxLength(100);
-            modelBuilder.Entity<Project>().Property(p => p.Description).HasMaxLength(250);
-            modelBuilder.Entity<Project>().HasMany<Board>("_tables").WithOne();
 
             modelBuilder.Entity<Board>().HasKey(p => p.Id);
             modelBuilder.Entity<Board>().Property(p => p.Id).ValueGeneratedNever();

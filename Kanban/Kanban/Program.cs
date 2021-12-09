@@ -25,7 +25,9 @@ namespace Kanban
                         true)
                     .Build());
             container.RegisterCommands();
-            container.Register(() => new DbContextOptionsBuilder<KanbanDbContext>().Options);
+            container.Register(() => new DbContextOptionsBuilder<KanbanDbContext>()
+                .UseNpgsql(container.GetInstance<IConfiguration>().GetSection("connectionString").Value)
+                .Options);
             container.Register<KanbanDbContext>();
             container.Register<Repository<Board, Guid>>();
             container.Register<IRepository<Board, Guid>, Repository<Board, Guid>>();
