@@ -29,9 +29,10 @@ namespace Kanban
         private async void ClientOnMessage(object sender, MessageEventArgs e)
         {
             var message = e.Message;
-            var command = message.Text;
-            if (command != null && _commands.ContainsKey(command))
-                await _commands[command].ExecuteAsync(message, _client);
+            var commandFull = message.Text;
+            var commandSplitted = commandFull?.Split(' ', 2);
+            if (commandSplitted != null && _commands.TryGetValue(commandSplitted[0], out var command))
+                await command.ExecuteAsync(message, _client);
         }
 
         private static Dictionary<string, ICommand> FillCommandsDictionary(IEnumerable<ICommand> commands)

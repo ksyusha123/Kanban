@@ -16,8 +16,8 @@ namespace Kanban
         public string Name => "/addCard";
         public async Task ExecuteAsync(Message message, TelegramBotClient botClient)
         {
-            await _repository.AddAsync(new Board(new List<Domain.Card>(), new Dictionary<Guid, AccessRights>(),
-                new List<State>())); 
+            // await _repository.AddAsync(new Board(new List<Domain.Task>(), new Dictionary<Guid, AccessRights>(),
+            //     new List<State>())); 
         }
     }
 }

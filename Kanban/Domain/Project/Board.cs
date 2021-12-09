@@ -7,25 +7,28 @@ namespace Domain
 {
     public class Board : IEntity<Guid>
     {
-        private readonly List<Card> _tasks;
+        private readonly List<Card> _tasks = null!;
         private readonly Dictionary<Guid, AccessRights> _team = new();
-        private readonly List<State> _states;
+        private readonly List<State> _states = null!;
 
-        public Board(List<Card> tasks, Dictionary<Guid, AccessRights> team, List<State> states) =>
-            (Id, _tasks, _team, _states) = (Guid.NewGuid(), tasks, team, states);
+        public Board(string name, List<Card> tasks, Dictionary<Guid, AccessRights> team, List<State> states) =>
+            (Id, Name, _tasks, _team, _states) = (Guid.NewGuid(), name, tasks, team, states);
 
-        private Board(Guid id, List<Card> tasks, IEnumerable<ExecutorsWithRights> executors, List<State> states)
+        private Board(Guid id, string name, List<Card> tasks, IEnumerable<ExecutorsWithRights> executors,
+            List<State> states)
         {
-            (Id, _tasks, _states) = (id, tasks, states);
+            (Id, Name, _tasks, _states) = (id, name, tasks, states);
 
             foreach (var i in executors) _team[i.ExecutorId] = i.Rights;
         }
 
+        // ReSharper disable once UnusedMember.Local
         private Board()
         {
         }
 
         public Guid Id { get; }
+        public string Name { get; }
 
         public IReadOnlyCollection<State> States => _states.ToArray();
         public IReadOnlyCollection<Card> Tasks => _tasks.ToArray();

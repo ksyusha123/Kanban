@@ -39,6 +39,7 @@ namespace Persistence
 
             modelBuilder.Entity<Board>().HasKey(p => p.Id);
             modelBuilder.Entity<Board>().Property(p => p.Id).ValueGeneratedNever();
+            modelBuilder.Entity<Board>().Property(p => p.Name);
             modelBuilder.Entity<Board>().HasMany(t => t.Tasks);
             modelBuilder.Entity<Board>().HasMany(t => t.States);
             modelBuilder.Entity<Board>().OwnsMany<ExecutorsWithRights>("ExecutorsWithRights", er =>

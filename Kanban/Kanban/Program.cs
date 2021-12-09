@@ -29,6 +29,7 @@ namespace Kanban
                 .UseNpgsql(container.GetInstance<IConfiguration>().GetSection("connectionString").Value)
                 .Options);
             container.Register<KanbanDbContext>();
+            container.Register<CreateBoardInteractor>();
             container.Register<Repository<Board, Guid>>();
             container.Register<IRepository<Board, Guid>, Repository<Board, Guid>>();
             container.Register<TelegramBot>();
