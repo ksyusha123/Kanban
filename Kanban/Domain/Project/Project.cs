@@ -12,14 +12,14 @@ namespace Domain
     {
         private string _name = string.Empty;
         private string _description = string.Empty;
-        private readonly List<Board> _tables = new();
+        private readonly List<Board> _boards = new();
 
         private Project()
         {
         }
 
-        public Project(string name, string description, IEnumerable<Board> tables) =>
-            (Id, Name, Description, _tables) = (Guid.NewGuid(), name, description, tables.ToList());
+        public Project(string name, string description, IEnumerable<Board> boards) =>
+            (Id, Name, Description, _boards) = (Guid.NewGuid(), name, description, boards.ToList());
 
         public Guid Id { get; }
 
@@ -57,11 +57,11 @@ namespace Domain
             }
         }
 
-        public IEnumerable<Board> Tables => _tables.ToArray();
+        public IEnumerable<Board> Tables => _boards.ToArray();
 
-        public void AddTable(Board board) => _tables.Add(board);
+        public void AddBoard(Board board) => _boards.Add(board);
 
-        public void RemoveTable(Board board) => _tables.Remove(board);
+        public void RemoveBoard(Board board) => _boards.Remove(board);
         public App App => App.OwnKanban;
     }
 }

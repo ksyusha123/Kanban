@@ -8,7 +8,7 @@ namespace Application
         private readonly IRepository<Board, Guid> _boardRepository;
         public CreateBoardInteractor(IRepository<Board, Guid> boardRepository) => _boardRepository = boardRepository;
 
-        public async System.Threading.Tasks.Task CreateTableAsync(Board board)
+        public async System.Threading.Tasks.Task CreateBoardAsync(Board board)
         {
             await _boardRepository.AddAsync(board);
         }

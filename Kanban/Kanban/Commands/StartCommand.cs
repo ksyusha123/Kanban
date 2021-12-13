@@ -23,7 +23,7 @@ namespace Kanban
             var boardName = message.Text.Split(' ', 2)[1];
             var board = new Board(boardName, new List<Card>(), new Dictionary<Guid, AccessRights>(),
                 new List<State>());
-            await _createBoardInteractor.CreateTableAsync(board);
+            await _createBoardInteractor.CreateBoardAsync(board);
             await botClient.SendTextMessageAsync(chatId, $"Created {board.Name}!");
         }
     }

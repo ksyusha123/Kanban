@@ -23,6 +23,8 @@ namespace Domain
             (Id, Name, Description, Executor, State, CreationTime) =
             (Guid.NewGuid(), name, description, executor, state, dateTimeProvider.GetCurrent());
 
+        public Card(string name, IDateTimeProvider dateTimeProvider) => (Id, Name) = (Guid.NewGuid(), name);
+
         public Guid Id { get; }
 
         public string Name

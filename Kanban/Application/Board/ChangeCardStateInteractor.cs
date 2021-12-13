@@ -9,12 +9,12 @@ namespace Application
 
         public ChangeCardStateInteractor(IRepository<Card, Guid> cardRepository) => _cardRepository = cardRepository;
 
-        public async System.Threading.Tasks.Task ChangeTaskState(Guid taskId, State state)
+        public async System.Threading.Tasks.Task ChangeCardState(Guid cardId, State state)
         {
-            var task = await _cardRepository.GetAsync(taskId);
-            task.State = state;
+            var card = await _cardRepository.GetAsync(cardId);
+            card.State = state;
             
-            await _cardRepository.UpdateAsync(task);
+            await _cardRepository.UpdateAsync(card);
         }
     }
 }

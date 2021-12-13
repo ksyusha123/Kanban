@@ -8,16 +8,16 @@ namespace Application
         private readonly IRepository<Card, Guid> _cardRepository;
         private readonly IRepository<Board, Guid> _boardRepository;
 
-        public AddCardToBoardInteractor(IRepository<Card, Guid> taskRepository, IRepository<Board, Guid> tableRepository)
-        => (_cardRepository, _boardRepository) = (taskRepository, tableRepository);
+        public AddCardToBoardInteractor(IRepository<Card, Guid> cardRepository, IRepository<Board, Guid> boardRepository)
+        => (_cardRepository, _boardRepository) = (cardRepository, boardRepository);
 
-        public async System.Threading.Tasks.Task AddTaskToTableAsync(Guid taskId, Guid tableId)
+        public async System.Threading.Tasks.Task AddCardToBoardAsync(Guid cardId, Guid boardId)
         {
-            var task = await _cardRepository.GetAsync(taskId);
-            var table = await _boardRepository.GetAsync(tableId);
+            var card = await _cardRepository.GetAsync(cardId);
+            var board = await _boardRepository.GetAsync(boardId);
             
-            table.AddTask(task);
-            await _boardRepository.UpdateAsync(table);
+            board.AddTask(card);
+            await _boardRepository.UpdateAsync(board);
         }
     }
 }

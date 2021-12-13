@@ -8,17 +8,17 @@ namespace Application
         private readonly IRepository<Board, Guid> _boardRepository;
         private readonly IRepository<Executor, Guid> _executorRepository;
 
-        public AddTeamMemberInteractor(IRepository<Board, Guid> tableRepository, IRepository<Executor, Guid> executorRepository)
-            => (_boardRepository, _executorRepository) = (tableRepository, executorRepository);
+        public AddTeamMemberInteractor(IRepository<Board, Guid> boardRepository, IRepository<Executor, Guid> executorRepository)
+            => (_boardRepository, _executorRepository) = (boardRepository, executorRepository);
 
-        public async System.Threading.Tasks.Task AddTeamMemberAsync(Guid executorId, Guid tableId)
+        public async System.Threading.Tasks.Task AddTeamMemberAsync(Guid executorId, Guid boardId)
         {
             var executor = await _executorRepository.GetAsync(executorId);
-            var table = await _boardRepository.GetAsync(tableId);
+            var board = await _boardRepository.GetAsync(boardId);
             
-            table.AddExecutor(executor);
+            board.AddExecutor(executor);
             
-            await _boardRepository.UpdateAsync(table);
+            await _boardRepository.UpdateAsync(board);
         }
     }
 }

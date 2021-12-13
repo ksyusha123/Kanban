@@ -8,17 +8,17 @@ namespace Application
         private readonly IRepository<Board, Guid> _boardRepository;
         private readonly IRepository<Executor, Guid> _executorRepository;
 
-        public ChangeExecutorRightsInteractor(IRepository<Board, Guid> tableRepository, IRepository<Executor, Guid> executorRepository)
-            => (_boardRepository, _executorRepository) = (tableRepository, executorRepository);
+        public ChangeExecutorRightsInteractor(IRepository<Board, Guid> boardRepository, IRepository<Executor, Guid> executorRepository)
+            => (_boardRepository, _executorRepository) = (boardRepository, executorRepository);
 
-        public async System.Threading.Tasks.Task GiveRightsToExecutorAsync(Guid tableId, Guid executorId, AccessRights accessRights)
+        public async System.Threading.Tasks.Task GiveRightsToExecutorAsync(Guid boardId, Guid executorId, AccessRights accessRights)
         {
-            var table = await _boardRepository.GetAsync(tableId);
+            var board = await _boardRepository.GetAsync(boardId);
             var executor = await _executorRepository.GetAsync(executorId);
             
-            table.ChangeExecutorRights(executor, accessRights);
+            board.ChangeExecutorRights(executor, accessRights);
             
-            await _boardRepository.UpdateAsync(table);
+            await _boardRepository.UpdateAsync(board);
         }
     }
 }

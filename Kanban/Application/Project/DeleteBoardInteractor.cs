@@ -16,7 +16,7 @@ namespace Application
             var table = await _boardRepository.GetAsync(tableId);
             var project = await _projectRepository.GetAsync(projectId);
             
-            project.RemoveTable(table);
+            project.RemoveBoard(table);
             await _boardRepository.DeleteAsync(table);
             await _projectRepository.UpdateAsync(project);
         }

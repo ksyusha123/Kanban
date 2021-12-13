@@ -16,7 +16,7 @@ namespace Application
             var project = await _projectRepository.GetAsync(projectId);
             var table = await _boardRepository.GetAsync(tableId);
             
-            project.AddTable(table);
+            project.AddBoard(table);
             await _projectRepository.UpdateAsync(project);
         }
     }
