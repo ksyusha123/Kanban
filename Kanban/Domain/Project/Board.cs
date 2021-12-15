@@ -14,7 +14,7 @@ namespace Domain
         public Board(string name, List<Card> cards, Dictionary<Guid, AccessRights> team, List<State> states) =>
             (Id, Name, _cards, _team, _states) = (Guid.NewGuid(), name, cards, team, states);
 
-        public Board(string name) => Name = name;
+        public Board(string name) => (Id, Name) = (Guid.NewGuid(), name);
 
         private Board(Guid id, string name, List<Card> cards, IEnumerable<ExecutorsWithRights> executors,
             List<State> states)
