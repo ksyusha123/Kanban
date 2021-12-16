@@ -20,5 +20,7 @@ namespace TrelloApi
             var proxy = TrelloClient.DeserializeJson<TrelloMember>(response);
             TrelloClient.Copy(proxy, this);
         }
+        
+        
     }
 }
