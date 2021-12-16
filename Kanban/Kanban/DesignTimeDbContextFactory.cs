@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Design;
+using Microsoft.Extensions.Configuration;
 using Persistence;
 
 namespace Kanban
@@ -9,7 +10,7 @@ namespace Kanban
 		public KanbanDbContext CreateDbContext(string[] args)
 		{
 			var dbContextOptions = new DbContextOptionsBuilder<KanbanDbContext>()
-                .UseNpgsql("Host=localhost;Port=5432;Database=postgres;Username=postgres;Password=12345")
+                .UseNpgsql("Host=localhost;Port=5432;Database=postgres;Username=postgres;Password=mysecretpassword")
 				.Options;
             return new KanbanDbContext(dbContextOptions);
 		}

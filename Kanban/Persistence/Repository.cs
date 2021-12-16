@@ -25,7 +25,7 @@ namespace Persistence
             await _context.SaveChangesAsync();
         }
 
-        public async Task<T> GetAsync(Guid id) => await _context.Set<T>().FirstOrDefaultAsync(e => e.Id.Equals(id));
+        public async Task<T> GetAsync(TId id) => await _context.Set<T>().FirstOrDefaultAsync(e => e.Id.Equals(id));
 
         public async Task UpdateAsync(T entity)
         {

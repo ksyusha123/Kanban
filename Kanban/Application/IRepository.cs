@@ -6,7 +6,7 @@ namespace Application
 {
     public interface IRepository<T, TId> where T : class, IEntity<TId> where TId: struct
     {
-        Task<T> GetAsync(Guid id);
+        Task<T> GetAsync(TId id);
 
         Task AddAsync(T entity);
 

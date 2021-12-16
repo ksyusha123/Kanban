@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using FluentSpecification.Composite;
 using FluentSpecification.Conclusion;
 using FluentSpecification.Embedded;
@@ -8,18 +7,23 @@ using Infrastructure;
 
 namespace Domain
 {
-    public class Project : IProject<Guid>
+    public class Card : ICard
     {
         private string _name = string.Empty;
         private string _description = string.Empty;
-        private readonly List<Board> _tables = new();
+        private readonly List<Comment> _comments = new();
 
-        private Project()
+        // ReSharper disable once UnusedMember.Local
+        private Card()
         {
         }
 
-        public Project(string name, string description, IEnumerable<Board> tables) =>
-            (Id, Name, Description, _tables) = (Guid.NewGuid(), name, description, tables.ToList());
+        public Card(string name, string description, Executor executor, State state,
+            IDateTimeProvider dateTimeProvider) =>
+            (Id, Name, Description, Executor, State, CreationTime) =
+            (Guid.NewGuid(), name, description, executor, state, dateTimeProvider.GetCurrent());
+
+        public Card(string name, IDateTimeProvider dateTimeProvider) => (Id, Name) = (Guid.NewGuid(), name);
 
         public Guid Id { get; }
 
@@ -31,7 +35,7 @@ namespace Domain
                 _name = value;
 
                 Specs
-                    .For<Project>()
+                    .For<ICard>()
                     .Member(t => t.Name, new StringNotEmptySpec()
                         .And(new StringMaxLengthSpec(100))
                         .And(new StringNotContinuousSpacesSpec())
@@ -48,7 +52,7 @@ namespace Domain
                 _description = value;
 
                 Specs
-                    .For<Project>()
+                    .For<ICard>()
                     .Member(t => t.Description, new StringMaxLengthSpec(250)
                         .And(new StringNotContinuousSpacesSpec())
                         .And(new StringNotEdgeSpaceSpec())
@@ -57,11 +61,11 @@ namespace Domain
             }
         }
 
-        public IEnumerable<Board> Tables => _tables.ToArray();
+        public Executor? Executor { get; set; }
+        public State State { get; set; } = null!;
+        public IEnumerable<Comment> Comments => _comments;
+        public DateTime CreationTime { get; }
 
-        public void AddTable(Board board) => _tables.Add(board);
-
-        public void RemoveTable(Board board) => _tables.Remove(board);
-        public App App => App.OwnKanban;
+        public void AddComment(Comment comment) => _comments.Add(comment);
     }
 }

@@ -1,7 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Reflection;
 using Microsoft.Extensions.Configuration;
 using Telegram.Bot;
 using Telegram.Bot.Args;
@@ -12,18 +10,22 @@ namespace Kanban
     public class TelegramBot
     {
         private readonly TelegramBotClient _client;
-        private static Dictionary<string, ICommand> _commands;
+        private readonly Dictionary<string, ICommand> _commands;
 
-        public TelegramBot(IConfiguration configuration)
+        public TelegramBot(IConfiguration configuration, IEnumerable<ICommand> commands)
         {
             _client = new TelegramBotClient(configuration.GetSection("botToken").Value);
-            _commands = FillCommandsDictionary();
+            _commands = FillCommandsDictionary(commands);
         }
 
         public void Start()
         {
             _client.StartReceiving();
             _client.OnMessage += ClientOnMessage;
+            _client.OnUpdate += (sender, args) =>
+            { 
+                Console.WriteLine(args.Update.Type);
+            };
             Console.ReadLine();
             _client.StopReceiving();
         }
@@ -31,31 +33,19 @@ namespace Kanban
         private async void ClientOnMessage(object sender, MessageEventArgs e)
         {
             var message = e.Message;
-            var command = message.Text;
-            if (_commands.ContainsKey(command))
-            {
-                await _commands[command].Execute(message, _client);
-            }
+            var commandFull = message.Text;
+            var commandSplitted = commandFull?.Split(' ', 2);
+            if (commandSplitted != null && _commands.TryGetValue(commandSplitted[0], out var command))
+                await command.ExecuteAsync(message, _client);
         }
 
-        private static Dictionary<string, ICommand> FillCommandsDictionary()
+        private static Dictionary<string, ICommand> FillCommandsDictionary(IEnumerable<ICommand> commands)
         {
             var dict = new Dictionary<string, ICommand>();
-            var commands = Assembly
-                .GetExecutingAssembly()
-                .GetTypes()
-                .Where(t => t.GetInterfaces().Contains(typeof(ICommand)));
             foreach (var command in commands)
             {
-                var commandInstance = (ICommand) Activator.CreateInstance(command);
-                // ReSharper disable PossibleNullReferenceException
-                var commandName = command
-                    .GetProperty("Name")
-                    .GetValue(commandInstance)
-                    .ToString();
-                // ReSharper disable once AssignNullToNotNullAttribute
-                dict[commandName] = commandInstance;
-                dict[$"{commandName}@AgileBoardBot"] = commandInstance;
+                dict[command.Name] = command;
+                dict[$"{command.Name}@AgileBoardBot"] = command;
             }
 
             return dict;

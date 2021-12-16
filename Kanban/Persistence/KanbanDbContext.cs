@@ -1,6 +1,6 @@
-﻿using System.Collections.Generic;
-using Domain;
+﻿using Domain;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
 
 namespace Persistence
 {
@@ -12,14 +12,14 @@ namespace Persistence
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            modelBuilder.Entity<Task>().HasKey(t => t.Id);
-            modelBuilder.Entity<Task>().Property(t => t.Id).ValueGeneratedNever();
-            modelBuilder.Entity<Task>().Property(t => t.Name).HasMaxLength(100);
-            modelBuilder.Entity<Task>().Property(t => t.Description).HasMaxLength(250);
-            modelBuilder.Entity<Task>().HasOne(t => t.Executor).WithMany();
-            modelBuilder.Entity<Task>().HasOne(t => t.State).WithMany();
-            modelBuilder.Entity<Task>().HasMany(t => t.Comments).WithOne();
-            modelBuilder.Entity<Task>().Property(t => t.CreationTime);
+            modelBuilder.Entity<Card>().HasKey(t => t.Id);
+            modelBuilder.Entity<Card>().Property(t => t.Id).ValueGeneratedNever();
+            modelBuilder.Entity<Card>().Property(t => t.Name).HasMaxLength(100);
+            modelBuilder.Entity<Card>().Property(t => t.Description).HasMaxLength(250);
+            modelBuilder.Entity<Card>().HasOne(t => t.Executor).WithMany();
+            modelBuilder.Entity<Card>().HasOne(t => t.State).WithMany();
+            modelBuilder.Entity<Card>().HasMany(t => t.Comments).WithOne();
+            modelBuilder.Entity<Card>().Property(t => t.CreationTime);
 
             modelBuilder.Entity<Executor>().HasKey(e => e.Id);
             modelBuilder.Entity<Executor>().Property(e => e.Id).ValueGeneratedNever();
@@ -37,15 +37,10 @@ namespace Persistence
             modelBuilder.Entity<Comment>().Property(c => c.Message).HasMaxLength(250);
             modelBuilder.Entity<Comment>().Property(c => c.CreationTime);
 
-            modelBuilder.Entity<Project>().HasKey(p => p.Id);
-            modelBuilder.Entity<Project>().Property(p => p.Id).ValueGeneratedNever();
-            modelBuilder.Entity<Project>().Property(p => p.Name).HasMaxLength(100);
-            modelBuilder.Entity<Project>().Property(p => p.Description).HasMaxLength(250);
-            modelBuilder.Entity<Project>().HasMany<Board>("_tables").WithOne();
-
             modelBuilder.Entity<Board>().HasKey(p => p.Id);
             modelBuilder.Entity<Board>().Property(p => p.Id).ValueGeneratedNever();
-            modelBuilder.Entity<Board>().HasMany(t => t.Tasks);
+            modelBuilder.Entity<Board>().Property(p => p.Name);
+            modelBuilder.Entity<Board>().HasMany(t => t.Cards);
             modelBuilder.Entity<Board>().HasMany(t => t.States);
             modelBuilder.Entity<Board>().OwnsMany<ExecutorsWithRights>("ExecutorsWithRights", er =>
             {

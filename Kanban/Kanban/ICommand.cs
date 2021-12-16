@@ -8,6 +8,6 @@ namespace Kanban
     {
         public string Name { get; }
 
-        public Task Execute(Message message, TelegramBotClient botClient);
+        public Task ExecuteAsync(Message message, TelegramBotClient botClient);
     }
 }
