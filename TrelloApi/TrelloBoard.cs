@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
+using System.Threading.Tasks;
 
 namespace TrelloApi
 {
@@ -55,8 +56,7 @@ namespace TrelloApi
             TrelloClient.GetResponseByWebRequest($"https://api.trello.com/1/lists/{list.Id}/closed", "PUT", parameters: new []{("value", "true")});
         }
 
-        /// <returns>Returns created board as TrelloBoard class object</returns>
-        public static TrelloBoard CreateBoard(string name)
+        public static async Task<TrelloBoard> CreateBoardAsync(string name)
         {
             var response = TrelloClient.GetResponseByWebRequest("https://api.trello.com/1/boards/", "POST",
                 parameters: new[] {("name", name)});

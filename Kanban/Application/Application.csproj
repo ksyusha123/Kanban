@@ -9,4 +9,10 @@
       <ProjectReference Include="..\Domain\Domain.csproj" />
     </ItemGroup>
 
+    <ItemGroup>
+      <Reference Include="TrelloApi">
+        <HintPath>..\..\TrelloApi\bin\Debug\netstandard2.0\TrelloApi.dll</HintPath>
+      </Reference>
+    </ItemGroup>
+
 </Project>

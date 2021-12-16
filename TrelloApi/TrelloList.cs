@@ -44,7 +44,7 @@ namespace TrelloApi
             //TODO
             var response = TrelloClient.GetResponseByWebRequest($"https://api.trello.com/1/lists/{Id}/cards", "GET",
                 new[] {("Accept", "application/json")});
-            return null;
+            return TrelloClient.DeserializeJson<IEnumerable<TrelloCard>>(response);
         }
     }
 }
