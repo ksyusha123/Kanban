@@ -22,20 +22,13 @@ namespace Kanban
         public string Name => @"/start";
 
         private string Text => "Этот бот поможет вам и вашей команде быстрее работать с kanban доской. " +
-                               "Наберите команду /help@AgileBoardBot чтобы посмотреть, что он может";
+                               "Наберите команду /help чтобы посмотреть, что он может";
 
         public async Task ExecuteAsync(Message message, TelegramBotClient botClient)
         {
             var chatId = message.Chat.Id;
             await _chatRepository.AddAsync(new Chat(chatId, App.OwnKanban, "adasd"));
             await botClient.SendTextMessageAsync(chatId, "хрю");
-            // var app = chat.App;
-            // var boardInteractor = _apps.First(i => i.App == app).BoardInteractor;
-            // var boardName = message.Text.Split(' ', 2)[1];
-            // var board = new Board(boardName, new List<Card>(), new Dictionary<Guid, AccessRights>(),
-            //     new List<State>());
-            // await boardInteractor.CreateBoardAsync(boardName);
-            // await botClient.SendTextMessageAsync(chatId, $"Created {board.Name}!");
         }
     }
 }

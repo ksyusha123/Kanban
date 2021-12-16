@@ -4,15 +4,17 @@ using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Domain;
 using TrelloApi;
 
 namespace Application
 {
-    class TrelloBoardInteractor: IBoardInteractor
+    class TrelloBoardInteractor : IBoardInteractor
     {
-        public async Task CreateBoardAsync(string name)
+        public async Task<Board> CreateBoardAsync(string name)
         {
-            await TrelloBoard.CreateBoardAsync(name);
+            var trelloBoard = await TrelloBoard.CreateBoardAsync(name);
+            return new Board("saljfksj");
         }
 
         public async Task AddCardAsync(string cardId, string boardId)

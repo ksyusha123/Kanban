@@ -15,10 +15,11 @@ namespace Application
             IDateTimeProvider dateTimeProvider) =>
             (_cardRepository, _executorRepository, _dateTimeProvider) = (cardRepository, executorRepository, dateTimeProvider);
 
-        public async Task CreateCardAsync(string name)
+        public async Task<Card> CreateCardAsync(string name)
         {
             var card = new Card(name, _dateTimeProvider);
             await _cardRepository.AddAsync(card);
+            return card;
         }
 
         public async Task EditCardNameAsync(string cardId, string name)

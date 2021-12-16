@@ -53,7 +53,7 @@ namespace Persistence
             modelBuilder.Entity<Chat>().HasKey(c => c.Id);
             modelBuilder.Entity<Chat>().Property(c => c.Id).ValueGeneratedNever();
             modelBuilder.Entity<Chat>().Property(c => c.App);
-            modelBuilder.Entity<Chat>().Property(c => c.ProjectId);
+            modelBuilder.Entity<Chat>().Property(c => c.BoardId);
         }
     }
 }

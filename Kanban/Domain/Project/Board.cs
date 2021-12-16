@@ -32,8 +32,8 @@ namespace Domain
         public Guid Id { get; }
         public string Name { get; }
 
-        public IReadOnlyCollection<State> States => _states.ToArray();
-        public IReadOnlyCollection<Card> Cards => _cards.ToArray();
+        public IReadOnlyCollection<State> States => _states;
+        public IReadOnlyCollection<Card> Cards => _cards;
         public IEnumerable<Guid> Team => _team.Keys;
         public IEnumerable<Guid> Readers => FilterExecutors(AccessRights.Read);
         public IEnumerable<Guid> Commentators => FilterExecutors(AccessRights.Comment);
@@ -43,9 +43,9 @@ namespace Domain
         private IEnumerable<ExecutorsWithRights> ExecutorsWithRights =>
             _team.Select(i => new ExecutorsWithRights(i.Key, i.Value));
 
-        public void AddTask(Card card) => _cards.Add(card);
+        public void AddCard(Card card) => _cards.Add(card);
 
-        public void RemoveTask(Card card) => _cards.Remove(card);
+        public void RemoveCard(Card card) => _cards.Remove(card);
 
         public void AddExecutor(Executor executor, AccessRights accessRights = AccessRights.Read) =>
             _team.Add(executor.Id, accessRights);
