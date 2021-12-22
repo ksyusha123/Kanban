@@ -23,12 +23,23 @@ namespace Kanban
         
         public async Task ExecuteAsync(Message message, TelegramBotClient botClient)
         {
-            var chatId = message.Chat.Id;
-            var chat = await _chatRepository.GetAsync(chatId);
-            var app = chat.App;
-            var boardInteractor = _apps.First(i => i.App == app).BoardInteractor;
-            var boardName = message.Text.Split(' ', 2)[1];
-            await boardInteractor.CreateBoardAsync(boardName);
+            var chatId = message.Chat.Id; 
+            var chat = await _chatRepository.GetAsync(chatId); 
+ 
+            if (chat is { }) 
+            { 
+                await botClient.SendTextMessageAsync(chatId, "у вас уже есть доска!!!"); 
+                return; 
+            } 
+ 
+            var splitted = message.Text.Split(' ', 3); 
+            var app = splitted[1].ToLower() == "trello" ? App.Trello : App.OwnKanban; 
+            var boardInteractor = _apps.First(i => i.App == app).BoardInteractor; 
+            var boardName = splitted[2]; 
+            var board = await boardInteractor.CreateBoardAsync(boardName); 
+ 
+            chat = new Chat(chatId, app, board.Id.ToString());
+            await _chatRepository.AddAsync(chat);
             await botClient.SendTextMessageAsync(chatId, $"я сделаль {boardName}!");
         }
     }

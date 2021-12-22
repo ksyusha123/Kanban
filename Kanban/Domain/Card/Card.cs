@@ -18,10 +18,10 @@ namespace Domain
         {
         }
 
-        public Card(string name, string description, Executor executor, State state,
+        public Card(string name, string description, Executor executor, Column column,
             IDateTimeProvider dateTimeProvider) =>
-            (Id, Name, Description, Executor, State, CreationTime) =
-            (Guid.NewGuid(), name, description, executor, state, dateTimeProvider.GetCurrent());
+            (Id, Name, Description, Executor, Column, CreationTime) =
+            (Guid.NewGuid(), name, description, executor, column, dateTimeProvider.GetCurrent());
 
         public Card(string name, IDateTimeProvider dateTimeProvider) => (Id, Name) = (Guid.NewGuid(), name);
 
@@ -33,14 +33,6 @@ namespace Domain
             set
             {
                 _name = value;
-
-                Specs
-                    .For<ICard>()
-                    .Member(t => t.Name, new StringNotEmptySpec()
-                        .And(new StringMaxLengthSpec(100))
-                        .And(new StringNotContinuousSpacesSpec())
-                        .And(new StringNotEdgeSpaceSpec()))
-                    .ThrowIfNotSatisfied(this);
             }
         }
 
@@ -50,19 +42,11 @@ namespace Domain
             set
             {
                 _description = value;
-
-                Specs
-                    .For<ICard>()
-                    .Member(t => t.Description, new StringMaxLengthSpec(250)
-                        .And(new StringNotContinuousSpacesSpec())
-                        .And(new StringNotEdgeSpaceSpec())
-                        .And(new StringMatchSpec("\n").Not()))
-                    .ThrowIfNotSatisfied(this);
             }
         }
 
         public Executor? Executor { get; set; }
-        public State State { get; set; } = null!;
+        public Column Column { get; set; } = null!;
         public IEnumerable<Comment> Comments => _comments;
         public DateTime CreationTime { get; }
 

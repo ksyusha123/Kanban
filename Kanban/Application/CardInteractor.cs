@@ -9,16 +9,26 @@ namespace Application
     {
         private readonly IRepository<Card, Guid> _cardRepository;
         private readonly IRepository<Executor, Guid> _executorRepository;
+        private readonly IRepository<Board, Guid> _boardRepository;
         private readonly IDateTimeProvider _dateTimeProvider;
 
-        public CardInteractor(IRepository<Card, Guid> cardRepository, IRepository<Executor, Guid> executorRepository, 
-            IDateTimeProvider dateTimeProvider) =>
-            (_cardRepository, _executorRepository, _dateTimeProvider) = (cardRepository, executorRepository, dateTimeProvider);
-
-        public async Task<Card> CreateCardAsync(string name)
+        public CardInteractor(IRepository<Card, Guid> cardRepository, IRepository<Executor, Guid> executorRepository,
+            IRepository<Board, Guid> boardRepository, IDateTimeProvider dateTimeProvider)
         {
-            var card = new Card(name, _dateTimeProvider);
-            await _cardRepository.AddAsync(card);
+            _cardRepository = cardRepository;
+            _executorRepository = executorRepository;
+            _boardRepository = boardRepository;
+            _dateTimeProvider = dateTimeProvider;
+        }
+
+        public async Task<Card> CreateCardAsync(string name, string boardId)
+        {
+            var card = new Card(name, "", new Executor("", ""),
+                new Column("todo", new Column[0], new Column[0]), _dateTimeProvider);
+            // await _cardRepository.AddAsync(card);
+            var board = await _boardRepository.GetAsync(new Guid(boardId));
+            board.AddCard(card);
+            await _boardRepository.UpdateAsync(board);
             return card;
         }
 
@@ -37,11 +47,16 @@ namespace Application
             await _cardRepository.UpdateAsync(task);
         }
 
-        public async Task ChangeState(string cardId, State state)
+        public async Task ChangeState(string cardId, Column column)
         {
             var card = await _cardRepository.GetAsync(new Guid(cardId));
-            card.State = state;
+            card.Column = column;
             await _cardRepository.UpdateAsync(card);
+        }
+
+        public async Task AddComment(string cardId, Comment comment)
+        {
+            
         }
     }
 }

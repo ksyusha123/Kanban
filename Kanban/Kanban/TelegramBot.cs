@@ -23,7 +23,7 @@ namespace Kanban
             _client.StartReceiving();
             _client.OnMessage += ClientOnMessage;
             _client.OnUpdate += (sender, args) =>
-            { 
+            {
                 Console.WriteLine(args.Update.Type);
             };
             Console.ReadLine();

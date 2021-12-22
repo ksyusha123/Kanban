@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using Persistence;
@@ -9,9 +10,10 @@ using Persistence;
 namespace Persistence.Migrations
 {
     [DbContext(typeof(KanbanDbContext))]
-    partial class KanbanDbContextModelSnapshot : ModelSnapshot
+    [Migration("20211222151203_Priz1")]
+    partial class Priz1
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -183,6 +185,35 @@ namespace Persistence.Migrations
                         .HasForeignKey("PrevStatesId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+                });
+
+            modelBuilder.Entity("Domain.Board", b =>
+                {
+                    b.OwnsMany("Domain.ExecutorsWithRights", "ExecutorsWithRights", b1 =>
+                        {
+                            b1.Property<Guid>("Id")
+                                .HasColumnType("uuid");
+
+                            b1.Property<Guid>("BoardId")
+                                .HasColumnType("uuid");
+
+                            b1.Property<Guid>("ExecutorId")
+                                .HasColumnType("uuid");
+
+                            b1.Property<int>("Rights")
+                                .HasColumnType("integer");
+
+                            b1.HasKey("Id");
+
+                            b1.HasIndex("BoardId");
+
+                            b1.ToTable("ExecutorsWithRights");
+
+                            b1.WithOwner()
+                                .HasForeignKey("BoardId");
+                        });
+
+                    b.Navigation("ExecutorsWithRights");
                 });
 
             modelBuilder.Entity("Domain.Card", b =>

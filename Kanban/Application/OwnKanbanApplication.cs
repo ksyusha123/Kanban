@@ -10,7 +10,7 @@ namespace Application
             IRepository<Executor, Guid> executorRepository, IDateTimeProvider dateTimeProvider)
         {
             BoardInteractor = new BoardInteractor(boardRepository, cardRepository);
-            CardInteractor = new CardInteractor(cardRepository, executorRepository, dateTimeProvider);
+            CardInteractor = new CardInteractor(cardRepository, executorRepository, boardRepository, dateTimeProvider);
         }
 
         public string Name => "OwnKanban";
