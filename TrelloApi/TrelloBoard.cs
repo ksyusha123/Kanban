@@ -16,72 +16,74 @@ namespace TrelloApi
         public string Url { get; set; }
         public string ShortUrl { get; set; }
         public bool CanInvite { get; set; }
+    }
 
-        internal TrelloBoard() { }
+    public class TrelloBoardClient
+    {
+        private string _apiKey;
+        private string _userToken;
         
-        public TrelloBoard(string id)
+        public TrelloBoardClient(string userToken, string apiKey)
         {
+            _apiKey = apiKey;
+            _userToken = userToken;
+        }
+
+        private void Authorize()
+        {
+            TrelloClient.ApiKey = _apiKey;
+            TrelloClient.Token = _userToken;
+        }
+        
+        public async Task<TrelloBoard> LoadAsync(string id)
+        {
+            Authorize();
             var response = TrelloClient.GetResponseByWebRequest($"https://api.trello.com/1/boards/{id}", "GET",
-                new List<(string title, string value)>{("Accept", "application/json")});
-            var proxy = TrelloClient.DeserializeJson<TrelloBoard>(response);
-            TrelloClient.Copy(proxy, this);
-        }
-
-        public void Delete()
-        {
-            TrelloClient.GetResponseByWebRequest($"https://api.trello.com/1/boards/{Id}", "DELETE");
-        }
-
-        public IEnumerable<TrelloList> GetAllLists()
-        {
-            var response = TrelloClient.GetResponseByWebRequest($"https://api.trello.com/1/boards/{Id}/lists", "GET",
-                new List<(string title, string value)>{("Accept", "application/json")});
-            var result = TrelloClient.DeserializeJson<List<TrelloList>>(response);
-            return result;
-        }
-       
-        /// <returns>Returns id of created list</returns>
-        public string CreateList(string name)
-        {
-            var response = TrelloClient.GetResponseByWebRequest($"https://api.trello.com/1/boards/{Id}/lists", "POST",
-                new[] {("Accept", "application/json")}, new[] {("name", name)});
-            return TrelloClient.DeserializeJson<TrelloList>(response).Id;
-        }
-
-        public void ArchiveList(string name = null, string id = null)
-        {
-            var list = GetAllLists().FirstOrDefault(x => x.Id != null && x.Id == id || x.Name != null && x.Name == name);
-            if (list is null)
-                throw new ArgumentException("List not found");
-            TrelloClient.GetResponseByWebRequest($"https://api.trello.com/1/lists/{list.Id}/closed", "PUT", parameters: new []{("value", "true")});
-        }
-
-        public static async Task<TrelloBoard> CreateBoardAsync(string name)
-        {
-            var response = TrelloClient.GetResponseByWebRequest("https://api.trello.com/1/boards/", "POST",
-                parameters: new[] {("name", name)});
+                new List<(string title, string value)> { ("Accept", "application/json") });
             return TrelloClient.DeserializeJson<TrelloBoard>(response);
         }
 
-        public IEnumerable<TrelloAction> GetAllActions()
+        public async Task DeleteAsync(string id)
         {
-            var response = TrelloClient.GetResponseByWebRequest($"https://api.trello.com/1/boards/{Id}/actions", "GET");
+            Authorize();
+            TrelloClient.GetResponseByWebRequest($"https://api.trello.com/1/boards/{id}", "DELETE");
+        }
+
+        public async Task<IEnumerable<TrelloList>> GetAllListsAsync(string id)
+        {
+            Authorize();
+            var response = TrelloClient.GetResponseByWebRequest($"https://api.trello.com/1/boards/{id}/lists", "GET",
+                        new List<(string title, string value)> { ("Accept", "application/json") });
+            var result = TrelloClient.DeserializeJson<List<TrelloList>>(response);
+            return result;
+        }
+
+        public async Task<TrelloBoard> CreatedAsync(string name)
+        {
+            Authorize();
+            var response = TrelloClient.GetResponseByWebRequest("https://api.trello.com/1/boards/", "POST",
+                parameters: new[] { ("name", name) });
+            return TrelloClient.DeserializeJson<TrelloBoard>(response);
+        }
+
+        public async Task<IEnumerable<TrelloAction>> GetAllActionsAsync(string id)
+        {
+            Authorize();
+            var response = TrelloClient.GetResponseByWebRequest($"https://api.trello.com/1/boards/{id}/actions", "GET");
             return TrelloClient.DeserializeJson<IEnumerable<TrelloAction>>(response);
         }
 
-        public IEnumerable<TrelloMember> GetAllMembers()
+        public async Task<IEnumerable<TrelloMember>> GetAllMembersAsync(string id)
         {
-            var response = TrelloClient.GetResponseByWebRequest($"https://api.trello.com/1/boards/{Id}/members", "GET");
+            Authorize();
+            var response = TrelloClient.GetResponseByWebRequest($"https://api.trello.com/1/boards/{id}/members", "GET");
             return TrelloClient.DeserializeJson<IEnumerable<TrelloMember>>(response);
         }
 
-        /// <param name="privilageType">Type of user privilage for board (Observer available only with the premium version of your account)</param>
-        /// <exception cref="ArgumentNullException">username and id cannot be null at the same time</exception>
-        public void AddMember(TrelloMemberTypes privilageType, string id = null, string username = null)
+        public void AddMemberAsync(string boardId, TrelloMemberTypes privilageType, string memberId)
         {
-            if (username is null && id is null)
-                throw new ArgumentNullException(username,"Enter member username or id");
-            var prms = new[] {("type", "")};
+            Authorize();
+            var prms = new[] { ("type", "") };
             switch (privilageType)
             {
                 case TrelloMemberTypes.Admin:
@@ -95,10 +97,9 @@ namespace TrelloApi
                     break;
             }
 
-            var finalMemberId = id ?? new TrelloMember(username).Id;
             try
             {
-                TrelloClient.GetResponseByWebRequest($"https://api.trello.com/1/boards/{Id}/members/{finalMemberId}", "PUT", parameters: prms);
+                TrelloClient.GetResponseByWebRequest($"https://api.trello.com/1/boards/{boardId}/members/{memberId}", "PUT", parameters: prms);
             }
             catch (WebException)
             {
@@ -106,14 +107,10 @@ namespace TrelloApi
             }
         }
 
-        public void DeleteMember(string username = null, string id = null)
+        public void DeleteMemberAsync(string boardId, string memberId)
         {
-            if (username is null && id is null)
-                throw new ArgumentNullException(username, "Enter member username or id");
-            
-            var finalMemberId = id ?? new TrelloMember(username).Id;
-
-            TrelloClient.GetResponseByWebRequest($"https://api.trello.com/1/boards/{Id}/members/{finalMemberId}",
+            Authorize();
+            TrelloClient.GetResponseByWebRequest($"https://api.trello.com/1/boards/{boardId}/members/{memberId}",
                 "DELETE");
         }
     }
