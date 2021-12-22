@@ -17,7 +17,7 @@ namespace Kanban
         public AddCardCommand(IRepository<Chat, long> chatRepository, IEnumerable<IApplication> apps) => 
             (_chatRepository, _apps) = (chatRepository, apps);
 
-        public string Name => "/addCard";
+        public string Name => "/addcard";
         public async Task ExecuteAsync(Message message, TelegramBotClient botClient)
         {
             var chatId = message.Chat.Id;

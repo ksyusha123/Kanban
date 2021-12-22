@@ -19,7 +19,7 @@ namespace Kanban
         public CreateBoardCommand(IRepository<Chat, long> chatRepository, IEnumerable<IApplication> apps) => 
             (_chatRepository, _apps) = (chatRepository, apps);
         
-        public string Name => "/createBoard";
+        public string Name => "/createboard";
         
         public async Task ExecuteAsync(Message message, TelegramBotClient botClient)
         {
