@@ -22,10 +22,6 @@ namespace Kanban
         {
             _client.StartReceiving();
             _client.OnMessage += ClientOnMessage;
-            _client.OnUpdate += (sender, args) =>
-            {
-                Console.WriteLine(args.Update.Type);
-            };
             Console.ReadLine();
             _client.StopReceiving();
         }
@@ -35,8 +31,21 @@ namespace Kanban
             var message = e.Message;
             var commandFull = message.Text;
             var commandSplitted = commandFull?.Split(' ', 2);
-            if (commandSplitted != null && _commands.TryGetValue(commandSplitted[0], out var command))
-                await command.ExecuteAsync(message, _client);
+
+            try
+            {
+                if (commandFull!.StartsWith('/'))
+                {
+                    if (commandSplitted != null && _commands.TryGetValue(commandSplitted[0], out var command))
+                        await command.ExecuteAsync(message, _client);
+                    else
+                        await _client.SendTextMessageAsync(message.Chat, "таких команд не учил!");
+                }
+            }
+            catch (Exception)
+            {
+                await _client.SendTextMessageAsync(message.Chat, "ошибочка вышла!");
+            }
         }
 
         private static Dictionary<string, ICommand> FillCommandsDictionary(IEnumerable<ICommand> commands)

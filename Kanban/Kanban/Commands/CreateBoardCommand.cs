@@ -1,7 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
-using System.Net.Mime;
 using System.Threading.Tasks;
 using Application;
 using Domain;
@@ -16,31 +14,30 @@ namespace Kanban
         private readonly IRepository<Chat, long> _chatRepository;
         private readonly IEnumerable<IApplication> _apps;
 
-        public CreateBoardCommand(IRepository<Chat, long> chatRepository, IEnumerable<IApplication> apps) => 
+        public CreateBoardCommand(IRepository<Chat, long> chatRepository, IEnumerable<IApplication> apps) =>
             (_chatRepository, _apps) = (chatRepository, apps);
-        
+
         public string Name => "/createboard";
-        
+
         public async Task ExecuteAsync(Message message, TelegramBotClient botClient)
         {
-            var chatId = message.Chat.Id; 
-            var chat = await _chatRepository.GetAsync(chatId); 
- 
-            if (chat is { }) 
-            { 
-                await botClient.SendTextMessageAsync(chatId, "у вас уже есть доска!!!"); 
-                return; 
-            } 
- 
-            var splitted = message.Text.Split(' ', 3); 
-            var app = splitted[1].ToLower() == "trello" ? App.Trello : App.OwnKanban; 
-            var boardInteractor = _apps.First(i => i.App == app).BoardInteractor; 
-            var boardName = splitted[2]; 
-            var board = await boardInteractor.CreateBoardAsync(boardName); 
- 
+            var chatId = message.Chat.Id;
+            var chat = await _chatRepository.GetAsync(chatId);
+
+            if (chat is { })
+            {
+                await botClient.SendTextMessageAsync(chatId, "у вас уже есть доска!!!");
+                return;
+            }
+
+            var splitted = message.Text.Split(' ', 3);
+            var app = splitted[1].ToLower() == "trello" ? App.Trello : App.OwnKanban;
+            var boardInteractor = _apps.First(i => i.App == app).BoardInteractor;
+            var board = await boardInteractor.CreateBoardAsync(splitted[2]);
+
             chat = new Chat(chatId, app, board.Id.ToString());
             await _chatRepository.AddAsync(chat);
-            await botClient.SendTextMessageAsync(chatId, $"я сделаль {boardName}!");
+            await botClient.SendTextMessageAsync(chatId, $"я сделаль {board.Name}!");
         }
     }
 }

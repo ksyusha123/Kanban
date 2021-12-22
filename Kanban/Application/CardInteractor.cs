@@ -25,7 +25,6 @@ namespace Application
         {
             var card = new Card(name, "", new Executor("", ""),
                 new Column("todo", new Column[0], new Column[0]), _dateTimeProvider);
-            // await _cardRepository.AddAsync(card);
             var board = await _boardRepository.GetAsync(new Guid(boardId));
             board.AddCard(card);
             await _boardRepository.UpdateAsync(board);

@@ -1,8 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using Application;
-using Domain;
 using Telegram.Bot;
 using Telegram.Bot.Types;
 using Chat = Domain.Chat;
