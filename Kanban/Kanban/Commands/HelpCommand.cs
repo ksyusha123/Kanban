@@ -6,7 +6,7 @@ namespace Kanban
 {
     public class HelpCommand : ICommand
     {
-        public string Name => @"/help";
+        public string Name => "/help";
         public async Task ExecuteAsync(Message message, TelegramBotClient botClient)
         {
             var chatId = message.Chat.Id;

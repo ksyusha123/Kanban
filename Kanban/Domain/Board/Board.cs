@@ -7,21 +7,20 @@ namespace Domain
 {
     public class Board : IEntity<Guid>
     {
-        private readonly List<Card> _cards = null!;
+        private readonly List<Card> _cards = new();
         private readonly Dictionary<Guid, AccessRights> _team = new();
-        private readonly List<State> _states = null!;
+        private readonly List<Column> _states = new();
 
-        public Board(string name, List<Card> cards, Dictionary<Guid, AccessRights> team, List<State> states) =>
+        public Board(string name, List<Card> cards, Dictionary<Guid, AccessRights> team, List<Column> states) =>
             (Id, Name, _cards, _team, _states) = (Guid.NewGuid(), name, cards, team, states);
 
         public Board(string name) => (Id, Name) = (Guid.NewGuid(), name);
 
-        private Board(Guid id, string name, List<Card> cards, IEnumerable<ExecutorsWithRights> executors,
-            List<State> states)
+        private Board(Guid id, string name, List<Card> cards, List<Column> states)
         {
             (Id, Name, _cards, _states) = (id, name, cards, states);
 
-            foreach (var i in executors) _team[i.ExecutorId] = i.Rights;
+            // foreach (var i in executors) _team[i.ExecutorId] = i.Rights;
         }
 
         // ReSharper disable once UnusedMember.Local
@@ -32,7 +31,7 @@ namespace Domain
         public Guid Id { get; }
         public string Name { get; }
 
-        public IReadOnlyCollection<State> States => _states;
+        public IReadOnlyCollection<Column> States => _states;
         public IReadOnlyCollection<Card> Cards => _cards;
         public IEnumerable<Guid> Team => _team.Keys;
         public IEnumerable<Guid> Readers => FilterExecutors(AccessRights.Read);

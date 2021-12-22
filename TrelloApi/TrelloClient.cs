@@ -12,8 +12,8 @@ namespace TrelloApi
 {
     public class TrelloClient
     {
-        public static string Token;
-        internal static string ApiKey = "43b57590d2412097e1d1779d19ff0aba";
+        internal static string Token;
+        internal static string ApiKey;
 
         internal static string GetResponseByWebRequest(string url, string method,
             IEnumerable<(string title, string value)> headers = null, IEnumerable<(string title, string value)> parameters = null)

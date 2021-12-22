@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using Persistence;
@@ -9,30 +10,16 @@ using Persistence;
 namespace Persistence.Migrations
 {
     [DbContext(typeof(KanbanDbContext))]
-    partial class KanbanDbContextModelSnapshot : ModelSnapshot
+    [Migration("20211222144809_Priz")]
+    partial class Priz
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
                 .HasAnnotation("Relational:MaxIdentifierLength", 63)
                 .HasAnnotation("ProductVersion", "5.0.12")
                 .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
-
-            modelBuilder.Entity("ColumnColumn", b =>
-                {
-                    b.Property<Guid>("NextStatesId")
-                        .HasColumnType("uuid");
-
-                    b.Property<Guid>("PrevStatesId")
-                        .HasColumnType("uuid");
-
-                    b.HasKey("NextStatesId", "PrevStatesId");
-
-                    b.HasIndex("PrevStatesId");
-
-                    b.ToTable("ColumnColumn");
-                });
 
             modelBuilder.Entity("Domain.Board", b =>
                 {
@@ -56,9 +43,6 @@ namespace Persistence.Migrations
                     b.Property<Guid?>("BoardId")
                         .HasColumnType("uuid");
 
-                    b.Property<Guid>("ColumnId")
-                        .HasColumnType("uuid");
-
                     b.Property<DateTime>("CreationTime")
                         .HasColumnType("timestamp without time zone");
 
@@ -75,13 +59,16 @@ namespace Persistence.Migrations
                         .HasMaxLength(100)
                         .HasColumnType("character varying(100)");
 
+                    b.Property<Guid>("StateId")
+                        .HasColumnType("uuid");
+
                     b.HasKey("Id");
 
                     b.HasIndex("BoardId");
 
-                    b.HasIndex("ColumnId");
-
                     b.HasIndex("ExecutorId");
+
+                    b.HasIndex("StateId");
 
                     b.ToTable("Card");
                 });
@@ -101,25 +88,6 @@ namespace Persistence.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Chat");
-                });
-
-            modelBuilder.Entity("Domain.Column", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .HasColumnType("uuid");
-
-                    b.Property<Guid?>("BoardId")
-                        .HasColumnType("uuid");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("BoardId");
-
-                    b.ToTable("Column");
                 });
 
             modelBuilder.Entity("Domain.Comment", b =>
@@ -170,19 +138,67 @@ namespace Persistence.Migrations
                     b.ToTable("Executor");
                 });
 
-            modelBuilder.Entity("ColumnColumn", b =>
+            modelBuilder.Entity("Domain.State", b =>
                 {
-                    b.HasOne("Domain.Column", null)
-                        .WithMany()
-                        .HasForeignKey("NextStatesId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                    b.Property<Guid>("Id")
+                        .HasColumnType("uuid");
 
-                    b.HasOne("Domain.Column", null)
-                        .WithMany()
-                        .HasForeignKey("PrevStatesId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                    b.Property<Guid?>("BoardId")
+                        .HasColumnType("uuid");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("BoardId");
+
+                    b.ToTable("State");
+                });
+
+            modelBuilder.Entity("StateState", b =>
+                {
+                    b.Property<Guid>("NextStatesId")
+                        .HasColumnType("uuid");
+
+                    b.Property<Guid>("PrevStatesId")
+                        .HasColumnType("uuid");
+
+                    b.HasKey("NextStatesId", "PrevStatesId");
+
+                    b.HasIndex("PrevStatesId");
+
+                    b.ToTable("StateState");
+                });
+
+            modelBuilder.Entity("Domain.Board", b =>
+                {
+                    b.OwnsMany("Domain.ExecutorsWithRights", "ExecutorsWithRights", b1 =>
+                        {
+                            b1.Property<Guid>("Id")
+                                .HasColumnType("uuid");
+
+                            b1.Property<Guid>("BoardId")
+                                .HasColumnType("uuid");
+
+                            b1.Property<Guid>("ExecutorId")
+                                .HasColumnType("uuid");
+
+                            b1.Property<int>("Rights")
+                                .HasColumnType("integer");
+
+                            b1.HasKey("Id");
+
+                            b1.HasIndex("BoardId");
+
+                            b1.ToTable("ExecutorsWithRights");
+
+                            b1.WithOwner()
+                                .HasForeignKey("BoardId");
+                        });
+
+                    b.Navigation("ExecutorsWithRights");
                 });
 
             modelBuilder.Entity("Domain.Card", b =>
@@ -191,26 +207,19 @@ namespace Persistence.Migrations
                         .WithMany("Cards")
                         .HasForeignKey("BoardId");
 
-                    b.HasOne("Domain.Column", "Column")
-                        .WithMany()
-                        .HasForeignKey("ColumnId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
                     b.HasOne("Domain.Executor", "Executor")
                         .WithMany()
                         .HasForeignKey("ExecutorId");
 
-                    b.Navigation("Column");
+                    b.HasOne("Domain.State", "State")
+                        .WithMany()
+                        .HasForeignKey("StateId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.Navigation("Executor");
-                });
 
-            modelBuilder.Entity("Domain.Column", b =>
-                {
-                    b.HasOne("Domain.Board", null)
-                        .WithMany("States")
-                        .HasForeignKey("BoardId");
+                    b.Navigation("State");
                 });
 
             modelBuilder.Entity("Domain.Comment", b =>
@@ -226,6 +235,28 @@ namespace Persistence.Migrations
                         .HasForeignKey("CardId");
 
                     b.Navigation("Author");
+                });
+
+            modelBuilder.Entity("Domain.State", b =>
+                {
+                    b.HasOne("Domain.Board", null)
+                        .WithMany("States")
+                        .HasForeignKey("BoardId");
+                });
+
+            modelBuilder.Entity("StateState", b =>
+                {
+                    b.HasOne("Domain.State", null)
+                        .WithMany()
+                        .HasForeignKey("NextStatesId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Domain.State", null)
+                        .WithMany()
+                        .HasForeignKey("PrevStatesId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("Domain.Board", b =>

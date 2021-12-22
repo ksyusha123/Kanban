@@ -1,8 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using Application;
-using Domain;
 using Telegram.Bot;
 using Telegram.Bot.Types;
 using Chat = Domain.Chat;
@@ -17,19 +15,18 @@ namespace Kanban
         public AddCardCommand(IRepository<Chat, long> chatRepository, IEnumerable<IApplication> apps) => 
             (_chatRepository, _apps) = (chatRepository, apps);
 
-        public string Name => "/addCard";
+        public string Name => "/addcard";
         public async Task ExecuteAsync(Message message, TelegramBotClient botClient)
         {
             var chatId = message.Chat.Id;
             var chat = await _chatRepository.GetAsync(chatId);
             var app = chat.App;
-            var boardInteractor = _apps.First(i => i.App == app).BoardInteractor;
             var cardInteractor = _apps.First(i => i.App == app).CardInteractor;
             var cardName = message.Text.Split(' ', 2)[1] != string.Empty
                 ? message.Text.Split(' ', 2)[1]
                 : message.ReplyToMessage.Text;
-            var card = await cardInteractor.CreateCardAsync(cardName);
-            await boardInteractor.AddCardAsync(card.Id.ToString(), chat.BoardId);
+            var card = await cardInteractor.CreateCardAsync(cardName, chat.BoardId);
+            await botClient.SendTextMessageAsync(chatId, $"слышь ты! я добавиль {cardName}! работай, дедлайны горят, а ты лежишь!");
         }
     }
 }

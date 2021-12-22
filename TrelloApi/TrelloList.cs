@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Threading.Tasks;
 
 namespace TrelloApi
 {
@@ -12,38 +13,59 @@ namespace TrelloApi
         public int Pos { get; set; }
         public string IdBoard { get; set; }
         public bool Subscribed { get; set; }
-        
-        internal TrelloList() { }
+    }
 
-        public TrelloList(string id)
+    public class TrelloListClient
+    {
+        private string _apiKey;
+        private string _userToken;
+
+        public TrelloListClient(string userToken, string apiKey)
         {
+            _apiKey = apiKey;
+            _userToken = userToken;
+        }
+
+        private void Authorize()
+        {
+            TrelloClient.ApiKey = _apiKey;
+            TrelloClient.Token = _userToken;
+        }
+
+        public async Task<TrelloList> LoadAsync(string id)
+        {
+            Authorize();
             var response = TrelloClient.GetResponseByWebRequest($"https://api.trello.com/1/lists/{id}", "GET",
-                new List<(string title, string value)> { ("Accept", "application/json") });
-            var proxy = TrelloClient.DeserializeJson<TrelloList>(response);
-            TrelloClient.Copy(proxy, this);
+                    new List<(string title, string value)> { ("Accept", "application/json") });
+            return TrelloClient.DeserializeJson<TrelloList>(response);
         }
 
-
-        /// <returns>Returns True if moving was successful, False otherwise</returns>
-        public bool MoveToBoard(string boardId)
+        public async Task<TrelloList> CreateAsync(string name, string boardId)
         {
-            try
-            {
-                TrelloClient.GetResponseByWebRequest($"https://api.trello.com/1/lists/{Id}/idBoard", "PUT",
-                    parameters: new [] {("value", boardId)});
-                return true;
-            }
-            catch (Exception)
-            {
-                return false;
-            }
+            Authorize();
+            var response = TrelloClient.GetResponseByWebRequest($"https://api.trello.com/1/boards/{boardId}/lists", "POST",
+                        new[] { ("Accept", "application/json") }, new[] { ("name", name) });
+            return TrelloClient.DeserializeJson<TrelloList>(response);
         }
 
-        public IEnumerable<TrelloCard> GetAllCards()
+        public async Task ArchiveAsync(string id)
         {
-            //TODO
-            var response = TrelloClient.GetResponseByWebRequest($"https://api.trello.com/1/lists/{Id}/cards", "GET",
-                new[] {("Accept", "application/json")});
+            Authorize();
+            TrelloClient.GetResponseByWebRequest($"https://api.trello.com/1/lists/{id}/closed", "PUT", parameters: new[] { ("value", "true") });
+        }
+
+        public async Task MoveToBoardAsync(string listId, string boardId)
+        {
+            Authorize();
+            TrelloClient.GetResponseByWebRequest($"https://api.trello.com/1/lists/{listId}/idBoard", "PUT",
+                    parameters: new[] { ("value", boardId) });
+        }
+
+        public async Task<IEnumerable<TrelloCard>> GetAllCardsAsync(string id)
+        {
+            Authorize();
+            var response = TrelloClient.GetResponseByWebRequest($"https://api.trello.com/1/lists/{id}/cards", "GET",
+                new[] { ("Accept", "application/json") });
             return TrelloClient.DeserializeJson<IEnumerable<TrelloCard>>(response);
         }
     }

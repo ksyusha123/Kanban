@@ -19,7 +19,7 @@ namespace Kanban
         public StartCommand(IRepository<Chat, long> chatRepository, List<IApplication> apps) => 
             (_chatRepository, _apps) = (chatRepository, apps);
 
-        public string Name => @"/start";
+        public string Name => "/start";
 
         private string Text => "Этот бот поможет вам и вашей команде быстрее работать с kanban доской. " +
                                "Наберите команду /help чтобы посмотреть, что он может";

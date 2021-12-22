@@ -7,16 +7,16 @@ using Infrastructure;
 
 namespace Domain
 {
-    public class State : IEntity<Guid>
+    public class Column : IEntity<Guid>
     {
         private string _name = string.Empty;
 
         // ReSharper disable once UnusedMember.Local
-        private State()
+        private Column()
         {
         }
 
-        public State(string name, IReadOnlyCollection<State> prevStates, IReadOnlyCollection<State> nextStates) =>
+        public Column(string name, IReadOnlyCollection<Column> prevStates, IReadOnlyCollection<Column> nextStates) =>
             (Id, Name, PrevStates, NextStates) = (Guid.NewGuid(), name, prevStates, nextStates);
 
         public Guid Id { get; }
@@ -29,7 +29,7 @@ namespace Domain
                 _name = value;
 
                 Specs
-                    .For<State>()
+                    .For<Column>()
                     .Member(t => t.Name, new StringNotEmptySpec()
                         .And(new StringMaxLengthSpec(100))
                         .And(new StringNotContinuousSpacesSpec())
@@ -38,7 +38,7 @@ namespace Domain
             }
         }
 
-        public IReadOnlyCollection<State> PrevStates { get; } = null!;
-        public IReadOnlyCollection<State> NextStates { get; } = null!;
+        public IReadOnlyCollection<Column> PrevStates { get; } = null!;
+        public IReadOnlyCollection<Column> NextStates { get; } = null!;
     }
 }

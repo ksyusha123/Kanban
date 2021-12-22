@@ -8,7 +8,7 @@ namespace Domain
         string Name { get; set; }
         Executor? Executor { get; set; }
         string Description { get; set; }
-        State State { get; set; }
+        Column Column { get; set; }
         DateTime CreationTime { get; }
     }
 }
