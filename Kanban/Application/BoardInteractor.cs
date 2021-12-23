@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using Domain;
 
@@ -8,13 +9,17 @@ namespace Application
     {
         private readonly IRepository<Board, Guid> _boardRepository;
         private readonly IRepository<Card, Guid> _cardRepository;
-        
+
         public BoardInteractor(IRepository<Board, Guid> boardRepository, IRepository<Card, Guid> cardRepository) =>
             (_boardRepository, _cardRepository) = (boardRepository, cardRepository);
 
         public async Task<Board> CreateBoardAsync(string name)
         {
-            var board = new Board(name);
+            var todoColumn = new Column("ToDo", 0);
+            var wipColumn = new Column("Work In Progress", 1);
+            var doneColumn = new Column("Done", 2);
+
+            var board = new Board(name, new List<Column> {todoColumn, wipColumn, doneColumn});
             await _boardRepository.AddAsync(board);
             return board;
         }

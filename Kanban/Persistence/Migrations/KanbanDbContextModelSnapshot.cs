@@ -19,21 +19,6 @@ namespace Persistence.Migrations
                 .HasAnnotation("ProductVersion", "5.0.12")
                 .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
 
-            modelBuilder.Entity("ColumnColumn", b =>
-                {
-                    b.Property<Guid>("NextStatesId")
-                        .HasColumnType("uuid");
-
-                    b.Property<Guid>("PrevStatesId")
-                        .HasColumnType("uuid");
-
-                    b.HasKey("NextStatesId", "PrevStatesId");
-
-                    b.HasIndex("PrevStatesId");
-
-                    b.ToTable("ColumnColumn");
-                });
-
             modelBuilder.Entity("Domain.Board", b =>
                 {
                     b.Property<Guid>("Id")
@@ -54,6 +39,9 @@ namespace Persistence.Migrations
                         .HasColumnType("uuid");
 
                     b.Property<Guid?>("BoardId")
+                        .HasColumnType("uuid");
+
+                    b.Property<Guid?>("BoardId1")
                         .HasColumnType("uuid");
 
                     b.Property<Guid>("ColumnId")
@@ -78,6 +66,8 @@ namespace Persistence.Migrations
                     b.HasKey("Id");
 
                     b.HasIndex("BoardId");
+
+                    b.HasIndex("BoardId1");
 
                     b.HasIndex("ColumnId");
 
@@ -114,6 +104,9 @@ namespace Persistence.Migrations
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasColumnType("text");
+
+                    b.Property<int>("OrderNumber")
+                        .HasColumnType("integer");
 
                     b.HasKey("Id");
 
@@ -170,26 +163,15 @@ namespace Persistence.Migrations
                     b.ToTable("Executor");
                 });
 
-            modelBuilder.Entity("ColumnColumn", b =>
-                {
-                    b.HasOne("Domain.Column", null)
-                        .WithMany()
-                        .HasForeignKey("NextStatesId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("Domain.Column", null)
-                        .WithMany()
-                        .HasForeignKey("PrevStatesId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-                });
-
             modelBuilder.Entity("Domain.Card", b =>
                 {
                     b.HasOne("Domain.Board", null)
                         .WithMany("Cards")
                         .HasForeignKey("BoardId");
+
+                    b.HasOne("Domain.Board", null)
+                        .WithMany("_cards")
+                        .HasForeignKey("BoardId1");
 
                     b.HasOne("Domain.Column", "Column")
                         .WithMany()
@@ -209,7 +191,7 @@ namespace Persistence.Migrations
             modelBuilder.Entity("Domain.Column", b =>
                 {
                     b.HasOne("Domain.Board", null)
-                        .WithMany("States")
+                        .WithMany("Columns")
                         .HasForeignKey("BoardId");
                 });
 
@@ -230,9 +212,11 @@ namespace Persistence.Migrations
 
             modelBuilder.Entity("Domain.Board", b =>
                 {
+                    b.Navigation("_cards");
+
                     b.Navigation("Cards");
 
-                    b.Navigation("States");
+                    b.Navigation("Columns");
                 });
 
             modelBuilder.Entity("Domain.Card", b =>

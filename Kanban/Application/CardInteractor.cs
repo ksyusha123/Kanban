@@ -23,9 +23,8 @@ namespace Application
 
         public async Task<Card> CreateCardAsync(string name, string boardId)
         {
-            var card = new Card(name, "", new Executor("", ""),
-                new Column("todo", new Column[0], new Column[0]), _dateTimeProvider);
             var board = await _boardRepository.GetAsync(new Guid(boardId));
+            var card = new Card(name, "", new Executor("", ""), board.StartColumn, _dateTimeProvider);
             board.AddCard(card);
             await _boardRepository.UpdateAsync(board);
             return card;
@@ -55,7 +54,6 @@ namespace Application
 
         public async Task AddComment(string cardId, Comment comment)
         {
-            
         }
     }
 }

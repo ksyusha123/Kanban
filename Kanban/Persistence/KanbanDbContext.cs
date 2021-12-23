@@ -12,24 +12,24 @@ namespace Persistence
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            modelBuilder.Entity<Card>().HasKey(t => t.Id);
-            modelBuilder.Entity<Card>().Property(t => t.Id).ValueGeneratedNever();
-            modelBuilder.Entity<Card>().Property(t => t.Name).HasMaxLength(100);
-            modelBuilder.Entity<Card>().Property(t => t.Description).HasMaxLength(250);
-            modelBuilder.Entity<Card>().HasOne(t => t.Executor).WithMany();
-            modelBuilder.Entity<Card>().HasOne(t => t.Column).WithMany();
-            modelBuilder.Entity<Card>().HasMany(t => t.Comments).WithOne();
-            modelBuilder.Entity<Card>().Property(t => t.CreationTime);
+            modelBuilder.Entity<Card>().HasKey(c => c.Id);
+            modelBuilder.Entity<Card>().Property(c => c.Id).ValueGeneratedNever();
+            modelBuilder.Entity<Card>().Property(c => c.Name).HasMaxLength(100);
+            modelBuilder.Entity<Card>().Property(c => c.Description).HasMaxLength(250);
+            modelBuilder.Entity<Card>().HasOne(c => c.Executor).WithMany();
+            modelBuilder.Entity<Card>().HasOne(c => c.Column).WithMany();
+            modelBuilder.Entity<Card>().HasMany(c => c.Comments).WithOne();
+            modelBuilder.Entity<Card>().Property(c => c.CreationTime);
 
             modelBuilder.Entity<Executor>().HasKey(e => e.Id);
             modelBuilder.Entity<Executor>().Property(e => e.Id).ValueGeneratedNever();
             modelBuilder.Entity<Executor>().Property(e => e.Name).HasMaxLength(100);
             modelBuilder.Entity<Executor>().Property(e => e.TelegramUsername).HasMaxLength(100);
 
-            modelBuilder.Entity<Column>().HasKey(s => s.Id);
-            modelBuilder.Entity<Column>().Property(s => s.Id).ValueGeneratedNever();
-            modelBuilder.Entity<Column>().Property(s => s.Name);
-            modelBuilder.Entity<Column>().HasMany(s => s.NextStates).WithMany(s => s.PrevStates);
+            modelBuilder.Entity<Column>().HasKey(c => c.Id);
+            modelBuilder.Entity<Column>().Property(c => c.Id).ValueGeneratedNever();
+            modelBuilder.Entity<Column>().Property(c => c.Name);
+            modelBuilder.Entity<Column>().Property(c => c.OrderNumber);
 
             modelBuilder.Entity<Comment>().HasKey(c => c.Id);
             modelBuilder.Entity<Comment>().Property(c => c.Id).ValueGeneratedNever();
@@ -37,18 +37,11 @@ namespace Persistence
             modelBuilder.Entity<Comment>().Property(c => c.Message).HasMaxLength(250);
             modelBuilder.Entity<Comment>().Property(c => c.CreationTime);
 
-            modelBuilder.Entity<Board>().HasKey(p => p.Id);
-            modelBuilder.Entity<Board>().Property(p => p.Id).ValueGeneratedNever();
-            modelBuilder.Entity<Board>().Property(p => p.Name);
-            modelBuilder.Entity<Board>().HasMany(t => t.Cards);
-            modelBuilder.Entity<Board>().HasMany(t => t.States);
-            // modelBuilder.Entity<Board>().OwnsMany<ExecutorsWithRights>("ExecutorsWithRights", er =>
-            // {
-            //     er.HasKey(e => e.Id);
-            //     er.Property(e => e.Id).ValueGeneratedNever();
-            //     er.Property(e => e.ExecutorId);
-            //     er.Property(e => e.Rights);
-            // });
+            modelBuilder.Entity<Board>().HasKey(b => b.Id);
+            modelBuilder.Entity<Board>().Property(b => b.Id).ValueGeneratedNever();
+            modelBuilder.Entity<Board>().Property(b => b.Name);
+            modelBuilder.Entity<Board>().HasMany<Card>("_cards");
+            modelBuilder.Entity<Board>().HasMany(b => b.Columns).WithOne();
 
             modelBuilder.Entity<Chat>().HasKey(c => c.Id);
             modelBuilder.Entity<Chat>().Property(c => c.Id).ValueGeneratedNever();

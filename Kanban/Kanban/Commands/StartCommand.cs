@@ -27,8 +27,7 @@ namespace Kanban
         public async Task ExecuteAsync(Message message, TelegramBotClient botClient)
         {
             var chatId = message.Chat.Id;
-            await _chatRepository.AddAsync(new Chat(chatId, App.OwnKanban, "adasd"));
-            await botClient.SendTextMessageAsync(chatId, "хрю");
+            await botClient.SendTextMessageAsync(chatId, Text);
         }
     }
 }
