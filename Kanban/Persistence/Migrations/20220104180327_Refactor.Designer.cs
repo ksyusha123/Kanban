@@ -10,8 +10,8 @@ using Persistence;
 namespace Persistence.Migrations
 {
     [DbContext(typeof(KanbanDbContext))]
-    [Migration("20211222151853_Priz2")]
-    partial class Priz2
+    [Migration("20220104180327_Refactor")]
+    partial class Refactor
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -20,21 +20,6 @@ namespace Persistence.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 63)
                 .HasAnnotation("ProductVersion", "5.0.12")
                 .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
-
-            modelBuilder.Entity("ColumnColumn", b =>
-                {
-                    b.Property<Guid>("NextStatesId")
-                        .HasColumnType("uuid");
-
-                    b.Property<Guid>("PrevStatesId")
-                        .HasColumnType("uuid");
-
-                    b.HasKey("NextStatesId", "PrevStatesId");
-
-                    b.HasIndex("PrevStatesId");
-
-                    b.ToTable("ColumnColumn");
-                });
 
             modelBuilder.Entity("Domain.Board", b =>
                 {
@@ -56,6 +41,9 @@ namespace Persistence.Migrations
                         .HasColumnType("uuid");
 
                     b.Property<Guid?>("BoardId")
+                        .HasColumnType("uuid");
+
+                    b.Property<Guid?>("BoardId1")
                         .HasColumnType("uuid");
 
                     b.Property<Guid>("ColumnId")
@@ -80,6 +68,8 @@ namespace Persistence.Migrations
                     b.HasKey("Id");
 
                     b.HasIndex("BoardId");
+
+                    b.HasIndex("BoardId1");
 
                     b.HasIndex("ColumnId");
 
@@ -113,13 +103,21 @@ namespace Persistence.Migrations
                     b.Property<Guid?>("BoardId")
                         .HasColumnType("uuid");
 
+                    b.Property<Guid?>("BoardId1")
+                        .HasColumnType("uuid");
+
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasColumnType("text");
 
+                    b.Property<int>("OrderNumber")
+                        .HasColumnType("integer");
+
                     b.HasKey("Id");
 
                     b.HasIndex("BoardId");
+
+                    b.HasIndex("BoardId1");
 
                     b.ToTable("Column");
                 });
@@ -172,26 +170,15 @@ namespace Persistence.Migrations
                     b.ToTable("Executor");
                 });
 
-            modelBuilder.Entity("ColumnColumn", b =>
-                {
-                    b.HasOne("Domain.Column", null)
-                        .WithMany()
-                        .HasForeignKey("NextStatesId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("Domain.Column", null)
-                        .WithMany()
-                        .HasForeignKey("PrevStatesId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-                });
-
             modelBuilder.Entity("Domain.Card", b =>
                 {
                     b.HasOne("Domain.Board", null)
                         .WithMany("Cards")
                         .HasForeignKey("BoardId");
+
+                    b.HasOne("Domain.Board", null)
+                        .WithMany("_cards")
+                        .HasForeignKey("BoardId1");
 
                     b.HasOne("Domain.Column", "Column")
                         .WithMany()
@@ -211,8 +198,12 @@ namespace Persistence.Migrations
             modelBuilder.Entity("Domain.Column", b =>
                 {
                     b.HasOne("Domain.Board", null)
-                        .WithMany("States")
+                        .WithMany("Columns")
                         .HasForeignKey("BoardId");
+
+                    b.HasOne("Domain.Board", null)
+                        .WithMany("_columns")
+                        .HasForeignKey("BoardId1");
                 });
 
             modelBuilder.Entity("Domain.Comment", b =>
@@ -232,9 +223,13 @@ namespace Persistence.Migrations
 
             modelBuilder.Entity("Domain.Board", b =>
                 {
+                    b.Navigation("_cards");
+
+                    b.Navigation("_columns");
+
                     b.Navigation("Cards");
 
-                    b.Navigation("States");
+                    b.Navigation("Columns");
                 });
 
             modelBuilder.Entity("Domain.Card", b =>

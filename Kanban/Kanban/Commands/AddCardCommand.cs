@@ -22,8 +22,9 @@ namespace Kanban
             var chat = await _chatRepository.GetAsync(chatId);
             var app = chat.App;
             var cardInteractor = _apps.First(i => i.App == app).CardInteractor;
-            var cardName = message.Text.Split(' ', 2)[1] != string.Empty
-                ? message.Text.Split(' ', 2)[1]
+            var strings = message.Text.Split(' ', 2);
+            var cardName = strings.Length > 1
+                ? strings[1]
                 : message.ReplyToMessage.Text;
             var card = await cardInteractor.CreateCardAsync(cardName, chat.BoardId);
             await botClient.SendTextMessageAsync(chatId, $"слышь ты! я добавиль {cardName}! работай, дедлайны горят, а ты лежишь!");

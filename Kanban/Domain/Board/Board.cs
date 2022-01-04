@@ -9,19 +9,9 @@ namespace Domain
     {
         private readonly List<Card> _cards = new();
         private readonly Dictionary<Guid, AccessRights> _team = new();
-        private readonly List<Column> _states = new();
+        private readonly List<Column> _columns = new();
 
-        public Board(string name, List<Card> cards, Dictionary<Guid, AccessRights> team, List<Column> states) =>
-            (Id, Name, _cards, _team, _states) = (Guid.NewGuid(), name, cards, team, states);
-
-        public Board(string name) => (Id, Name) = (Guid.NewGuid(), name);
-
-        private Board(Guid id, string name, List<Card> cards, List<Column> states)
-        {
-            (Id, Name, _cards, _states) = (id, name, cards, states);
-
-            // foreach (var i in executors) _team[i.ExecutorId] = i.Rights;
-        }
+        public Board(string name, List<Column> columns) => (Id, Name, _columns) = (Guid.NewGuid(), name, columns);
 
         // ReSharper disable once UnusedMember.Local
         private Board()
@@ -29,9 +19,10 @@ namespace Domain
         }
 
         public Guid Id { get; }
-        public string Name { get; }
+        public string Name { get; } = null!;
 
-        public IReadOnlyCollection<Column> States => _states;
+        public Column StartColumn => _columns.Single(c => c.OrderNumber == 0);
+        public IReadOnlyCollection<Column> Columns => _columns;
         public IReadOnlyCollection<Card> Cards => _cards;
         public IEnumerable<Guid> Team => _team.Keys;
         public IEnumerable<Guid> Readers => FilterExecutors(AccessRights.Read);
