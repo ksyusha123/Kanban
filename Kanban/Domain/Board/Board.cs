@@ -11,7 +11,7 @@ namespace Domain
         private readonly Dictionary<Guid, AccessRights> _team = new();
         private readonly List<Column> _columns = new();
 
-        public Board(string name, List<Column> states) => (Id, Name, _columns) = (Guid.NewGuid(), name, states);
+        public Board(string name, List<Column> columns) => (Id, Name, _columns) = (Guid.NewGuid(), name, columns);
 
         // ReSharper disable once UnusedMember.Local
         private Board()

@@ -101,6 +101,9 @@ namespace Persistence.Migrations
                     b.Property<Guid?>("BoardId")
                         .HasColumnType("uuid");
 
+                    b.Property<Guid?>("BoardId1")
+                        .HasColumnType("uuid");
+
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasColumnType("text");
@@ -111,6 +114,8 @@ namespace Persistence.Migrations
                     b.HasKey("Id");
 
                     b.HasIndex("BoardId");
+
+                    b.HasIndex("BoardId1");
 
                     b.ToTable("Column");
                 });
@@ -193,6 +198,10 @@ namespace Persistence.Migrations
                     b.HasOne("Domain.Board", null)
                         .WithMany("Columns")
                         .HasForeignKey("BoardId");
+
+                    b.HasOne("Domain.Board", null)
+                        .WithMany("_columns")
+                        .HasForeignKey("BoardId1");
                 });
 
             modelBuilder.Entity("Domain.Comment", b =>
@@ -213,6 +222,8 @@ namespace Persistence.Migrations
             modelBuilder.Entity("Domain.Board", b =>
                 {
                     b.Navigation("_cards");
+
+                    b.Navigation("_columns");
 
                     b.Navigation("Cards");
 

@@ -56,7 +56,8 @@ namespace Persistence.Migrations
                     Id = table.Column<Guid>(type: "uuid", nullable: false),
                     Name = table.Column<string>(type: "text", nullable: false),
                     OrderNumber = table.Column<int>(type: "integer", nullable: false),
-                    BoardId = table.Column<Guid>(type: "uuid", nullable: true)
+                    BoardId = table.Column<Guid>(type: "uuid", nullable: true),
+                    BoardId1 = table.Column<Guid>(type: "uuid", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -64,6 +65,12 @@ namespace Persistence.Migrations
                     table.ForeignKey(
                         name: "FK_Column_Board_BoardId",
                         column: x => x.BoardId,
+                        principalTable: "Board",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_Column_Board_BoardId1",
+                        column: x => x.BoardId1,
                         principalTable: "Board",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
@@ -78,6 +85,11 @@ namespace Persistence.Migrations
                 name: "IX_Column_BoardId",
                 table: "Column",
                 column: "BoardId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Column_BoardId1",
+                table: "Column",
+                column: "BoardId1");
 
             migrationBuilder.AddForeignKey(
                 name: "FK_Card_Board_BoardId1",

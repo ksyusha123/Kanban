@@ -1,8 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using FluentSpecification.Composite;
-using FluentSpecification.Conclusion;
-using FluentSpecification.Embedded;
 using Infrastructure;
 
 namespace Domain
