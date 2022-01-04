@@ -5,24 +5,23 @@ using Application;
 using Domain;
 using Telegram.Bot;
 using Telegram.Bot.Types;
-using Chat = Domain.Chat;
 
 namespace Kanban
 {
     public class CreateBoardCommand : ICommand
     {
-        private readonly IRepository<Chat, long> _chatRepository;
+        private readonly ChatInteractor _chatInteractor;
         private readonly IEnumerable<IApplication> _apps;
 
-        public CreateBoardCommand(IRepository<Chat, long> chatRepository, IEnumerable<IApplication> apps) =>
-            (_chatRepository, _apps) = (chatRepository, apps);
+        public CreateBoardCommand(ChatInteractor chatInteractor, IEnumerable<IApplication> apps) =>
+            (_chatInteractor, _apps) = (chatInteractor, apps);
 
         public string Name => "/createboard";
 
         public async Task ExecuteAsync(Message message, TelegramBotClient botClient)
         {
             var chatId = message.Chat.Id;
-            var chat = await _chatRepository.GetAsync(chatId);
+            var chat = await _chatInteractor.GetChatAsync(chatId);
 
             if (chat is { })
             {
@@ -35,8 +34,7 @@ namespace Kanban
             var boardInteractor = _apps.First(i => i.App == app).BoardInteractor;
             var board = await boardInteractor.CreateBoardAsync(splitted[2]);
 
-            chat = new Chat(chatId, app, board.Id.ToString());
-            await _chatRepository.AddAsync(chat);
+            await _chatInteractor.AddChatAsync(chatId, app, board.Id.ToString());
             await botClient.SendTextMessageAsync(chatId, $"я сделаль {board.Name}!");
         }
     }
