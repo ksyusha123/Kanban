@@ -24,14 +24,6 @@ namespace Application
             return board;
         }
 
-        public async Task AddCardAsync(string cardId, string boardId)
-        {
-            var card = await _cardRepository.GetAsync(new Guid(cardId));
-            var board = await _boardRepository.GetAsync(new Guid(boardId));
-            board.AddCard(card);
-            await _boardRepository.UpdateAsync(board);
-        }
-
         public async Task DeleteCardAsync(string cardId, string boardId)
         {
             var card = await _cardRepository.GetAsync(new Guid(cardId));

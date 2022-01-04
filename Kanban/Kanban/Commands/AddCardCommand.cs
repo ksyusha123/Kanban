@@ -10,16 +10,16 @@ namespace Kanban
 {
     public class AddCardCommand : ICommand
     {
-        private readonly IRepository<Chat, long> _chatRepository;
+        private readonly ChatInteractor _chatInteractor;
         private readonly IEnumerable<IApplication> _apps;
-        public AddCardCommand(IRepository<Chat, long> chatRepository, IEnumerable<IApplication> apps) => 
-            (_chatRepository, _apps) = (chatRepository, apps);
+        public AddCardCommand(ChatInteractor chatInteractor, IEnumerable<IApplication> apps) => 
+            (_chatInteractor, _apps) = (chatInteractor, apps);
 
         public string Name => "/addcard";
         public async Task ExecuteAsync(Message message, TelegramBotClient botClient)
         {
             var chatId = message.Chat.Id;
-            var chat = await _chatRepository.GetAsync(chatId);
+            var chat = await _chatInteractor.GetChatAsync(chatId);
             var app = chat.App;
             var cardInteractor = _apps.First(i => i.App == app).CardInteractor;
             var strings = message.Text.Split(' ', 2);
