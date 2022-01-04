@@ -12,10 +12,16 @@ namespace TrelloApi
 {
     public class TrelloClient
     {
-        internal static string Token;
-        internal static string ApiKey;
+        private string token;
+        private string apiKey;
 
-        internal static string GetResponseByWebRequest(string url, string method,
+        public TrelloClient(string token, string apiKey)
+        {
+            this.token = token;
+            this.apiKey = apiKey;
+        }
+
+        internal string GetResponseByWebRequest(string url, string method,
             IEnumerable<(string title, string value)> headers = null, IEnumerable<(string title, string value)> parameters = null)
         {
             var request = (HttpWebRequest) WebRequest.Create(url);
@@ -25,7 +31,7 @@ namespace TrelloApi
                     request.Headers.Add(title, value);
             
             request.Method = method.ToUpper();
-            request.Headers.Add("Authorization", $"OAuth oauth_consumer_key =\"{ApiKey}\", oauth_token=\"{Token}\"");
+            request.Headers.Add("Authorization", $"OAuth oauth_consumer_key =\"{apiKey}\", oauth_token=\"{token}\"");
             if (!(parameters is null))
             {
                 using var requestStream = request.GetRequestStream();
@@ -46,7 +52,7 @@ namespace TrelloApi
             return input;
         }
 
-        internal static T DeserializeJson<T>(string json)
+        internal T DeserializeJson<T>(string json)
         {
             var builderJson = new StringBuilder();
             builderJson.Append(json[0].ToString() + json[1].ToString());
@@ -63,7 +69,7 @@ namespace TrelloApi
             return JsonConvert.DeserializeObject<T>(builderJson.ToString(), settings);
         }
 
-        internal static void Copy<T>(T fromObject, T toObject)
+        internal void Copy<T>(T fromObject, T toObject)
         {
             var properties = typeof(T).GetProperties();
             foreach (var prop in properties)

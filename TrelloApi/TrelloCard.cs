@@ -7,7 +7,6 @@ namespace TrelloApi
 {
     public class TrelloCard
     {
-        //TODO
         public string Id { get; set; }
         public bool Closed { get; set; }
         public string Desc { get; set; }
@@ -16,27 +15,48 @@ namespace TrelloApi
         public string Name { get; set; }
         public IEnumerable<string> IdMembers { get; set; }
 
-        internal TrelloCard() { }
+    }
 
-        public TrelloCard(string id)
+    public class TrelloCardClient
+    {
+        private TrelloClient client;
+        public TrelloCardClient(TrelloClient client)
         {
-            var response = TrelloClient.GetResponseByWebRequest($"https://api.trello.com/1/cards/{id}", "GET",
+            this.client = client;
+        }
+        
+        public async Task<TrelloCard> LoadAsync(string id)
+        {
+            var response = client.GetResponseByWebRequest($"https://api.trello.com/1/cards/{id}", "GET",
                 new List<(string title, string value)> { ("Accept", "application/json") });
-            var proxy = TrelloClient.DeserializeJson<TrelloCard>(response);
-            TrelloClient.Copy(proxy, this);
+            return client.DeserializeJson<TrelloCard>(response);
         }
 
-        public async Task<TrelloCard> ReplaceToListAsync(string listId)
+        public async Task<TrelloCard> ReplaceToListAsync(string id, string listId)
         {
-            var response = TrelloClient.GetResponseByWebRequest($"https://api.trello.com/1/cards/{Id}", "PUT",
-                new[] {("Accept", "application/json")}, new[] {("idList", listId)});
-            return TrelloClient.DeserializeJson<TrelloCard>(response);
+            var response = client.GetResponseByWebRequest($"https://api.trello.com/1/cards/{id}", "PUT",
+                new[] { ("Accept", "application/json") }, new[] { ("idList", listId) });
+            return client.DeserializeJson<TrelloCard>(response);
         }
 
-        public async Task<string> DeleteAsync()
+        public async Task DeleteAsync(string id)
         {
-            TrelloClient.GetResponseByWebRequest($"https://api.trello.com/1/cards/{Id}", "DELETE");
-            return null;
+            client.GetResponseByWebRequest($"https://api.trello.com/1/cards/{id}", "DELETE");
+        }
+
+        public async Task AddMemberAsync(string id, string memberId)
+        {
+            //TODO
+        }
+
+        public async Task RemoveMember(string id, string memberId)
+        {
+            //TODO
+        }
+
+        public async Task GetAllMembers(string id)
+        {
+            //TODO
         }
     }
 }
