@@ -4,7 +4,6 @@ using Microsoft.Extensions.Configuration;
 using Telegram.Bot;
 using Telegram.Bot.Args;
 
-
 namespace Kanban
 {
     public class TelegramBot
