@@ -40,6 +40,8 @@ namespace Kanban
             container.Register<IDateTimeProvider, StandardDateTimeProvider>();
             container.Register<TelegramBot>();
             container.RegisterInitializer<TelegramBot>(bot => bot.Start());
+            
+            container.Register<ChatInteractor>();
             return container;
         }
 

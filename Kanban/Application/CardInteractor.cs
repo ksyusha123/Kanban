@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using Domain;
 using Infrastructure;
@@ -28,6 +30,13 @@ namespace Application
             board.AddCard(card);
             await _boardRepository.UpdateAsync(board);
             return card;
+        }
+
+        public async Task<IEnumerable<Card>> GetCardsAsync(string nameQuery, string boardId)
+        {
+            var board = await _boardRepository.GetAsync(new Guid(boardId));
+            var nameTokens = nameQuery.Split(' ');
+            return board.Cards.Where(c => nameTokens.Any(t => c.Name.Contains(t, StringComparison.OrdinalIgnoreCase)));
         }
 
         public async Task EditCardNameAsync(string cardId, string name)

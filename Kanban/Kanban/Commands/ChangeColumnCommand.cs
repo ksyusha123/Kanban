@@ -11,26 +11,35 @@ namespace Kanban
 {
     public class ChangeColumnCommand : ICommand
     {
-        private readonly ChatInteractor _chatInteractor;
-        private readonly IEnumerable<IApplication> _apps;
+        private readonly IDictionary<App, IApplication> _apps;
 
-        public ChangeColumnCommand(ChatInteractor chatInteractor, IEnumerable<IApplication> apps) =>
-            (_chatInteractor, _apps) = (chatInteractor, apps);
+        public ChangeColumnCommand(IEnumerable<IApplication> apps) => _apps = apps.ToDictionary(a => a.App);
 
         public string Name => "/changecolumn";
-        public async Task ExecuteAsync(Message message, TelegramBotClient botClient)
+
+        public async Task ExecuteAsync(Chat chat, Message message, TelegramBotClient botClient)
         {
-            var chatId = message.Chat.Id;
-            var chat = await _chatInteractor.GetChatAsync(chatId);
-            var columnName = message.Text.Split(' ', 2)[1];
+            if (chat is null)
+            {
+                await botClient.SendTextMessageAsync(message.Chat.Id,
+                    "Не найдена доска проекта. Сначала введите /addboard или /help");
+                return;
+            }
+
             var cardName = message.ReplyToMessage.Text;
-            Card card; // find card by cardname
-            var app = _apps.First(a => a.App == chat.App);
-            var cardInteractor = app.CardInteractor;
-            var boardInteractor = app.BoardInteractor;
-            Column column; // find column by name
-            await cardInteractor.ChangeState(card.Id, column);
-            await botClient.SendTextMessageAsync(chatId, "передвинул твою карточку, а мог бы и сам справиться!");
+            var app = _apps[chat.App];
+            var card = (await app.CardInteractor.GetCardsAsync(cardName, chat.BoardId)).SingleOrDefault();
+            if (card is null)
+            {
+                // не найдено карточек или их несколько. надо шото написать юзерам. возможно, стоит разделить 2 случая:
+                // в случае нескольких карт вывести их список и попросить уточнить,
+                // а в случае, когда ничего не нашли просто сказать об этом
+            }
+
+            var columnName = message.Text.Split(' ', 2)[1];
+            var column = default(Column); // find column by name (можно скопипастить из CardInteractor.GetCardsAsync)
+            await app.CardInteractor.ChangeState(card!.Id.ToString(), column);
+            await botClient.SendTextMessageAsync(chat.Id, $"Передвинул карточку {card.Name} в колонку {column.Name}");
         }
     }
 }

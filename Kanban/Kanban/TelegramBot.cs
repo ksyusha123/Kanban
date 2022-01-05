@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using Application;
 using Microsoft.Extensions.Configuration;
 using Telegram.Bot;
 using Telegram.Bot.Args;
@@ -10,11 +11,13 @@ namespace Kanban
     {
         private readonly TelegramBotClient _client;
         private readonly Dictionary<string, ICommand> _commands;
+        private readonly ChatInteractor _chatInteractor;
 
-        public TelegramBot(IConfiguration configuration, IEnumerable<ICommand> commands)
+        public TelegramBot(IConfiguration configuration, IEnumerable<ICommand> commands, ChatInteractor chatInteractor)
         {
             _client = new TelegramBotClient(configuration.GetSection("botToken").Value);
             _commands = FillCommandsDictionary(commands);
+            _chatInteractor = chatInteractor;
         }
 
         public void Start()
@@ -36,7 +39,8 @@ namespace Kanban
                 if (commandFull!.StartsWith('/'))
                 {
                     if (commandSplitted != null && _commands.TryGetValue(commandSplitted[0], out var command))
-                        await command.ExecuteAsync(message, _client);
+                        await command.ExecuteAsync(await _chatInteractor.GetChatAsync(message.Chat.Id), message,
+                            _client);
                     else
                         await _client.SendTextMessageAsync(message.Chat, "таких команд не учил!");
                 }

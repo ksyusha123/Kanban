@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System.Collections.Generic;
+using System.Threading.Tasks;
 using Domain;
 
 namespace Application
@@ -21,6 +22,11 @@ namespace Application
         }
 
         public Task ChangeState(string cardId, Column column)
+        {
+            throw new System.NotImplementedException();
+        }
+
+        public Task<IEnumerable<Card>> GetCardsAsync(string nameQuery, string boardId)
         {
             throw new System.NotImplementedException();
         }

@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System.Collections.Generic;
+using System.Threading.Tasks;
 using Domain;
 
 namespace Application
@@ -9,5 +10,6 @@ namespace Application
         Task EditCardNameAsync(string cardId, string name);
         Task AssignCardExecutor(string cardId, string executorId);
         Task ChangeState(string cardId, Column column);
+        Task<IEnumerable<Card>> GetCardsAsync(string nameQuery, string boardId);
     }
 }

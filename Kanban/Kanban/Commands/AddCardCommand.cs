@@ -1,33 +1,38 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using Application;
+using Domain;
 using Telegram.Bot;
 using Telegram.Bot.Types;
 using Chat = Domain.Chat;
-using Task = System.Threading.Tasks.Task;
 
 namespace Kanban
 {
     public class AddCardCommand : ICommand
     {
-        private readonly ChatInteractor _chatInteractor;
-        private readonly IEnumerable<IApplication> _apps;
-        public AddCardCommand(ChatInteractor chatInteractor, IEnumerable<IApplication> apps) => 
-            (_chatInteractor, _apps) = (chatInteractor, apps);
+        private readonly Dictionary<App, IApplication> _apps;
+
+        public AddCardCommand(IEnumerable<IApplication> apps) => _apps = apps.ToDictionary(a => a.App);
 
         public string Name => "/addcard";
-        public async Task ExecuteAsync(Message message, TelegramBotClient botClient)
+
+        public async Task ExecuteAsync(Chat chat, Message message, TelegramBotClient botClient)
         {
-            var chatId = message.Chat.Id;
-            var chat = await _chatInteractor.GetChatAsync(chatId);
-            var app = chat.App;
-            var cardInteractor = _apps.First(i => i.App == app).CardInteractor;
+            if (chat is null)
+            {
+                await botClient.SendTextMessageAsync(message.Chat.Id,
+                    "Не найдена доска проекта. Сначала введите /addboard или /help");
+                return;
+            }
+
+            var cardInteractor = _apps[chat.App].CardInteractor;
             var strings = message.Text.Split(' ', 2);
             var cardName = strings.Length > 1
                 ? strings[1]
                 : message.ReplyToMessage.Text;
             var card = await cardInteractor.CreateCardAsync(cardName, chat.BoardId);
-            await botClient.SendTextMessageAsync(chatId, $"слышь ты! я добавиль {cardName}! работай, дедлайны горят, а ты лежишь!");
+            await botClient.SendTextMessageAsync(chat.Id, $"Создал задачу {card.Name} в колонке {card.Column.Name}");
         }
     }
 }
