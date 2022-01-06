@@ -8,6 +8,7 @@ namespace Kanban
     public class HelpCommand : ICommand
     {
         public string Name => "/help";
+        public bool NeedBoard => false;
         private const string Text = "<place for help>";
 
         public async Task ExecuteAsync(Chat chat, Message message, TelegramBotClient botClient) =>

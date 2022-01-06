@@ -16,16 +16,10 @@ namespace Kanban
         public ChangeColumnCommand(IEnumerable<IApplication> apps) => _apps = apps.ToDictionary(a => a.App);
 
         public string Name => "/changecolumn";
+        public bool NeedBoard => true;
 
         public async Task ExecuteAsync(Chat chat, Message message, TelegramBotClient botClient)
         {
-            if (chat is null)
-            {
-                await botClient.SendTextMessageAsync(message.Chat.Id,
-                    "Не найдена доска проекта. Сначала введите /addboard или /help");
-                return;
-            }
-
             var cardName = message.ReplyToMessage.Text;
             var app = _apps[chat.App];
             var card = (await app.CardInteractor.GetCardsAsync(cardName, chat.BoardId)).SingleOrDefault();

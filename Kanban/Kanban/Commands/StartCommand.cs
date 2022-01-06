@@ -16,6 +16,7 @@ namespace Kanban
             _supportedApps = string.Join(", ", apps.Select(a => a.Name));
 
         public string Name => "/start";
+        public bool NeedBoard => false;
 
         private string Text => "Этот бот поможет вам и вашей команде быстрее работать с Kanban доской. " +
                                $"Поддерживается использование {_supportedApps}.\n" +

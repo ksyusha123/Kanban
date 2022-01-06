@@ -39,8 +39,17 @@ namespace Kanban
                 if (commandFull!.StartsWith('/'))
                 {
                     if (commandSplitted != null && _commands.TryGetValue(commandSplitted[0], out var command))
-                        await command.ExecuteAsync(await _chatInteractor.GetChatAsync(message.Chat.Id), message,
-                            _client);
+                    {
+                        var chat = await _chatInteractor.GetChatAsync(message.Chat.Id);
+                        if (command.NeedBoard && chat is null)
+                        {
+                            await _client.SendTextMessageAsync(message.Chat.Id,
+                                "Не найдена доска проекта. Сначала введите /addboard или /help");
+                            return;
+                        }
+
+                        await command.ExecuteAsync(chat, message, _client);
+                    }
                     else
                         await _client.SendTextMessageAsync(message.Chat, "таких команд не учил!");
                 }

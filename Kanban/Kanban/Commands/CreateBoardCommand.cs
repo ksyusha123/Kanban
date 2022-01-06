@@ -22,6 +22,7 @@ namespace Kanban
         }
 
         public string Name => "/createboard";
+        public bool NeedBoard => false;
 
         public async Task ExecuteAsync(Chat chat, Message message, TelegramBotClient botClient)
         {

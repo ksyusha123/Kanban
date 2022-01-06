@@ -8,6 +8,7 @@ namespace Kanban
     public interface ICommand
     {
         public string Name { get; }
+        public bool NeedBoard { get; }
 
         public Task ExecuteAsync(Chat chat, Message message, TelegramBotClient botClient);
     }

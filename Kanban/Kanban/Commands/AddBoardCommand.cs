@@ -16,6 +16,8 @@ namespace Kanban
         public AddBoardCommand(IRepository<Chat, long> chatRepository, IEnumerable<IApplication> apps) =>
             (_chatRepository, _apps) = (chatRepository, apps);
         public string Name => "/addboard";
+        public bool NeedBoard => false;
+
         public async Task ExecuteAsync(Chat chat1, Message message, TelegramBotClient botClient)
         {
             var chatId = message.Chat.Id;
