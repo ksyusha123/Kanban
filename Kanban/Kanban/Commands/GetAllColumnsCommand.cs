@@ -9,11 +9,11 @@ using Chat = Domain.Chat;
 
 namespace Kanban
 {
-    public class GetAllColumns : ICommand
+    public class GetAllColumnsCommand : ICommand
     {
         private readonly IDictionary<App, IApplication> _apps;
 
-        public GetAllColumns(IEnumerable<IApplication> apps) => _apps = apps.ToDictionary(a => a.App);
+        public GetAllColumnsCommand(IEnumerable<IApplication> apps) => _apps = apps.ToDictionary(a => a.App);
         public string Name => "/getallcolumns";
         public bool NeedBoard => true;
         public async Task ExecuteAsync(Chat chat, Message message, TelegramBotClient botClient)
