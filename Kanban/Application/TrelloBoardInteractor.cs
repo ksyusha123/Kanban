@@ -26,5 +26,10 @@ namespace Application
             var card = new TrelloCard(cardId);
             await card.DeleteAsync();
         }
+
+        public Task<IEnumerable<Column>> GetAllColumnsAsync(string boardId)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

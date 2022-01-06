@@ -32,5 +32,11 @@ namespace Application
             await _cardRepository.DeleteAsync(card);
             await _boardRepository.UpdateAsync(board);
         }
+
+        public async Task<IEnumerable<Column>> GetAllColumnsAsync(string boardId)
+        {
+            var board = await _boardRepository.GetAsync(new Guid(boardId));
+            return board.Columns;
+        }
     }
 }

@@ -30,8 +30,11 @@ namespace Kanban
                 // а в случае, когда ничего не нашли просто сказать об этом
             }
 
+            var boardInteractor = _apps[chat.App].BoardInteractor;
             var columnName = message.Text.Split(' ', 2)[1];
-            var column = default(Column); // find column by name (можно скопипастить из CardInteractor.GetCardsAsync)
+            var column = (await boardInteractor.GetAllColumnsAsync(chat.BoardId))
+                .FirstOrDefault(c => c.Name == columnName);
+            // if(column is null)
             await app.CardInteractor.ChangeState(card!.Id.ToString(), column);
             await botClient.SendTextMessageAsync(chat.Id, $"Передвинул карточку {card.Name} в колонку {column.Name}");
         }
