@@ -21,7 +21,7 @@ namespace Application
             throw new System.NotImplementedException();
         }
 
-        public Task ChangeState(string cardId, Column column)
+        public Task ChangeColumn(string cardId, Column column)
         {
             throw new System.NotImplementedException();
         }

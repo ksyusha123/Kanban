@@ -35,7 +35,7 @@ namespace Kanban
             var column = (await boardInteractor.GetAllColumnsAsync(chat.BoardId))
                 .FirstOrDefault(c => c.Name == columnName);
             // if(column is null)
-            await app.CardInteractor.ChangeState(card!.Id.ToString(), column);
+            await app.CardInteractor.ChangeColumn(card!.Id.ToString(), column);
             await botClient.SendTextMessageAsync(chat.Id, $"Передвинул карточку {card.Name} в колонку {column.Name}");
         }
     }

@@ -49,12 +49,12 @@ namespace Application
         public async Task AssignCardExecutor(string cardId, string executorId)
         {
             var executor = await _executorRepository.GetAsync(new Guid(executorId));
-            var task = await _cardRepository.GetAsync(new Guid(cardId));
-            task.Executor = executor;
-            await _cardRepository.UpdateAsync(task);
+            var card = await _cardRepository.GetAsync(new Guid(cardId));
+            card.Executor = executor;
+            await _cardRepository.UpdateAsync(card);
         }
 
-        public async Task ChangeState(string cardId, Column column)
+        public async Task ChangeColumn(string cardId, Column column)
         {
             var card = await _cardRepository.GetAsync(new Guid(cardId));
             card.Column = column;

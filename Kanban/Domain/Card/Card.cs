@@ -9,8 +9,6 @@ namespace Domain
 {
     public class Card : ICard
     {
-        private string _name = string.Empty;
-        private string _description = string.Empty;
         private readonly List<Comment> _comments = new();
 
         // ReSharper disable once UnusedMember.Local
@@ -25,17 +23,9 @@ namespace Domain
 
         public Guid Id { get; }
 
-        public string Name
-        {
-            get => _name;
-            set { _name = value; }
-        }
+        public string Name { get; set; } = string.Empty;
 
-        public string Description
-        {
-            get => _description;
-            set { _description = value; }
-        }
+        public string Description { get; set; } = string.Empty;
 
         public Executor? Executor { get; set; }
         public Column Column { get; set; } = null!;
