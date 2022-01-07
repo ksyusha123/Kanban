@@ -1,6 +1,5 @@
 ﻿using Domain;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Configuration;
 
 namespace Persistence
 {
@@ -17,7 +16,7 @@ namespace Persistence
             modelBuilder.Entity<Card>().Property(c => c.Name).HasMaxLength(100);
             modelBuilder.Entity<Card>().Property(c => c.Description).HasMaxLength(250);
             modelBuilder.Entity<Card>().HasOne(c => c.Executor).WithMany();
-            modelBuilder.Entity<Card>().HasOne(c => c.Column).WithMany();
+            modelBuilder.Entity<Card>().Property(c => c.ColumnId);
             modelBuilder.Entity<Card>().HasMany(c => c.Comments).WithOne();
             modelBuilder.Entity<Card>().Property(c => c.CreationTime);
 

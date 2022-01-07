@@ -28,14 +28,19 @@ namespace Kanban
                 // не найдено карточек или их несколько. надо шото написать юзерам. возможно, стоит разделить 2 случая:
                 // в случае нескольких карт вывести их список и попросить уточнить,
                 // а в случае, когда ничего не нашли просто сказать об этом
+                return;
             }
 
-            var boardInteractor = _apps[chat.App].BoardInteractor;
             var columnName = message.Text.Split(' ', 2)[1];
-            var column = (await boardInteractor.GetAllColumnsAsync(chat.BoardId))
+            var column = (await app.BoardInteractor.GetAllColumnsAsync(chat.BoardId))
                 .FirstOrDefault(c => c.Name == columnName);
-            // if(column is null)
-            await app.CardInteractor.ChangeColumn(card!.Id.ToString(), column);
+            if (column is null)
+            {
+                await botClient.SendTextMessageAsync(chat.Id, "Столбец не найден!");
+                return;
+            }
+
+            await app.CardInteractor.ChangeColumn(card.Id.ToString(), column);
             await botClient.SendTextMessageAsync(chat.Id, $"Передвинул карточку {card.Name} в колонку {column.Name}");
         }
     }

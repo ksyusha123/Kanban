@@ -26,7 +26,9 @@ namespace Kanban
                 ? strings[1]
                 : message.ReplyToMessage.Text;
             var card = await cardInteractor.CreateCardAsync(cardName, chat.BoardId);
-            await botClient.SendTextMessageAsync(chat.Id, $"Создал задачу {card.Name} в колонке {card.Column.Name}");
+            var columnName = (await _apps[chat.App].BoardInteractor.GetAllColumnsAsync(chat.BoardId))
+                .First(c => c.Id == card.ColumnId).Name;
+            await botClient.SendTextMessageAsync(chat.Id, $"Создал задачу {card.Name} в колонке {columnName}");
         }
     }
 }

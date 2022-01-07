@@ -26,7 +26,7 @@ namespace Application
         public async Task<Card> CreateCardAsync(string name, string boardId)
         {
             var board = await _boardRepository.GetAsync(new Guid(boardId));
-            var card = new Card(name, "", new Executor("", ""), board.StartColumn, _dateTimeProvider);
+            var card = new Card(name, "", new Executor("", ""), board.StartColumn.Id, _dateTimeProvider);
             board.AddCard(card);
             await _boardRepository.UpdateAsync(board);
             return card;
@@ -57,7 +57,7 @@ namespace Application
         public async Task ChangeColumn(string cardId, Column column)
         {
             var card = await _cardRepository.GetAsync(new Guid(cardId));
-            card.Column = column;
+            card.ColumnId = column.Id;
             await _cardRepository.UpdateAsync(card);
         }
 

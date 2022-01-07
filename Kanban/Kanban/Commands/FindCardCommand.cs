@@ -31,8 +31,11 @@ namespace Kanban
                 return;
             }
 
+            var columns = (await _apps[chat.App].BoardInteractor.GetAllColumnsAsync(chat.BoardId))
+                .ToDictionary(c => c.Id);
             await botClient.SendTextMessageAsync(chat.Id,
-                "Результаты поиска:\n\n" + string.Join('\n', cards.Select(c => $"{c.Name} в {c.Column.Name}")));
+                "Результаты поиска:\n\n" +
+                string.Join('\n', cards.Select(c => $"{c.Name} в {columns[c.ColumnId].Name}")));
         }
     }
 }
