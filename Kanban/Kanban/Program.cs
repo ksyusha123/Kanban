@@ -27,6 +27,7 @@ namespace Kanban
                             "config.json"),
                         true)
                     .Build());
+            // container.Register<TrelloClient>();
             container.RegisterApplications();
             container.RegisterCommands();
             container.Register(() => new DbContextOptionsBuilder<KanbanDbContext>()
