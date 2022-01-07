@@ -37,10 +37,11 @@ namespace Kanban
             container.Register<IRepository<Chat, long>, Repository<Chat, long>>();
             container.Register<IRepository<Card, Guid>, Repository<Card, Guid>>();
             container.Register<IRepository<Executor, Guid>, Repository<Executor, Guid>>();
-            container.Register<Repository<Board, Guid>>();
             container.Register<IDateTimeProvider, StandardDateTimeProvider>();
             container.Register<TelegramBot>();
             container.RegisterInitializer<TelegramBot>(bot => bot.Start());
+            
+            container.Register<ChatInteractor>();
             return container;
         }
 

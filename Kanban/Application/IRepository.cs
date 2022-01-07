@@ -1,10 +1,9 @@
-﻿using System;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using Infrastructure;
 
 namespace Application
 {
-    public interface IRepository<T, TId> where T : IEntity<TId> where TId: struct
+    public interface IRepository<T, in TId> where T : IEntity<TId> where TId: struct
     {
         Task<T> GetAsync(TId id);
 

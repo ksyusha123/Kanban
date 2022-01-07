@@ -1,16 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
-using FluentSpecification.Composite;
-using FluentSpecification.Conclusion;
-using FluentSpecification.Embedded;
 using Infrastructure;
 
 namespace Domain
 {
     public class Card : ICard
     {
-        private string _name = string.Empty;
-        private string _description = string.Empty;
         private readonly List<Comment> _comments = new();
 
         // ReSharper disable once UnusedMember.Local
@@ -18,27 +13,19 @@ namespace Domain
         {
         }
 
-        public Card(string name, string description, Executor executor, Column column,
+        public Card(string name, string description, Executor executor, Guid columnId, 
             IDateTimeProvider dateTimeProvider) =>
-            (Id, Name, Description, Executor, Column, CreationTime) =
-            (Guid.NewGuid(), name, description, executor, column, dateTimeProvider.GetCurrent());
+            (Id, Name, Description, Executor, ColumnId, CreationTime) =
+            (Guid.NewGuid(), name, description, executor, columnId, dateTimeProvider.GetCurrent());
 
         public Guid Id { get; }
 
-        public string Name
-        {
-            get => _name;
-            set { _name = value; }
-        }
+        public string Name { get; set; } = string.Empty;
 
-        public string Description
-        {
-            get => _description;
-            set { _description = value; }
-        }
+        public string Description { get; set; } = string.Empty;
 
         public Executor? Executor { get; set; }
-        public Column Column { get; set; } = null!;
+        public Guid ColumnId { get; set; }
         public IEnumerable<Comment> Comments => _comments;
         public DateTime CreationTime { get; }
 

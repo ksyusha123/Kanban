@@ -1,6 +1,5 @@
 ﻿using Domain;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Configuration;
 
 namespace Persistence
 {
@@ -17,7 +16,7 @@ namespace Persistence
             modelBuilder.Entity<Card>().Property(c => c.Name).HasMaxLength(100);
             modelBuilder.Entity<Card>().Property(c => c.Description).HasMaxLength(250);
             modelBuilder.Entity<Card>().HasOne(c => c.Executor).WithMany();
-            modelBuilder.Entity<Card>().HasOne(c => c.Column).WithMany();
+            modelBuilder.Entity<Card>().Property(c => c.ColumnId);
             modelBuilder.Entity<Card>().HasMany(c => c.Comments).WithOne();
             modelBuilder.Entity<Card>().Property(c => c.CreationTime);
 
@@ -42,7 +41,8 @@ namespace Persistence
             modelBuilder.Entity<Board>().Property(b => b.Name);
             modelBuilder.Entity<Board>().HasMany<Column>("_columns").WithOne();
             modelBuilder.Entity<Board>().Navigation("_columns").AutoInclude();
-            modelBuilder.Entity<Board>().HasMany<Card>("_cards");
+            modelBuilder.Entity<Board>().HasMany<Card>("_cards").WithOne();
+            modelBuilder.Entity<Board>().Navigation("_cards").AutoInclude();
 
             modelBuilder.Entity<Chat>().HasKey(c => c.Id);
             modelBuilder.Entity<Chat>().Property(c => c.Id).ValueGeneratedNever();

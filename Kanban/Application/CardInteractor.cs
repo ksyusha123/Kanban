@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using Domain;
 using Infrastructure;
@@ -24,10 +26,17 @@ namespace Application
         public async Task<Card> CreateCardAsync(string name, string boardId)
         {
             var board = await _boardRepository.GetAsync(new Guid(boardId));
-            var card = new Card(name, "", new Executor("", ""), board.StartColumn, _dateTimeProvider);
+            var card = new Card(name, "", new Executor("", ""), board.StartColumn.Id, _dateTimeProvider);
             board.AddCard(card);
             await _boardRepository.UpdateAsync(board);
             return card;
+        }
+
+        public async Task<IEnumerable<Card>> GetCardsAsync(string nameQuery, string boardId)
+        {
+            var board = await _boardRepository.GetAsync(new Guid(boardId));
+            var nameTokens = nameQuery.Split(' ');
+            return board.Cards.Where(c => nameTokens.Any(t => c.Name.Contains(t, StringComparison.OrdinalIgnoreCase)));
         }
 
         public async Task EditCardNameAsync(string cardId, string name)
@@ -40,15 +49,15 @@ namespace Application
         public async Task AssignCardExecutor(string cardId, string executorId)
         {
             var executor = await _executorRepository.GetAsync(new Guid(executorId));
-            var task = await _cardRepository.GetAsync(new Guid(cardId));
-            task.Executor = executor;
-            await _cardRepository.UpdateAsync(task);
+            var card = await _cardRepository.GetAsync(new Guid(cardId));
+            card.Executor = executor;
+            await _cardRepository.UpdateAsync(card);
         }
 
-        public async Task ChangeState(string cardId, Column column)
+        public async Task ChangeColumn(string cardId, Column column)
         {
             var card = await _cardRepository.GetAsync(new Guid(cardId));
-            card.Column = column;
+            card.ColumnId = column.Id;
             await _cardRepository.UpdateAsync(card);
         }
 

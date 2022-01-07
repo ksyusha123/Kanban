@@ -1,16 +1,17 @@
 ﻿using System.Threading.Tasks;
 using Telegram.Bot;
 using Telegram.Bot.Types;
+using Chat = Domain.Chat;
 
 namespace Kanban
 {
     public class HelpCommand : ICommand
     {
         public string Name => "/help";
-        public async Task ExecuteAsync(Message message, TelegramBotClient botClient)
-        {
-            var chatId = message.Chat.Id;
-            await botClient.SendTextMessageAsync(chatId, "<place for help>");
-        }
+        public bool NeedBoard => false;
+        private const string Text = "<place for help>";
+
+        public async Task ExecuteAsync(Chat chat, Message message, TelegramBotClient botClient) =>
+            await botClient.SendTextMessageAsync(chat.Id, Text);
     }
 }

@@ -14,24 +14,22 @@ namespace Application
         public async Task<Board> CreateBoardAsync(string name)
         {
             var trelloBoard = await TrelloBoard.CreateBoardAsync(name);
-            return new Board(trelloBoard.Name);
+            var columns = trelloBoard
+                .GetAllLists()
+                .Select(t => new Column(t.Name, t.Pos))
+                .ToList();
+            return new Board(trelloBoard.Name, columns);
         }
-
-        // public async Task<Card> AddCardAsync(string name, string boardId)
-        // {
-        //     var board = new TrelloBoard(boardId);
-        //     var someList = board.GetAllLists().FirstOrDefault();
-        //     if (someList is null)
-        //         throw new NullReferenceException("Board hasn't any list");
-        //     var card = new TrelloCard(cardId);
-        //     await card.ReplaceToListAsync(someList.Id);
-        //     return new Card(card.Name);
-        // }
 
         public async Task DeleteCardAsync(string cardId, string boardId)
         {
             var card = new TrelloCard(cardId);
             await card.DeleteAsync();
+        }
+
+        public Task<IEnumerable<Column>> GetAllColumnsAsync(string boardId)
+        {
+            throw new NotImplementedException();
         }
     }
 }
