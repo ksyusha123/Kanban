@@ -44,6 +44,18 @@ namespace TrelloApi
             client.GetResponseByWebRequest($"https://api.trello.com/1/cards/{id}", "DELETE");
         }
 
+        public void Create(string listId, string name)
+        {
+            client.GetResponseByWebRequest("https://api.trello.com/1/cards", "POST",
+                new[] { ("Accept", "application/json") }, new[] { ("idList", listId), ("name", name) });
+        }
+
+        public void Rename(string id, string name)
+        {
+            client.GetResponseByWebRequest($"https://api.trello.com/1/cards/{id}", "PUT",
+                new[] { ("Accept", "application/json") }, new[] { ("name", name) });
+        }
+        
         public async Task AddMemberAsync(string id, string memberId)
         {
             //TODO
