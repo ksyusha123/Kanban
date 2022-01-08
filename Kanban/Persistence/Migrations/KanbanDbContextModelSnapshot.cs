@@ -21,8 +21,8 @@ namespace Persistence.Migrations
 
             modelBuilder.Entity("Domain.Board", b =>
                 {
-                    b.Property<Guid>("Id")
-                        .HasColumnType("uuid");
+                    b.Property<string>("Id")
+                        .HasColumnType("text");
 
                     b.Property<string>("Name")
                         .IsRequired()
@@ -35,17 +35,18 @@ namespace Persistence.Migrations
 
             modelBuilder.Entity("Domain.Card", b =>
                 {
-                    b.Property<Guid>("Id")
-                        .HasColumnType("uuid");
+                    b.Property<string>("Id")
+                        .HasColumnType("text");
 
-                    b.Property<Guid?>("BoardId")
-                        .HasColumnType("uuid");
+                    b.Property<string>("BoardId")
+                        .HasColumnType("text");
 
-                    b.Property<Guid?>("BoardId1")
-                        .HasColumnType("uuid");
+                    b.Property<string>("BoardId1")
+                        .HasColumnType("text");
 
-                    b.Property<Guid>("ColumnId")
-                        .HasColumnType("uuid");
+                    b.Property<string>("ColumnId")
+                        .IsRequired()
+                        .HasColumnType("text");
 
                     b.Property<DateTime>("CreationTime")
                         .HasColumnType("timestamp without time zone");
@@ -93,14 +94,14 @@ namespace Persistence.Migrations
 
             modelBuilder.Entity("Domain.Column", b =>
                 {
-                    b.Property<Guid>("Id")
-                        .HasColumnType("uuid");
+                    b.Property<string>("Id")
+                        .HasColumnType("text");
 
-                    b.Property<Guid?>("BoardId")
-                        .HasColumnType("uuid");
+                    b.Property<string>("BoardId")
+                        .HasColumnType("text");
 
-                    b.Property<Guid?>("BoardId1")
-                        .HasColumnType("uuid");
+                    b.Property<string>("BoardId1")
+                        .HasColumnType("text");
 
                     b.Property<string>("Name")
                         .IsRequired()
@@ -126,8 +127,8 @@ namespace Persistence.Migrations
                     b.Property<Guid>("AuthorId")
                         .HasColumnType("uuid");
 
-                    b.Property<Guid?>("CardId")
-                        .HasColumnType("uuid");
+                    b.Property<string>("CardId")
+                        .HasColumnType("text");
 
                     b.Property<DateTime>("CreationTime")
                         .HasColumnType("timestamp without time zone");

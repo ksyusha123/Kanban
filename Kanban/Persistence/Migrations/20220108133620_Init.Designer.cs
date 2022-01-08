@@ -10,8 +10,8 @@ using Persistence;
 namespace Persistence.Migrations
 {
     [DbContext(typeof(KanbanDbContext))]
-    [Migration("20220104180327_Refactor")]
-    partial class Refactor
+    [Migration("20220108133620_Init")]
+    partial class Init
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -23,8 +23,8 @@ namespace Persistence.Migrations
 
             modelBuilder.Entity("Domain.Board", b =>
                 {
-                    b.Property<Guid>("Id")
-                        .HasColumnType("uuid");
+                    b.Property<string>("Id")
+                        .HasColumnType("text");
 
                     b.Property<string>("Name")
                         .IsRequired()
@@ -37,17 +37,18 @@ namespace Persistence.Migrations
 
             modelBuilder.Entity("Domain.Card", b =>
                 {
-                    b.Property<Guid>("Id")
-                        .HasColumnType("uuid");
+                    b.Property<string>("Id")
+                        .HasColumnType("text");
 
-                    b.Property<Guid?>("BoardId")
-                        .HasColumnType("uuid");
+                    b.Property<string>("BoardId")
+                        .HasColumnType("text");
 
-                    b.Property<Guid?>("BoardId1")
-                        .HasColumnType("uuid");
+                    b.Property<string>("BoardId1")
+                        .HasColumnType("text");
 
-                    b.Property<Guid>("ColumnId")
-                        .HasColumnType("uuid");
+                    b.Property<string>("ColumnId")
+                        .IsRequired()
+                        .HasColumnType("text");
 
                     b.Property<DateTime>("CreationTime")
                         .HasColumnType("timestamp without time zone");
@@ -70,8 +71,6 @@ namespace Persistence.Migrations
                     b.HasIndex("BoardId");
 
                     b.HasIndex("BoardId1");
-
-                    b.HasIndex("ColumnId");
 
                     b.HasIndex("ExecutorId");
 
@@ -97,14 +96,14 @@ namespace Persistence.Migrations
 
             modelBuilder.Entity("Domain.Column", b =>
                 {
-                    b.Property<Guid>("Id")
-                        .HasColumnType("uuid");
+                    b.Property<string>("Id")
+                        .HasColumnType("text");
 
-                    b.Property<Guid?>("BoardId")
-                        .HasColumnType("uuid");
+                    b.Property<string>("BoardId")
+                        .HasColumnType("text");
 
-                    b.Property<Guid?>("BoardId1")
-                        .HasColumnType("uuid");
+                    b.Property<string>("BoardId1")
+                        .HasColumnType("text");
 
                     b.Property<string>("Name")
                         .IsRequired()
@@ -130,8 +129,8 @@ namespace Persistence.Migrations
                     b.Property<Guid>("AuthorId")
                         .HasColumnType("uuid");
 
-                    b.Property<Guid?>("CardId")
-                        .HasColumnType("uuid");
+                    b.Property<string>("CardId")
+                        .HasColumnType("text");
 
                     b.Property<DateTime>("CreationTime")
                         .HasColumnType("timestamp without time zone");
@@ -180,17 +179,9 @@ namespace Persistence.Migrations
                         .WithMany("_cards")
                         .HasForeignKey("BoardId1");
 
-                    b.HasOne("Domain.Column", "Column")
-                        .WithMany()
-                        .HasForeignKey("ColumnId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
                     b.HasOne("Domain.Executor", "Executor")
                         .WithMany()
                         .HasForeignKey("ExecutorId");
-
-                    b.Navigation("Column");
 
                     b.Navigation("Executor");
                 });
