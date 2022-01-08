@@ -11,11 +11,11 @@ namespace Application
     {
         private readonly IRepository<Card, Guid> _cardRepository;
         private readonly IRepository<Executor, Guid> _executorRepository;
-        private readonly IRepository<Board, Guid> _boardRepository;
+        private readonly IRepository<Board, string> _boardRepository;
         private readonly IDateTimeProvider _dateTimeProvider;
 
         public CardInteractor(IRepository<Card, Guid> cardRepository, IRepository<Executor, Guid> executorRepository,
-            IRepository<Board, Guid> boardRepository, IDateTimeProvider dateTimeProvider)
+            IRepository<Board, string> boardRepository, IDateTimeProvider dateTimeProvider)
         {
             _cardRepository = cardRepository;
             _executorRepository = executorRepository;
@@ -25,7 +25,7 @@ namespace Application
 
         public async Task<Card> CreateCardAsync(string name, string boardId)
         {
-            var board = await _boardRepository.GetAsync(new Guid(boardId));
+            var board = await _boardRepository.GetAsync(boardId);
             var card = new Card(name, "", new Executor("", ""), board.StartColumn.Id, _dateTimeProvider);
             board.AddCard(card);
             await _boardRepository.UpdateAsync(board);
@@ -34,7 +34,7 @@ namespace Application
 
         public async Task<IEnumerable<Card>> GetCardsAsync(string nameQuery, string boardId)
         {
-            var board = await _boardRepository.GetAsync(new Guid(boardId));
+            var board = await _boardRepository.GetAsync(boardId);
             var nameTokens = nameQuery.Split(' ');
             return board.Cards.Where(c => nameTokens.Any(t => c.Name.Contains(t, StringComparison.OrdinalIgnoreCase)));
         }

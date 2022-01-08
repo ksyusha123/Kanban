@@ -7,7 +7,7 @@ using Task = System.Threading.Tasks.Task;
 
 namespace Persistence
 {
-    public class Repository<T, TId> : IRepository<T, TId> where T : class, IEntity<TId> where TId: struct
+    public class Repository<T, TId> : IRepository<T, TId> where T : class, IEntity<TId>
     {
         private readonly KanbanDbContext _context;
 

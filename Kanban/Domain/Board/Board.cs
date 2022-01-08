@@ -5,20 +5,25 @@ using Infrastructure;
 
 namespace Domain
 {
-    public class Board : IEntity<Guid>
+    public class Board : IEntity<string>
     {
         private readonly List<Card> _cards = new();
         private readonly Dictionary<Guid, AccessRights> _team = new();
         private readonly List<Column> _columns = new();
 
-        public Board(string name, List<Column> columns) => (Id, Name, _columns) = (Guid.NewGuid(), name, columns);
+        public Board(string name, List<Column> columns, string id="")
+        {
+            Id = id == "" ? Guid.NewGuid().ToString() : id;
+            Name = name;
+            _columns = columns;
+        }
 
         // ReSharper disable once UnusedMember.Local
         private Board()
         {
         }
 
-        public Guid Id { get; }
+        public string Id { get; }
         public string Name { get; } = null!;
 
         public Column StartColumn => _columns.Single(c => c.OrderNumber == 0);

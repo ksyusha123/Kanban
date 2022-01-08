@@ -37,7 +37,7 @@ namespace Kanban
                 .UseNpgsql(container.GetInstance<IConfiguration>().GetSection("connectionString").Value)
                 .Options);
             container.Register<KanbanDbContext>();
-            container.Register<IRepository<Board, Guid>, Repository<Board, Guid>>();
+            container.Register<IRepository<Board, string>, Repository<Board, string>>();
             container.Register<IRepository<Chat, long>, Repository<Chat, long>>();
             container.Register<IRepository<Card, Guid>, Repository<Card, Guid>>();
             container.Register<IRepository<Executor, Guid>, Repository<Executor, Guid>>();

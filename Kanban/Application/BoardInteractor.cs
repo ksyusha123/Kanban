@@ -7,10 +7,10 @@ namespace Application
 {
     public class BoardInteractor : IBoardInteractor
     {
-        private readonly IRepository<Board, Guid> _boardRepository;
+        private readonly IRepository<Board, string> _boardRepository;
         private readonly IRepository<Card, Guid> _cardRepository;
 
-        public BoardInteractor(IRepository<Board, Guid> boardRepository, IRepository<Card, Guid> cardRepository) =>
+        public BoardInteractor(IRepository<Board, string> boardRepository, IRepository<Card, Guid> cardRepository) =>
             (_boardRepository, _cardRepository) = (boardRepository, cardRepository);
 
         public async Task<Board> CreateBoardAsync(string name)
@@ -27,7 +27,7 @@ namespace Application
         public async Task DeleteCardAsync(string cardId, string boardId)
         {
             var card = await _cardRepository.GetAsync(new Guid(cardId));
-            var board = await _boardRepository.GetAsync(new Guid(boardId));
+            var board = await _boardRepository.GetAsync(boardId);
             board.RemoveCard(card);
             await _cardRepository.DeleteAsync(card);
             await _boardRepository.UpdateAsync(board);
@@ -35,7 +35,7 @@ namespace Application
 
         public async Task<IEnumerable<Column>> GetAllColumnsAsync(string boardId)
         {
-            var board = await _boardRepository.GetAsync(new Guid(boardId));
+            var board = await _boardRepository.GetAsync(boardId);
             return board.Columns;
         }
     }
