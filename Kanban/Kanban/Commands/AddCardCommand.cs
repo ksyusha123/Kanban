@@ -20,12 +20,11 @@ namespace Kanban
 
         public async Task ExecuteAsync(Chat chat, Message message, TelegramBotClient botClient)
         {
-            var cardInteractor = _apps[chat.App].CardInteractor;
             var strings = message.Text.Split(' ', 2);
             var cardName = strings.Length > 1
                 ? strings[1]
                 : message.ReplyToMessage.Text;
-            var card = await cardInteractor.CreateCardAsync(cardName, chat.BoardId);
+            var card = await _apps[chat.App].CardInteractor.CreateCardAsync(cardName, chat.BoardId);
             var columnName = (await _apps[chat.App].BoardInteractor.GetAllColumnsAsync(chat.BoardId))
                 .First(c => c.Id == card.ColumnId).Name;
             await botClient.SendTextMessageAsync(chat.Id, $"Создал задачу {card.Name} в колонке {columnName}");

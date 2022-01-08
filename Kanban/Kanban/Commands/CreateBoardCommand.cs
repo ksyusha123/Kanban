@@ -39,12 +39,14 @@ namespace Kanban
                 await botClient.SendTextMessageAsync(chatId, $"Мы не поддерживаем {splitted[1]}. Подробнее - /help");
                 return;
             }
-            
+
             var boardInteractor = _apps[app].BoardInteractor;
             var board = await boardInteractor.CreateBoardAsync(splitted[2]);
 
-            await _chatInteractor.AddChatAsync(chatId, app, board.Id.ToString());
-            await botClient.SendTextMessageAsync(chatId, $"Я создал доску {board.Name}. Удачи в создании проекта!");
+            await _chatInteractor.AddChatAsync(chatId, app, board.Id);
+            await botClient.SendTextMessageAsync(chatId, $"Я создал доску {board.Name} со столбцами " +
+                                                         $"{string.Join(", ", board.Columns.Select(c => c.Name))}. " +
+                                                         "Удачи в создании проекта!");
         }
     }
 }
