@@ -11,9 +11,14 @@ namespace Domain
         private readonly Dictionary<Guid, AccessRights> _team = new();
         private readonly List<Column> _columns = new();
 
-        public Board(string name, List<Column> columns, string id="")
+        public Board(string name, List<Column> columns) : this(Guid.NewGuid().ToString(), name, columns)
         {
-            Id = id == "" ? Guid.NewGuid().ToString() : id;
+        }
+
+        public Board(string id, string name, List<Column> columns)
+        {
+            // ReSharper disable once ConstantNullCoalescingCondition
+            Id = id ?? Guid.NewGuid().ToString();
             Name = name;
             _columns = columns;
         }
@@ -23,7 +28,7 @@ namespace Domain
         {
         }
 
-        public string Id { get; }
+        public string Id { get; } = null!;
         public string Name { get; } = null!;
 
         public Column StartColumn => _columns.Single(c => c.OrderNumber == 0);

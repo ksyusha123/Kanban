@@ -26,7 +26,7 @@ namespace Application
             var columns = (await _trelloBoardClient.GetAllListsAsync(trelloBoard.Id))
                 .Select(t => new Column(t.Name, t.Pos, t.Id))
                 .ToList();
-            return new Board(trelloBoard.Name, columns, trelloBoard.Id);
+            return new Board(trelloBoard.Id, trelloBoard.Name, columns);
         }
 
         public async Task DeleteCardAsync(string cardId, string boardId) => await _trelloCardClient.DeleteAsync(cardId);
