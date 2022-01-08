@@ -39,8 +39,12 @@ namespace Persistence
             modelBuilder.Entity<Board>().HasKey(b => b.Id);
             modelBuilder.Entity<Board>().Property(b => b.Id).ValueGeneratedNever();
             modelBuilder.Entity<Board>().Property(b => b.Name);
+            
+            modelBuilder.Entity<Board>().Ignore(b => b.Columns);
             modelBuilder.Entity<Board>().HasMany<Column>("_columns").WithOne();
             modelBuilder.Entity<Board>().Navigation("_columns").AutoInclude();
+            
+            modelBuilder.Entity<Board>().Ignore(b => b.Cards);
             modelBuilder.Entity<Board>().HasMany<Card>("_cards").WithOne();
             modelBuilder.Entity<Board>().Navigation("_cards").AutoInclude();
 

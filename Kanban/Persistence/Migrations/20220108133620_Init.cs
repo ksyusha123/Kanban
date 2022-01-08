@@ -52,7 +52,7 @@ namespace Persistence.Migrations
                     Id = table.Column<string>(type: "text", nullable: false),
                     Name = table.Column<string>(type: "text", nullable: false),
                     OrderNumber = table.Column<int>(type: "integer", nullable: false),
-                    BoardId = table.Column<string>(type: "text", nullable: false)
+                    BoardId = table.Column<string>(type: "text", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -75,7 +75,7 @@ namespace Persistence.Migrations
                     ExecutorId = table.Column<Guid>(type: "uuid", nullable: true),
                     ColumnId = table.Column<string>(type: "text", nullable: false),
                     CreationTime = table.Column<DateTime>(type: "timestamp without time zone", nullable: false),
-                    BoardId = table.Column<string>(type: "text", nullable: false)
+                    BoardId = table.Column<string>(type: "text", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -102,7 +102,7 @@ namespace Persistence.Migrations
                     AuthorId = table.Column<Guid>(type: "uuid", nullable: false),
                     Message = table.Column<string>(type: "character varying(250)", maxLength: 250, nullable: false),
                     CreationTime = table.Column<DateTime>(type: "timestamp without time zone", nullable: false),
-                    CardId = table.Column<string>(type: "text", nullable: false)
+                    CardId = table.Column<string>(type: "text", nullable: true)
                 },
                 constraints: table =>
                 {

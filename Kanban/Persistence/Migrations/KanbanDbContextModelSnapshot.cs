@@ -41,9 +41,6 @@ namespace Persistence.Migrations
                     b.Property<string>("BoardId")
                         .HasColumnType("text");
 
-                    b.Property<string>("BoardId1")
-                        .HasColumnType("text");
-
                     b.Property<string>("ColumnId")
                         .IsRequired()
                         .HasColumnType("text");
@@ -67,8 +64,6 @@ namespace Persistence.Migrations
                     b.HasKey("Id");
 
                     b.HasIndex("BoardId");
-
-                    b.HasIndex("BoardId1");
 
                     b.HasIndex("ExecutorId");
 
@@ -100,9 +95,6 @@ namespace Persistence.Migrations
                     b.Property<string>("BoardId")
                         .HasColumnType("text");
 
-                    b.Property<string>("BoardId1")
-                        .HasColumnType("text");
-
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasColumnType("text");
@@ -113,8 +105,6 @@ namespace Persistence.Migrations
                     b.HasKey("Id");
 
                     b.HasIndex("BoardId");
-
-                    b.HasIndex("BoardId1");
 
                     b.ToTable("Column");
                 });
@@ -170,12 +160,8 @@ namespace Persistence.Migrations
             modelBuilder.Entity("Domain.Card", b =>
                 {
                     b.HasOne("Domain.Board", null)
-                        .WithMany("Cards")
-                        .HasForeignKey("BoardId");
-
-                    b.HasOne("Domain.Board", null)
                         .WithMany("_cards")
-                        .HasForeignKey("BoardId1");
+                        .HasForeignKey("BoardId");
 
                     b.HasOne("Domain.Executor", "Executor")
                         .WithMany()
@@ -187,12 +173,8 @@ namespace Persistence.Migrations
             modelBuilder.Entity("Domain.Column", b =>
                 {
                     b.HasOne("Domain.Board", null)
-                        .WithMany("Columns")
-                        .HasForeignKey("BoardId");
-
-                    b.HasOne("Domain.Board", null)
                         .WithMany("_columns")
-                        .HasForeignKey("BoardId1");
+                        .HasForeignKey("BoardId");
                 });
 
             modelBuilder.Entity("Domain.Comment", b =>
@@ -215,10 +197,6 @@ namespace Persistence.Migrations
                     b.Navigation("_cards");
 
                     b.Navigation("_columns");
-
-                    b.Navigation("Cards");
-
-                    b.Navigation("Columns");
                 });
 
             modelBuilder.Entity("Domain.Card", b =>
