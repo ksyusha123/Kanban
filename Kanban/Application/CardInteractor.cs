@@ -46,7 +46,7 @@ namespace Application
             await _cardRepository.UpdateAsync(card);
         }
 
-        public async Task AssignCardExecutor(string cardId, string executorId)
+        public async Task AssignCardExecutorAsync(string cardId, string executorId)
         {
             var executor = await _executorRepository.GetAsync(new Guid(executorId));
             var card = await _cardRepository.GetAsync(new Guid(cardId));
@@ -54,7 +54,7 @@ namespace Application
             await _cardRepository.UpdateAsync(card);
         }
 
-        public async Task ChangeColumn(string cardId, Column column)
+        public async Task ChangeColumnAsync(string cardId, Column column)
         {
             var card = await _cardRepository.GetAsync(new Guid(cardId));
             card.ColumnId = column.Id;

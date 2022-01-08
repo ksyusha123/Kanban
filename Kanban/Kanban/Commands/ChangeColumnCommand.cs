@@ -40,7 +40,7 @@ namespace Kanban
                 return;
             }
 
-            await app.CardInteractor.ChangeColumn(card.Id.ToString(), column);
+            await app.CardInteractor.ChangeColumnAsync(card.Id.ToString(), column);
             await botClient.SendTextMessageAsync(chat.Id, $"Передвинул карточку {card.Name} в колонку {column.Name}");
         }
     }

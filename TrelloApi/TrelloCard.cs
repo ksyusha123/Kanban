@@ -44,13 +44,14 @@ namespace TrelloApi
             client.GetResponseByWebRequest($"https://api.trello.com/1/cards/{id}", "DELETE");
         }
 
-        public void Create(string listId, string name)
+        public async Task<TrelloCard> Create(string listId, string name)
         {
-            client.GetResponseByWebRequest("https://api.trello.com/1/cards", "POST",
+            var response = client.GetResponseByWebRequest("https://api.trello.com/1/cards", "POST",
                 new[] { ("Accept", "application/json") }, new[] { ("idList", listId), ("name", name) });
+            return client.DeserializeJson<TrelloCard>(response);
         }
 
-        public void Rename(string id, string name)
+        public async Task Rename(string id, string name)
         {
             client.GetResponseByWebRequest($"https://api.trello.com/1/cards/{id}", "PUT",
                 new[] { ("Accept", "application/json") }, new[] { ("name", name) });

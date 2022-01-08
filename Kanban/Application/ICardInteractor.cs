@@ -8,8 +8,8 @@ namespace Application
     {
         Task<Card> CreateCardAsync(string name, string boardId);
         Task EditCardNameAsync(string cardId, string name);
-        Task AssignCardExecutor(string cardId, string executorId);
-        Task ChangeColumn(string cardId, Column column);
+        Task AssignCardExecutorAsync(string cardId, string executorId);
+        Task ChangeColumnAsync(string cardId, Column column);
         Task<IEnumerable<Card>> GetCardsAsync(string nameQuery, string boardId);
     }
 }
