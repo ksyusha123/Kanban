@@ -10,6 +10,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Persistence;
 using SimpleInjector;
+using TrelloApi;
 
 namespace Kanban
 {
@@ -27,6 +28,9 @@ namespace Kanban
                             "config.json"),
                         true)
                     .Build());
+            container.Register(() => 
+                new TrelloClient(container.GetInstance<IConfiguration>().GetSection("token").Value, 
+                    container.GetInstance<IConfiguration>().GetSection("api-key").Value));
             container.RegisterApplications();
             container.RegisterCommands();
             container.Register(() => new DbContextOptionsBuilder<KanbanDbContext>()

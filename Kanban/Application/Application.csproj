@@ -10,9 +10,6 @@
     </ItemGroup>
 
     <ItemGroup>
-      <Reference Include="TrelloApi">
-        <HintPath>..\..\TrelloApi\bin\Debug\netstandard2.0\TrelloApi.dll</HintPath>
-      </Reference>
       <Reference Include="TrelloApi, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null">
         <HintPath>..\..\TrelloApi\bin\Debug\netstandard2.0\TrelloApi.dll</HintPath>
       </Reference>

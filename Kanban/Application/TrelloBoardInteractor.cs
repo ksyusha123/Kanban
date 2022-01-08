@@ -11,25 +11,27 @@ namespace Application
 {
     class TrelloBoardInteractor : IBoardInteractor
     {
+        private readonly TrelloBoardClient _trelloBoardClient;
+        private readonly TrelloCardClient _trelloCardClient;
+        
+        public TrelloBoardInteractor(TrelloClient trelloClient)
+        {
+            _trelloCardClient = new TrelloCardClient(trelloClient);
+            _trelloBoardClient = new TrelloBoardClient(trelloClient);
+        }
+        
         public async Task<Board> CreateBoardAsync(string name)
         {
-            var trelloBoard = await TrelloBoard.CreateBoardAsync(name);
-            var columns = trelloBoard
-                .GetAllLists()
+            var trelloBoard = await _trelloBoardClient.CreatedAsync(name);
+            var columns = (await _trelloBoardClient.GetAllListsAsync(trelloBoard.Id))
                 .Select(t => new Column(t.Name, t.Pos))
                 .ToList();
             return new Board(trelloBoard.Name, columns);
         }
 
-        public async Task DeleteCardAsync(string cardId, string boardId)
-        {
-            var card = new TrelloCard(cardId);
-            await card.DeleteAsync();
-        }
+        public async Task DeleteCardAsync(string cardId, string boardId) => await _trelloCardClient.DeleteAsync(cardId);
 
-        public Task<IEnumerable<Column>> GetAllColumnsAsync(string boardId)
-        {
-            throw new NotImplementedException();
-        }
+        public async Task<IEnumerable<Column>> GetAllColumnsAsync(string boardId) => 
+            (await _trelloBoardClient.GetAllListsAsync(boardId)).Select(t => new Column(t.Name, t.Pos));
     }
 }
