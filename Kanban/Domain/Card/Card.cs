@@ -19,16 +19,16 @@ namespace Domain
             (id, name, description, executor, columnId, dateTimeProvider.GetCurrent());
 
         public Card(string name, string description, Executor executor, string columnId,
-            IDateTimeProvider dateTimeProvider) : this(Guid.NewGuid().ToString(), name, description, executor, columnId,
-            dateTimeProvider)
+            IDateTimeProvider dateTimeProvider) 
+            : this(Guid.NewGuid().ToString(), name, description, executor, columnId, dateTimeProvider)
         {
         }
 
         public string Id { get; } = null!;
 
-        public string Name { get; set; } = string.Empty;
+        public string Name { get; set; } = null!;
 
-        public string Description { get; set; } = string.Empty;
+        public string Description { get; set; } = null!;
 
         public Executor? Executor { get; set; }
         public string ColumnId { get; set; } = null!;

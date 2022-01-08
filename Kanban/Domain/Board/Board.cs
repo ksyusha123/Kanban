@@ -9,19 +9,12 @@ namespace Domain
     {
         private readonly List<Card> _cards = new();
         private readonly Dictionary<Guid, AccessRights> _team = new();
-        private readonly List<Column> _columns = new();
 
         public Board(string name, List<Column> columns) : this(Guid.NewGuid().ToString(), name, columns)
         {
         }
 
-        public Board(string id, string name, List<Column> columns)
-        {
-            // ReSharper disable once ConstantNullCoalescingCondition
-            Id = id ?? Guid.NewGuid().ToString();
-            Name = name;
-            _columns = columns;
-        }
+        public Board(string id, string name, List<Column> columns) => (Id, Name, Columns) = (id, name, columns);
 
         // ReSharper disable once UnusedMember.Local
         private Board()
@@ -31,9 +24,20 @@ namespace Domain
         public string Id { get; } = null!;
         public string Name { get; } = null!;
 
-        public Column StartColumn => _columns.Single(c => c.OrderNumber == 0);
-        public IReadOnlyCollection<Column> Columns => _columns;
+        public Column StartColumn => Columns.Single(c => c.OrderNumber == 0);
+        public List<Column> Columns { get; set; } = null!;
         public IReadOnlyCollection<Card> Cards => _cards;
+
+        public ILookup<Column, Card> CardsByColumns
+        {
+            get
+            {
+                var columnsDict = Columns.ToDictionary(c => c.Id);
+                return Cards.Select(c => (Card: c, Column: columnsDict[c.ColumnId]))
+                    .ToLookup(c => c.Column, c => c.Card);
+            }
+        }
+
         public IEnumerable<Guid> Team => _team.Keys;
         public IEnumerable<Guid> Readers => FilterExecutors(AccessRights.Read);
         public IEnumerable<Guid> Commentators => FilterExecutors(AccessRights.Comment);

@@ -1,5 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using Domain;
 
@@ -24,6 +24,8 @@ namespace Application
             return board;
         }
 
+        public async Task<Board> GetBoardAsync(string boardId) => await _boardRepository.GetAsync(boardId);
+
         public async Task DeleteCardAsync(string cardId, string boardId)
         {
             var card = await _cardRepository.GetAsync(cardId);
@@ -33,10 +35,20 @@ namespace Application
             await _boardRepository.UpdateAsync(board);
         }
 
-        public async Task<IEnumerable<Column>> GetAllColumnsAsync(string boardId)
+        public async Task ChangeColumnsAsync(string boardId, string[] newColumnsNames)
         {
             var board = await _boardRepository.GetAsync(boardId);
-            return board.Columns;
+
+            var columns = newColumnsNames.Select((c, i) => new Column(c, i)).ToList();
+            var newColumnsDict = columns.ToDictionary(c => c.Name);
+            var oldColumnsDict = board.Columns.ToDictionary(c => c.Id);
+
+            foreach (var card in board.Cards) card.ColumnId = newColumnsDict[oldColumnsDict[card.ColumnId].Name].Id;
+            board.Columns = columns;
+            await _boardRepository.UpdateAsync(board);
         }
+
+        public async Task<IEnumerable<Column>> GetAllColumnsAsync(string boardId) =>
+            (await _boardRepository.GetAsync(boardId)).Columns;
     }
 }

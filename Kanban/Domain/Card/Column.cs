@@ -9,16 +9,16 @@ namespace Domain
         private Column()
         {
         }
+        
+        public Column(string id, string name, int orderNumber) => (Id, Name, OrderNumber) = (id, name, orderNumber);
 
-        public Column(string name, int orderNumber, string id="")
+        public Column(string name, int orderNumber) : this(Guid.NewGuid().ToString(), name, orderNumber)
         {
-            Id = id == "" ? Guid.NewGuid().ToString() : id;
-            (Name, OrderNumber) = (name, orderNumber);
         }
 
-        public string Id { get; }
+        public string Id { get; } = null!;
 
-        public string Name { get; set; } = null!;
+        public string Name { get; } = null!;
 
         public int OrderNumber { get; }
     }

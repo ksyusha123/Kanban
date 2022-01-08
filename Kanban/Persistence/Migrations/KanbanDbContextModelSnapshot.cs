@@ -173,7 +173,7 @@ namespace Persistence.Migrations
             modelBuilder.Entity("Domain.Column", b =>
                 {
                     b.HasOne("Domain.Board", null)
-                        .WithMany("_columns")
+                        .WithMany("Columns")
                         .HasForeignKey("BoardId");
                 });
 
@@ -196,7 +196,7 @@ namespace Persistence.Migrations
                 {
                     b.Navigation("_cards");
 
-                    b.Navigation("_columns");
+                    b.Navigation("Columns");
                 });
 
             modelBuilder.Entity("Domain.Card", b =>
