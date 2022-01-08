@@ -32,31 +32,32 @@ namespace Kanban
         {
             var message = e.Message;
             var commandFull = message.Text;
-            var commandSplitted = commandFull?.Split(' ', 2);
+
+            if (commandFull is null || !commandFull.StartsWith('/')) return;
+
+            var commandSplitted = commandFull.Split(' ', 2);
 
             try
             {
-                if (commandFull!.StartsWith('/'))
+                if (_commands.TryGetValue(commandSplitted[0], out var command))
                 {
-                    if (commandSplitted != null && _commands.TryGetValue(commandSplitted[0], out var command))
+                    var chat = await _chatInteractor.GetChatAsync(message.Chat.Id);
+                    if (command.NeedBoard && chat is null)
                     {
-                        var chat = await _chatInteractor.GetChatAsync(message.Chat.Id);
-                        if (command.NeedBoard && chat is null)
-                        {
-                            await _client.SendTextMessageAsync(message.Chat.Id,
-                                "Не найдена доска проекта. Сначала введите /addboard или /help");
-                            return;
-                        }
-
-                        await command.ExecuteAsync(chat, message, _client);
+                        await _client.SendTextMessageAsync(message.Chat.Id,
+                            "Не найдена доска проекта. Сначала введите /addboard или /help");
+                        return;
                     }
-                    else
-                        await _client.SendTextMessageAsync(message.Chat, "таких команд не учил!");
+
+                    await command.ExecuteAsync(chat, message, _client);
                 }
+                else
+                    await _client.SendTextMessageAsync(message.Chat, "Таких команд не учил!");
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-                await _client.SendTextMessageAsync(message.Chat, "ошибочка вышла!");
+                await _client.SendTextMessageAsync(message.Chat, "Ошибочка вышла!");
+                Console.WriteLine(ex);
             }
         }
 
