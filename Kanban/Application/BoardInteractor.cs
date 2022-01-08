@@ -8,9 +8,9 @@ namespace Application
     public class BoardInteractor : IBoardInteractor
     {
         private readonly IRepository<Board, string> _boardRepository;
-        private readonly IRepository<Card, Guid> _cardRepository;
+        private readonly IRepository<Card, string> _cardRepository;
 
-        public BoardInteractor(IRepository<Board, string> boardRepository, IRepository<Card, Guid> cardRepository) =>
+        public BoardInteractor(IRepository<Board, string> boardRepository, IRepository<Card, string> cardRepository) =>
             (_boardRepository, _cardRepository) = (boardRepository, cardRepository);
 
         public async Task<Board> CreateBoardAsync(string name)
@@ -26,7 +26,7 @@ namespace Application
 
         public async Task DeleteCardAsync(string cardId, string boardId)
         {
-            var card = await _cardRepository.GetAsync(new Guid(cardId));
+            var card = await _cardRepository.GetAsync(cardId);
             var board = await _boardRepository.GetAsync(boardId);
             board.RemoveCard(card);
             await _cardRepository.DeleteAsync(card);

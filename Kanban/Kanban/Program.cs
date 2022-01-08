@@ -39,7 +39,7 @@ namespace Kanban
             container.Register<KanbanDbContext>();
             container.Register<IRepository<Board, string>, Repository<Board, string>>();
             container.Register<IRepository<Chat, long>, Repository<Chat, long>>();
-            container.Register<IRepository<Card, Guid>, Repository<Card, Guid>>();
+            container.Register<IRepository<Card, string>, Repository<Card, string>>();
             container.Register<IRepository<Executor, Guid>, Repository<Executor, Guid>>();
             container.Register<IDateTimeProvider, StandardDateTimeProvider>();
             container.Register<TelegramBot>();

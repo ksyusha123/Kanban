@@ -32,6 +32,6 @@ namespace Application
         public async Task DeleteCardAsync(string cardId, string boardId) => await _trelloCardClient.DeleteAsync(cardId);
 
         public async Task<IEnumerable<Column>> GetAllColumnsAsync(string boardId) => 
-            (await _trelloBoardClient.GetAllListsAsync(boardId)).Select(t => new Column(t.Name, t.Pos));
+            (await _trelloBoardClient.GetAllListsAsync(boardId)).Select(t => new Column(t.Name, t.Pos, t.Id));
     }
 }

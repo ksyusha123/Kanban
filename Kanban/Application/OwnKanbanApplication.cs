@@ -6,7 +6,7 @@ namespace Application
 {
     public class OwnKanbanApplication : IApplication
     {
-        public OwnKanbanApplication(IRepository<Board, string> boardRepository, IRepository<Card, Guid> cardRepository,
+        public OwnKanbanApplication(IRepository<Board, string> boardRepository, IRepository<Card, string> cardRepository,
             IRepository<Executor, Guid> executorRepository, IDateTimeProvider dateTimeProvider)
         {
             BoardInteractor = new BoardInteractor(boardRepository, cardRepository);

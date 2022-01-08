@@ -9,12 +9,12 @@ namespace Application
 {
     public class CardInteractor : ICardInteractor
     {
-        private readonly IRepository<Card, Guid> _cardRepository;
+        private readonly IRepository<Card, string> _cardRepository;
         private readonly IRepository<Executor, Guid> _executorRepository;
         private readonly IRepository<Board, string> _boardRepository;
         private readonly IDateTimeProvider _dateTimeProvider;
 
-        public CardInteractor(IRepository<Card, Guid> cardRepository, IRepository<Executor, Guid> executorRepository,
+        public CardInteractor(IRepository<Card, string> cardRepository, IRepository<Executor, Guid> executorRepository,
             IRepository<Board, string> boardRepository, IDateTimeProvider dateTimeProvider)
         {
             _cardRepository = cardRepository;
@@ -41,7 +41,7 @@ namespace Application
 
         public async Task EditCardNameAsync(string cardId, string name)
         {
-            var card = await _cardRepository.GetAsync(new Guid(cardId));
+            var card = await _cardRepository.GetAsync(cardId);
             if (name != null) card.Name = name;
             await _cardRepository.UpdateAsync(card);
         }
@@ -49,14 +49,14 @@ namespace Application
         public async Task AssignCardExecutorAsync(string cardId, string executorId)
         {
             var executor = await _executorRepository.GetAsync(new Guid(executorId));
-            var card = await _cardRepository.GetAsync(new Guid(cardId));
+            var card = await _cardRepository.GetAsync(cardId);
             card.Executor = executor;
             await _cardRepository.UpdateAsync(card);
         }
 
         public async Task ChangeColumnAsync(string cardId, Column column)
         {
-            var card = await _cardRepository.GetAsync(new Guid(cardId));
+            var card = await _cardRepository.GetAsync(cardId);
             card.ColumnId = column.Id;
             await _cardRepository.UpdateAsync(card);
         }

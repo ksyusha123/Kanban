@@ -4,7 +4,7 @@ using Infrastructure;
 
 namespace Domain
 {
-    public class Card : ICard
+    public class Card : IEntity<string>
     {
         private readonly List<Comment> _comments = new();
 
@@ -13,19 +13,22 @@ namespace Domain
         {
         }
 
-        public Card(string name, string description, Executor executor, Guid columnId, 
-            IDateTimeProvider dateTimeProvider) =>
-            (Id, Name, Description, Executor, ColumnId, CreationTime) =
-            (Guid.NewGuid(), name, description, executor, columnId, dateTimeProvider.GetCurrent());
+        public Card(string name, string description, Executor executor, string columnId, 
+            IDateTimeProvider dateTimeProvider, string id="")
+        {
+            Id = id == "" ? Guid.NewGuid().ToString() : id;
+            (Name, Description, Executor, ColumnId, CreationTime) =
+                (name, description, executor, columnId, dateTimeProvider.GetCurrent());
+        }
 
-        public Guid Id { get; }
+        public string Id { get; }
 
         public string Name { get; set; } = string.Empty;
 
         public string Description { get; set; } = string.Empty;
 
         public Executor? Executor { get; set; }
-        public Guid ColumnId { get; set; }
+        public string ColumnId { get; set; }
         public IEnumerable<Comment> Comments => _comments;
         public DateTime CreationTime { get; }
 

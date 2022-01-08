@@ -26,9 +26,9 @@ namespace Application
             var startColumn = (await _trelloBoardClient.GetAllListsAsync(boardId))
                 .OrderBy(t => t.Pos)
                 .First();
-            await _trelloCardClient.Create(startColumn.Id, name);
+            var card = await _trelloCardClient.Create(startColumn.Id, name);
             return new Card(name, "", new Executor("", ""), 
-                new Guid(startColumn.Id), _dateTimeProvider);
+                startColumn.Id, _dateTimeProvider, card.Id);
         }
 
         public async Task EditCardNameAsync(string cardId, string name)
@@ -54,7 +54,7 @@ namespace Application
             {
                 var trelloCards = (await _trelloListClient.GetAllCardsAsync(column.Id))
                     .Select(c => new Card(c.Name, c.Desc, new Executor("", ""), 
-                        new Guid(column.Id), _dateTimeProvider));
+                        column.Id, _dateTimeProvider, c.Id));
                 cards = cards.Concat(trelloCards).ToList();
             }
 
