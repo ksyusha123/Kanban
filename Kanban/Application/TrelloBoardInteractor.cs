@@ -24,7 +24,7 @@ namespace Application
         {
             var trelloBoard = await _trelloBoardClient.CreatedAsync(name);
             var columns = (await _trelloBoardClient.GetAllListsAsync(trelloBoard.Id))
-                .Select(t => new Column(t.Name, t.Pos))
+                .Select(t => new Column(t.Name, t.Pos, t.Id))
                 .ToList();
             return new Board(trelloBoard.Name, columns, trelloBoard.Id);
         }

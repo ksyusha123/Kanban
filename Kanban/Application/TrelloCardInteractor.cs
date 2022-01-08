@@ -43,7 +43,7 @@ namespace Application
 
         public async Task ChangeColumnAsync(string cardId, Column column)
         {
-            await _trelloCardClient.ReplaceToListAsync(cardId, column.Id.ToString());
+            await _trelloCardClient.ReplaceToListAsync(cardId, column.Id);
         }
 
         public async Task<IEnumerable<Card>> GetCardsAsync(string nameQuery, string boardId)
