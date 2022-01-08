@@ -21,4 +21,10 @@
       <PackageReference Include="Telegram.Bot" Version="15.7.1" />
     </ItemGroup>
 
+    <ItemGroup>
+      <Reference Include="TrelloApi, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null">
+        <HintPath>..\..\TrelloApi\bin\Debug\netstandard2.0\TrelloApi.dll</HintPath>
+      </Reference>
+    </ItemGroup>
+
 </Project>
