@@ -50,5 +50,10 @@ namespace Application
 
         public async Task<IEnumerable<Column>> GetAllColumnsAsync(string boardId) =>
             (await _boardRepository.GetAsync(boardId)).Columns;
+
+        public Task AddMemberAsync(string boardId, string userId)
+        {
+            throw new System.NotImplementedException();
+        }
     }
 }

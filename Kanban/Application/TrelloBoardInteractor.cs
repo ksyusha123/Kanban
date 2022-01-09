@@ -74,5 +74,8 @@ namespace Application
 
         public async Task<IEnumerable<Column>> GetAllColumnsAsync(string boardId) =>
             (await _trelloBoardClient.GetAllListsAsync(boardId)).Select(t => new Column(t.Id, t.Name, t.Pos));
+
+        public async Task AddMemberAsync(string boardId, string userId) => 
+            await _trelloBoardClient.AddMemberAsync(boardId, TrelloMemberTypes.Normal, userId);
     }
 }

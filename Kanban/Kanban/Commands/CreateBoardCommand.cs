@@ -46,6 +46,7 @@ namespace Kanban
             await _chatInteractor.AddChatAsync(chatId, app, board.Id);
             await botClient.SendTextMessageAsync(chatId, $"Я создал доску {board.Name} со столбцами " +
                                                          $"{string.Join(", ", board.Columns.Select(c => c.Name))}. " +
+                                                         $"Id доски: {board.Id}" +
                                                          "Удачи в создании проекта!");
         }
     }
