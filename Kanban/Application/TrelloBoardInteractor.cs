@@ -56,12 +56,12 @@ namespace Application
         {
             var oldColumns = (await _trelloBoardClient.GetAllListsAsync(boardId)).ToList();
             var newColumns = new Dictionary<string, TrelloList>();
-            foreach (var newColumnName in newColumnsNames)
+            for (var i = newColumnsNames.Length - 1; i >= 0; i--)
             {
-                var newColumn = await _trelloListClient.CreateAsync(newColumnName, boardId);
+                var newColumn = await _trelloListClient.CreateAsync(newColumnsNames[i], boardId);
                 newColumns[newColumn.Name] = newColumn;
             }
-            
+
             foreach (var oldColumn in oldColumns)
             {
                 var cards = await _trelloListClient.GetAllCardsAsync(oldColumn.Id);
