@@ -23,6 +23,6 @@ namespace Kanban
                                "Наберите команду /help чтобы посмотреть, что он может";
 
         public async Task ExecuteAsync(Chat chat, Message message, TelegramBotClient botClient) =>
-            await botClient.SendTextMessageAsync(chat.Id, Text);
+            await botClient.SendTextMessageAsync(message.Chat.Id, Text);
     }
 }

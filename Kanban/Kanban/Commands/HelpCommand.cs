@@ -18,10 +18,10 @@ namespace Kanban
                                     "/changecolumns - поменять существущие колонки\n" +
                                     "/findcard - дает боту частичный текст задачи для поиска задачи на доске\n" +
                                     "/deletecard - удаляет задачу\n" +
-                                    @"Перед тем, как начать работу, добавьте доску\n" +
+                                    "Перед тем, как начать работу, добавьте доску\n" +
                                     "Для этого используйте команду /addBoard, чтобы добавить существующую доску или /createBoard, чтобы создать новую";
 
         public async Task ExecuteAsync(Chat chat, Message message, TelegramBotClient botClient) =>
-            await botClient.SendTextMessageAsync(chat.Id, Text);
+            await botClient.SendTextMessageAsync(message.Chat.Id, Text);
     }
 }
