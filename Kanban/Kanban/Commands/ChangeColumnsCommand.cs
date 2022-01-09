@@ -22,7 +22,7 @@ namespace Kanban
         {
             var newColumns = message.Text.Split(' ') is var splitted && splitted.Length > 1
                 ? splitted[1..]
-                : message.ReplyToMessage.Text.Split(' ');
+                : message.ReplyToMessage.Text.Split(", ");
 
             var board = await _apps[chat.App].BoardInteractor.GetBoardAsync(chat.BoardId);
 

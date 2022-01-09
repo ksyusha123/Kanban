@@ -8,7 +8,7 @@ namespace Application
     {
         public TrelloApplication(TrelloClient trelloClient, IDateTimeProvider dateTimeProvider)
         {
-            BoardInteractor = new TrelloBoardInteractor(trelloClient);
+            BoardInteractor = new TrelloBoardInteractor(trelloClient, dateTimeProvider);
             CardInteractor = new TrelloCardInteractor(trelloClient, dateTimeProvider);
         }
         public string Name => "Trello";
