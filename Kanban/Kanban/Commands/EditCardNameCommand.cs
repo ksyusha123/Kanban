@@ -18,10 +18,11 @@ namespace Kanban
         public bool NeedBoard => true;
         public async Task ExecuteAsync(Chat chat, Message message, TelegramBotClient botClient)
         {
-            var oldCardName = message.ReplyToMessage.Text;
+            var splitted = message.ReplyToMessage.Text.Split('\n');
+            var oldCardName = splitted[0];
             var card = (await _apps[chat.App].CardInteractor.GetCardsAsync(oldCardName, chat.BoardId)).SingleOrDefault();
-            var newCardName = message.Text.Split(' ', 2)[1];
-            await _apps[chat.App].CardInteractor.EditCardNameAsync(card.Id.ToString(), newCardName);
+            var newCardName = splitted[1];
+            await _apps[chat.App].CardInteractor.EditCardNameAsync(card.Id, newCardName);
             await botClient.SendTextMessageAsync(chat.Id, $"Поменял {oldCardName} на {newCardName}");
         }
     }

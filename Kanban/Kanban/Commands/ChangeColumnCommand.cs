@@ -20,7 +20,8 @@ namespace Kanban
 
         public async Task ExecuteAsync(Chat chat, Message message, TelegramBotClient botClient)
         {
-            var cardName = message.ReplyToMessage.Text;
+            var splitted = message.ReplyToMessage.Text.Split("\n");
+            var cardName = splitted[0];
             var app = _apps[chat.App];
             var card = (await app.CardInteractor.GetCardsAsync(cardName, chat.BoardId)).SingleOrDefault();
             if (card is null)
@@ -31,7 +32,7 @@ namespace Kanban
                 return;
             }
 
-            var columnName = message.Text.Split(' ', 2)[1];
+            var columnName = splitted[1];
             var column = (await app.BoardInteractor.GetAllColumnsAsync(chat.BoardId))
                 .FirstOrDefault(c => c.Name == columnName);
             if (column is null)

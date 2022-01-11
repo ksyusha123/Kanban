@@ -18,10 +18,7 @@ namespace Kanban
         public bool NeedBoard => true;
         public async Task ExecuteAsync(Chat chat, Message message, TelegramBotClient botClient)
         {
-            var strings = message.Text.Split(' ', 2);
-            var cardName = strings.Length > 1
-                ? strings[1]
-                : message.ReplyToMessage.Text;
+            var cardName = message.ReplyToMessage.Text;
             var card = (await _apps[chat.App].CardInteractor.GetCardsAsync(cardName, chat.BoardId)).FirstOrDefault();
             await _apps[chat.App].BoardInteractor.DeleteCardAsync(card.Id.ToString(), chat.BoardId);
             await botClient.SendTextMessageAsync(chat.Id, $"Удалил карточку {card.Name}");

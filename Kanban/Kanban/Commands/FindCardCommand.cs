@@ -19,10 +19,7 @@ namespace Kanban
 
         public async Task ExecuteAsync(Chat chat, Message message, TelegramBotClient botClient)
         {
-            var strings = message.Text.Split(' ', 2);
-            var cardName = strings.Length > 1
-                ? strings[1]
-                : message.ReplyToMessage.Text;
+            var cardName = message.ReplyToMessage.Text;
             var cards = (await _apps[chat.App].CardInteractor.GetCardsAsync(cardName, chat.BoardId)).ToArray();
 
             if (!cards.Any())

@@ -29,12 +29,12 @@ namespace Kanban
                 return;
             }
 
-            var splitted = message.Text.Split(' ', 3);
-            var app = splitted[1].ToLower() == "trello" ? App.Trello : App.OwnKanban;
+            var splitted = message.ReplyToMessage.Text.Split(' ', 2);
+            var app = splitted[0].ToLower() == "trello" ? App.Trello : App.OwnKanban;
 
             chat = new Chat(chatId, app, splitted[2]);
             await _chatRepository.AddAsync(chat);
-            await botClient.SendTextMessageAsync(chatId, $"я добавиль {splitted[2]}!");
+            await botClient.SendTextMessageAsync(chatId, $"я добавиль {splitted[1]}!");
         }
     }
 }

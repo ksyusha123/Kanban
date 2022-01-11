@@ -20,10 +20,7 @@ namespace Kanban
 
         public async Task ExecuteAsync(Chat chat, Message message, TelegramBotClient botClient)
         {
-            var columnName = message.Text.Split(' ', 2) is var strings && strings.Length > 1
-                ? strings[1]
-                : message.ReplyToMessage.Text;
-
+            var columnName = message.ReplyToMessage.Text;
             var board = await _apps[chat.App].BoardInteractor.GetBoardAsync(chat.BoardId);
             var column = board.Columns.SingleOrDefault(c => c.Name == columnName);
 
