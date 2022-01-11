@@ -1,18 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Reflection;
-using Application;
-using Domain;
-using Infrastructure;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Configuration;
-using Persistence;
-using SimpleInjector;
-using TrelloApi;
-
-namespace Kanban
+﻿namespace Kanban
 {
     internal static class Program
     {
@@ -28,8 +14,8 @@ namespace Kanban
                             "config.json"),
                         true)
                     .Build());
-            container.Register(() => 
-                new TrelloClient(container.GetInstance<IConfiguration>().GetSection("token").Value, 
+            container.Register(() =>
+                new TrelloClient(container.GetInstance<IConfiguration>().GetSection("token").Value,
                     container.GetInstance<IConfiguration>().GetSection("api-key").Value));
             container.RegisterApplications();
             container.RegisterCommands();
@@ -44,7 +30,7 @@ namespace Kanban
             container.Register<IDateTimeProvider, StandardDateTimeProvider>();
             container.Register<TelegramBot>();
             container.RegisterInitializer<TelegramBot>(bot => bot.Start());
-            
+
             container.Register<ChatInteractor>();
             return container;
         }
@@ -52,7 +38,7 @@ namespace Kanban
         private static void RegisterCommands(this Container container) =>
             container.Collection.Register<ICommand>(Assembly.GetCallingAssembly());
 
-        private static void RegisterApplications(this Container container) => 
+        private static void RegisterApplications(this Container container) =>
             container.Collection.Register<IApplication>(typeof(IApplication).Assembly);
     }
 }
