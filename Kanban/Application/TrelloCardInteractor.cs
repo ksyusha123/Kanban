@@ -52,8 +52,10 @@ namespace Application
                     .Select(c => new Card(c.Id, c.Name, c.Desc, new Executor("", ""), column.Id, _dateTimeProvider));
                 cards = cards.Concat(trelloCards);
             }
-
-            return cards.ToList();
+            var nameTokens = nameQuery.Split(' ');
+            return cards
+                .Where(c => nameTokens.Any(t => c.Name.Contains(t, StringComparison.OrdinalIgnoreCase)))
+                .ToList();
         }
     }
 }
