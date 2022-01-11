@@ -38,7 +38,7 @@ namespace Kanban
             }
 
             await botClient.SendTextMessageAsync(chat.Id,
-                $"Карточки в столбце {columnName}:\n\n" + string.Join('\n', cards.Select(c => c.Name)));
+                $"Карточки в столбце {columnName}:\n\n" + string.Join('\n', cards.Select(c => $"- {c.Name}")));
         }
     }
 }

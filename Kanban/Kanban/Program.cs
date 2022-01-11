@@ -52,11 +52,7 @@ namespace Kanban
         private static void RegisterCommands(this Container container) =>
             container.Collection.Register<ICommand>(Assembly.GetCallingAssembly());
 
-        private static void RegisterApplications(this Container container)
-        {
-            var tmp = AppDomain.CurrentDomain.GetAssemblies().
-                SingleOrDefault(assembly => assembly.GetName().Name == "Application");
-            container.Collection.Register<IApplication>(tmp!);
-        }
+        private static void RegisterApplications(this Container container) => 
+            container.Collection.Register<IApplication>(typeof(IApplication).Assembly);
     }
 }

@@ -34,7 +34,7 @@ namespace Kanban
 
             var chatId = message.Chat.Id;
             var splitted = message.ReplyToMessage.Text.Split(' ', 2);
-            if (!Enum.TryParse(splitted[1], true, out App app))
+            if (!Enum.TryParse(splitted[0], true, out App app))
             {
                 await botClient.SendTextMessageAsync(chatId, $"Мы не поддерживаем {splitted[0]}. Подробнее - /help");
                 return;
@@ -47,7 +47,7 @@ namespace Kanban
             await botClient.SendTextMessageAsync(chatId, $"Я создал доску {board.Name} со столбцами " +
                                                          $"{string.Join(", ", board.Columns.Select(c => c.Name))}. " +
                                                          $"Id доски: {board.Id}. " +
-                                                         "Если вы создали доску в стороннем приложении, добавьте людей с помощью /addmember" +
+                                                         "Если вы создали доску в стороннем приложении, добавьте людей с помощью /addmember. " +
                                                          "Удачи в создании проекта!");
         }
     }
