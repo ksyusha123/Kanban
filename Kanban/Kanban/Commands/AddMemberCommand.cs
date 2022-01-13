@@ -1,11 +1,3 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Application;
-using Domain;
-using Telegram.Bot;
-using Telegram.Bot.Types;
 using Chat = Domain.Chat;
 
 namespace Kanban
@@ -16,6 +8,7 @@ namespace Kanban
 
         public AddMemberCommand(IEnumerable<IApplication> apps) => _apps = apps.ToDictionary(a => a.App);
         public string Name => "/addmember";
+        public string Help => "Добавляет участника в доску проекта";
         public bool NeedBoard => true;
         public bool NeedReply => true;
 
@@ -26,7 +19,7 @@ namespace Kanban
         {
             var membersToAdd = message.ReplyToMessage.Text.Split(' ', StringSplitOptions.RemoveEmptyEntries);
             var boardInteractor = _apps[chat.App].BoardInteractor;
-            foreach (var member in membersToAdd) 
+            foreach (var member in membersToAdd)
                 await boardInteractor.AddMemberAsync(chat.BoardId, member);
             await botClient.SendTextMessageAsync(chat.Id, $"Добавил {string.Join(' ', membersToAdd)} на доску");
         }

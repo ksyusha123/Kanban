@@ -1,11 +1,4 @@
-﻿using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Application;
-using Domain;
-using Telegram.Bot;
-using Telegram.Bot.Types;
-using Chat = Domain.Chat;
+﻿using Chat = Domain.Chat;
 
 namespace Kanban
 {
@@ -15,6 +8,7 @@ namespace Kanban
 
         public GetAllColumnsCommand(IEnumerable<IApplication> apps) => _apps = apps.ToDictionary(a => a.App);
         public string Name => "/getallcolumns";
+        public string Help => "Вывести все колонки";
         public bool NeedBoard => true;
         public bool NeedReply => false;
         public string Hint { get; }

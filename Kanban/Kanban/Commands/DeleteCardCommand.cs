@@ -1,11 +1,4 @@
-﻿using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Application;
-using Domain;
-using Telegram.Bot;
-using Telegram.Bot.Types;
-using Chat = Domain.Chat;
+﻿using Chat = Domain.Chat;
 
 namespace Kanban
 {
@@ -15,6 +8,7 @@ namespace Kanban
 
         public DeleteCardCommand(IEnumerable<IApplication> apps) => _apps = apps.ToDictionary(a => a.App);
         public string Name => "/deletecard";
+        public string Help => "Удаляет задачу";
         public bool NeedBoard => true;
         public bool NeedReply => true;
 

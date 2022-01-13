@@ -1,7 +1,4 @@
-﻿using System.Threading.Tasks;
-using Telegram.Bot;
-using Telegram.Bot.Types;
-using Chat = Domain.Chat;
+﻿using Chat = Domain.Chat;
 
 namespace Kanban
 {

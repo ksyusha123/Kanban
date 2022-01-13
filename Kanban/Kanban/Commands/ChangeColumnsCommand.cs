@@ -1,11 +1,3 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Application;
-using Domain;
-using Telegram.Bot;
-using Telegram.Bot.Types;
 using Chat = Domain.Chat;
 
 namespace Kanban
@@ -17,6 +9,7 @@ namespace Kanban
         public ChangeColumnsCommand(IEnumerable<IApplication> apps) => _apps = apps.ToDictionary(a => a.App);
 
         public string Name => "/changecolumns";
+        public string Help => "Изменить существущие колонки";
         public bool NeedBoard => true;
         public bool NeedReply => true;
 

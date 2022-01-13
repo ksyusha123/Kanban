@@ -1,10 +1,4 @@
-﻿using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Application;
-using Telegram.Bot;
-using Telegram.Bot.Types;
-using Chat = Domain.Chat;
+﻿using Chat = Domain.Chat;
 
 namespace Kanban
 {
@@ -16,6 +10,7 @@ namespace Kanban
             _supportedApps = string.Join(", ", apps.Select(a => a.Name));
 
         public string Name => "/start";
+        public string Help => "Выводит текст просто так";
         public bool NeedBoard => false;
         public bool NeedReply => false;
         public string Hint { get; }
