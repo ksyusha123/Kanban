@@ -4,7 +4,7 @@ using Infrastructure;
 
 namespace Domain
 {
-    public class Card : IEntity<string>
+    public class Card : IEntity
     {
         private readonly List<Comment> _comments = new();
 

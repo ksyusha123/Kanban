@@ -9,13 +9,13 @@ namespace Application
 {
     public class CardInteractor : ICardInteractor
     {
-        private readonly IRepository<Card, string> _cardRepository;
-        private readonly IRepository<Executor, Guid> _executorRepository;
-        private readonly IRepository<Board, string> _boardRepository;
+        private readonly IRepository<Card> _cardRepository;
+        private readonly IRepository<Executor> _executorRepository;
+        private readonly IRepository<Board> _boardRepository;
         private readonly IDateTimeProvider _dateTimeProvider;
 
-        public CardInteractor(IRepository<Card, string> cardRepository, IRepository<Executor, Guid> executorRepository,
-            IRepository<Board, string> boardRepository, IDateTimeProvider dateTimeProvider)
+        public CardInteractor(IRepository<Card> cardRepository, IRepository<Executor> executorRepository,
+            IRepository<Board> boardRepository, IDateTimeProvider dateTimeProvider)
         {
             _cardRepository = cardRepository;
             _executorRepository = executorRepository;
@@ -48,7 +48,7 @@ namespace Application
 
         public async Task AssignCardExecutorAsync(string cardId, string executorId)
         {
-            var executor = await _executorRepository.GetAsync(new Guid(executorId));
+            var executor = await _executorRepository.GetAsync(executorId);
             var card = await _cardRepository.GetAsync(cardId);
             card.Executor = executor;
             await _cardRepository.UpdateAsync(card);
