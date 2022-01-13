@@ -4,7 +4,13 @@ namespace Kanban
 {
     public class HelpCommand : ICommand
     {
+        public HelpCommand(IEnumerable<ICommand> commands)
+        {
+            Help = string.Join('\n', commands.Select(c => $"{c.Name} - {c.Help}"));
+        }
+
         public string Name => "/help";
+        public string Help { get; }
         public bool NeedBoard => false;
         public bool NeedReply => false;
         public string Hint { get; }
