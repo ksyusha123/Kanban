@@ -9,7 +9,7 @@ namespace Domain
         {
         }
 
-        public Chat(long id, App app, string projectId) => (Id, App, BoardId) = (id, app, projectId);
+        public Chat(long id, App app, string boardId) => (Id, App, BoardId) = (id, app, boardId);
 
         public long Id { get; }
         public App App { get; }

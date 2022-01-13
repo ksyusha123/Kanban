@@ -16,6 +16,8 @@ namespace Kanban
         public GetAllColumnsCommand(IEnumerable<IApplication> apps) => _apps = apps.ToDictionary(a => a.App);
         public string Name => "/getallcolumns";
         public bool NeedBoard => true;
+        public bool NeedReply => false;
+        public string Hint { get; }
 
         public async Task ExecuteAsync(Chat chat, Message message, TelegramBotClient botClient)
         {

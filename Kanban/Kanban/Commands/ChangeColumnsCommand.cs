@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Application;
@@ -17,10 +18,15 @@ namespace Kanban
 
         public string Name => "/changecolumns";
         public bool NeedBoard => true;
+        public bool NeedReply => true;
+
+        public string Hint => "Недостаточно аргументов :(\n" +
+                               "Ответьте этой командой на сообщение с перечислением новых названий колонок через символ переноса строки\n" +
+                               "Пример:\nПервая колонка\nВторая колонка\nТретья колонка";
 
         public async Task ExecuteAsync(Chat chat, Message message, TelegramBotClient botClient)
         {
-            var newColumns = message.ReplyToMessage.Text.Split('\n');
+            var newColumns = message.ReplyToMessage.Text.Split('\n', StringSplitOptions.RemoveEmptyEntries);
 
             var board = await _apps[chat.App].BoardInteractor.GetBoardAsync(chat.BoardId);
 

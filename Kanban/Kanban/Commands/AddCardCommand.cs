@@ -17,10 +17,15 @@ namespace Kanban
 
         public string Name => "/addcard";
         public bool NeedBoard => true;
+        public bool NeedReply => true;
+
+        public string Hint => "Недостаточно аргументов :(\n" +
+                               "Ответьте этой командой на название карточки\n" +
+                               "Пример: повторить матан";
 
         public async Task ExecuteAsync(Chat chat, Message message, TelegramBotClient botClient)
         {
-            var cardName = message.ReplyToMessage.Text;
+            var cardName = message.ReplyToMessage.Text.Trim();
             var card = await _apps[chat.App].CardInteractor.CreateCardAsync(cardName, chat.BoardId);
             var columnName = (await _apps[chat.App].BoardInteractor.GetAllColumnsAsync(chat.BoardId))
                 .First(c => c.Id == card.ColumnId).Name;

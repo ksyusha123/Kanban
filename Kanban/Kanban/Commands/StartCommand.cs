@@ -17,6 +17,8 @@ namespace Kanban
 
         public string Name => "/start";
         public bool NeedBoard => false;
+        public bool NeedReply => false;
+        public string Hint { get; }
 
         private string Text => "Этот бот поможет вам и вашей команде быстрее работать с Kanban доской. " +
                                $"Поддерживается использование {_supportedApps}.\n" +

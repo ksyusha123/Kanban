@@ -17,10 +17,14 @@ namespace Kanban
 
         public string Name => "/getcolumncards";
         public bool NeedBoard => true;
+        public bool NeedReply => true;
+        public string Hint => "Недостаточно аргументов :(\n" +
+                              "Ответьте этой командой на сообщение с названием колонки\n" +
+                              "Пример: ToDo";
 
         public async Task ExecuteAsync(Chat chat, Message message, TelegramBotClient botClient)
         {
-            var columnName = message.ReplyToMessage.Text;
+            var columnName = message.ReplyToMessage.Text.Trim();
             var board = await _apps[chat.App].BoardInteractor.GetBoardAsync(chat.BoardId);
             var column = board.Columns.SingleOrDefault(c => c.Name == columnName);
 

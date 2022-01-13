@@ -49,6 +49,11 @@ namespace Kanban
                         return;
                     }
 
+                    if (command.NeedReply && message.ReplyToMessage is null)
+                    {
+                        await _client.SendTextMessageAsync(message.Chat.Id, command.Hint);
+                        return;
+                    }
                     await command.ExecuteAsync(chat, message, _client);
                 }
                 else

@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using Application;
 using Domain;
@@ -17,6 +18,11 @@ namespace Kanban
             (_chatRepository, _apps) = (chatRepository, apps);
         public string Name => "/addboard";
         public bool NeedBoard => false;
+        public bool NeedReply => true;
+
+        public string Hint => "Недостаточно аргументов :(\n" +
+                               "Ответьте этой командой на сообщение вида: приложение идентификатор_доски\n" +
+                               "Пример: trello 123456789101112131415160";
 
         public async Task ExecuteAsync(Chat chat1, Message message, TelegramBotClient botClient)
         {
@@ -29,10 +35,18 @@ namespace Kanban
                 return;
             }
 
-            var splitted = message.ReplyToMessage.Text.Split(' ', 2);
+            var splitted = message.ReplyToMessage.Text.Split(' ', 2, 
+                StringSplitOptions.RemoveEmptyEntries);
+            
+            if (splitted.Length < 2)
+            {
+                await botClient.SendTextMessageAsync(chatId, Hint);
+                return;
+            }
+            
             var app = splitted[0].ToLower() == "trello" ? App.Trello : App.OwnKanban;
 
-            chat = new Chat(chatId, app, splitted[2]);
+            chat = new Chat(chatId, app, splitted[1]);
             await _chatRepository.AddAsync(chat);
             await botClient.SendTextMessageAsync(chatId, $"я добавиль {splitted[1]}!");
         }

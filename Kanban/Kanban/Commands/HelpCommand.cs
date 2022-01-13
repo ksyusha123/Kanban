@@ -9,6 +9,8 @@ namespace Kanban
     {
         public string Name => "/help";
         public bool NeedBoard => false;
+        public bool NeedReply => false;
+        public string Hint { get; }
 
         private const string Text = "/addboard - добавляет существующую доску в бот\n" +
                                     "/createboard - создает новую доску и добавляет её в бот\n" +
