@@ -22,12 +22,13 @@ namespace Kanban
         }
 
         public string Name => "/createboard";
+        public string Help => "Создает новую доску и добавляет её в бот";
         public bool NeedBoard => false;
         public bool NeedReply => true;
 
         public string Hint => "Недостаточно аргументов :(\n" +
-                               "Ответьте этой командой на сообщение вида: приложение название_доски\n" +
-                               "Пример: trello проект";
+                              "Ответьте этой командой на сообщение вида: приложение название_доски\n" +
+                              "Пример: trello проект";
 
         public async Task ExecuteAsync(Chat chat, Message message, TelegramBotClient botClient)
         {
@@ -38,14 +39,14 @@ namespace Kanban
             }
 
             var chatId = message.Chat.Id;
-            
+
             var splitted = message.ReplyToMessage.Text.Split(' ', 2, StringSplitOptions.RemoveEmptyEntries);
             if (splitted.Length < 2)
             {
                 await botClient.SendTextMessageAsync(chatId, Hint);
                 return;
             }
-            
+
             if (!Enum.TryParse(splitted[0], true, out App app))
             {
                 await botClient.SendTextMessageAsync(chatId, $"Мы не поддерживаем {splitted[0]}. Подробнее - /help");
@@ -56,11 +57,10 @@ namespace Kanban
             var board = await boardInteractor.CreateBoardAsync(splitted[1]);
 
             await _chatInteractor.AddChatAsync(chatId, app, board.Id);
-            await botClient.SendTextMessageAsync(chatId, $"Я создал доску {board.Name} со столбцами " +
-                                                         $"{string.Join(", ", board.Columns.Select(c => c.Name))}. " +
-                                                         $"Id доски: {board.Id}. " +
-                                                         "Если вы создали доску в стороннем приложении, добавьте людей с помощью /addmember. " +
-                                                         "Удачи в создании проекта!");
+            await botClient.SendTextMessageAsync(chatId,
+                $"Я создал доску {board.Name} со столбцами {string.Join(", ", board.Columns.Select(c => c.Name))}. " +
+                $"Id доски: {board.Id}. Если вы создали доску в стороннем приложении, " +
+                "добавьте людей с помощью /addmember. Удачи в создании проекта!");
         }
     }
 }

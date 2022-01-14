@@ -15,12 +15,15 @@ namespace Kanban
 
         public DeleteCardCommand(IEnumerable<IApplication> apps) => _apps = apps.ToDictionary(a => a.App);
         public string Name => "/deletecard";
+        public string Help => "Удаляет задачу";
         public bool NeedBoard => true;
         public bool NeedReply => true;
 
         public string Hint => "Недостаточно аргументов :(\n" +
-                               "Ответьте этой командой на сообщение с частью названия карточки, которую вы хотите удалить\n" +
-                               "Пример: повторить";
+                              "Ответьте этой командой на сообщение с частью названия карточки, " +
+                              "которую вы хотите удалить\n" +
+                              "Пример: повторить";
+
         public async Task ExecuteAsync(Chat chat, Message message, TelegramBotClient botClient)
         {
             var cardName = message.ReplyToMessage.Text.Trim();

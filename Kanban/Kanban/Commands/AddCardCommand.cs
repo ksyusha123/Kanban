@@ -16,12 +16,13 @@ namespace Kanban
         public AddCardCommand(IEnumerable<IApplication> apps) => _apps = apps.ToDictionary(a => a.App);
 
         public string Name => "/addcard";
+        public string Help => "Добавляет новую карточку на доску";
         public bool NeedBoard => true;
         public bool NeedReply => true;
 
         public string Hint => "Недостаточно аргументов :(\n" +
-                               "Ответьте этой командой на название карточки\n" +
-                               "Пример: повторить матан";
+                              "Ответьте этой командой на название карточки\n" +
+                              "Пример: повторить матан";
 
         public async Task ExecuteAsync(Chat chat, Message message, TelegramBotClient botClient)
         {

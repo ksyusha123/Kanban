@@ -16,8 +16,10 @@ namespace Kanban
         public MoveCardCommand(IEnumerable<IApplication> apps) => _apps = apps.ToDictionary(a => a.App);
 
         public string Name => "/movecard";
+        public string Help => "Переместить карточку в другую колонку";
         public bool NeedBoard => true;
         public bool NeedReply => true;
+
         public string Hint => "Недостаточно аргументов :(\n" +
                               "Ответьте этой командой на сообщение вида:\n" +
                               "часть_названия_карточки\n" +
@@ -34,6 +36,7 @@ namespace Kanban
                 await botClient.SendTextMessageAsync(chat.Id, Hint);
                 return;
             }
+
             var cardName = splitted[0];
             var app = _apps[chat.App];
             var card = (await app.CardInteractor.GetCardsAsync(cardName, chat.BoardId)).SingleOrDefault();

@@ -16,13 +16,17 @@ namespace Kanban
             _supportedApps = string.Join(", ", apps.Select(a => a.Name));
 
         public string Name => "/start";
+        public string Help => "Выводит текст просто так";
         public bool NeedBoard => false;
         public bool NeedReply => false;
-        public string Hint { get; }
+        public string Hint => null;
 
         private string Text => "Этот бот поможет вам и вашей команде быстрее работать с Kanban доской. " +
                                $"Поддерживается использование {_supportedApps}.\n" +
-                               "Наберите команду /help чтобы посмотреть, что он может";
+                               "Перед тем, как начать работу, добавьте доску. " +
+                               "Для этого используйте команду /addBoard, чтобы добавить существующую доску или " +
+                               "/createBoard, чтобы создать новую, или же наберите команду /help, чтобы узнать " +
+                               "о прочих возможностях";
 
         public async Task ExecuteAsync(Chat chat, Message message, TelegramBotClient botClient) =>
             await botClient.SendTextMessageAsync(message.Chat.Id, Text);

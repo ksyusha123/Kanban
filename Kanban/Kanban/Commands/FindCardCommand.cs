@@ -15,12 +15,14 @@ namespace Kanban
 
         public FindCardCommand(IEnumerable<IApplication> apps) => _apps = apps.ToDictionary(a => a.App);
         public string Name => "/findcard";
+        public string Help => "Дает боту частичный текст задачи для поиска задачи на доске";
         public bool NeedBoard => true;
         public bool NeedReply => true;
+
         public string Hint => "Недостаточно аргументов :(\n" +
                               "Ответьте этой командой на сообщение с частью названия карточки\n" +
                               "Пример: матан";
-        
+
         public async Task ExecuteAsync(Chat chat, Message message, TelegramBotClient botClient)
         {
             var cardName = message.ReplyToMessage.Text.Trim();
