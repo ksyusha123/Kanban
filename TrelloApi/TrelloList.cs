@@ -10,7 +10,7 @@ namespace TrelloApi
         public string Id { get; set; }
         public string Name { get; set; }
         public bool Closed { get; set; }
-        public int Pos { get; set; }
+        public double Pos { get; set; }
         public string IdBoard { get; set; }
         public bool Subscribed { get; set; }
     }
