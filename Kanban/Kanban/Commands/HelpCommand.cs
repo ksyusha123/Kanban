@@ -1,32 +1,26 @@
-﻿using Chat = Domain.Chat;
+﻿using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
+using Telegram.Bot;
+using Telegram.Bot.Types;
+using Chat = Domain.Chat;
 
 namespace Kanban
 {
     public class HelpCommand : ICommand
     {
-        public HelpCommand(IEnumerable<ICommand> commands)
-        {
-            Help = string.Join('\n', commands.Select(c => $"{c.Name} - {c.Help}"));
-        }
+        public HelpCommand(IEnumerable<ICommand> commands) =>
+            _text = string.Join('\n', commands.Append(this).Select(c => $"{c.Name} - {c.Help}"));
 
         public string Name => "/help";
-        public string Help { get; }
+        public string Help => "Выводит данную подсказку";
         public bool NeedBoard => false;
         public bool NeedReply => false;
-        public string Hint { get; }
+        public string Hint => null!;
 
-        private const string Text = "/addboard - добавляет существующую доску в бот\n" +
-                                    "/createboard - создает новую доску и добавляет её в бот\n" +
-                                    "/addcard - добавляет новую карточку на доску\n" +
-                                    "/getallcolumns - вывести все колонки\n" +
-                                    "/changecolumn - переместить карточку в другую колонку\n" +
-                                    "/changecolumns - поменять существущие колонки\n" +
-                                    "/findcard - дает боту частичный текст задачи для поиска задачи на доске\n" +
-                                    "/deletecard - удаляет задачу\n" +
-                                    "Перед тем, как начать работу, добавьте доску\n" +
-                                    "Для этого используйте команду /addBoard, чтобы добавить существующую доску или /createBoard, чтобы создать новую";
+        private readonly string _text;
 
         public async Task ExecuteAsync(Chat chat, Message message, TelegramBotClient botClient) =>
-            await botClient.SendTextMessageAsync(message.Chat.Id, Text);
+            await botClient.SendTextMessageAsync(message.Chat.Id, _text);
     }
 }

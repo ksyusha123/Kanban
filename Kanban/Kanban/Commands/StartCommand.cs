@@ -1,4 +1,10 @@
-﻿using Chat = Domain.Chat;
+﻿using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
+using Application;
+using Telegram.Bot;
+using Telegram.Bot.Types;
+using Chat = Domain.Chat;
 
 namespace Kanban
 {
@@ -13,11 +19,14 @@ namespace Kanban
         public string Help => "Выводит текст просто так";
         public bool NeedBoard => false;
         public bool NeedReply => false;
-        public string Hint { get; }
+        public string Hint => null;
 
         private string Text => "Этот бот поможет вам и вашей команде быстрее работать с Kanban доской. " +
                                $"Поддерживается использование {_supportedApps}.\n" +
-                               "Наберите команду /help чтобы посмотреть, что он может";
+                               "Перед тем, как начать работу, добавьте доску. " +
+                               "Для этого используйте команду /addBoard, чтобы добавить существующую доску или " +
+                               "/createBoard, чтобы создать новую, или же наберите команду /help, чтобы узнать " +
+                               "о прочих возможностях";
 
         public async Task ExecuteAsync(Chat chat, Message message, TelegramBotClient botClient) =>
             await botClient.SendTextMessageAsync(message.Chat.Id, Text);

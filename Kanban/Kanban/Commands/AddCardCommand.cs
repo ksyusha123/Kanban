@@ -1,4 +1,11 @@
-﻿using Chat = Domain.Chat;
+﻿using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
+using Application;
+using Domain;
+using Telegram.Bot;
+using Telegram.Bot.Types;
+using Chat = Domain.Chat;
 
 namespace Kanban
 {
@@ -14,8 +21,8 @@ namespace Kanban
         public bool NeedReply => true;
 
         public string Hint => "Недостаточно аргументов :(\n" +
-                               "Ответьте этой командой на название карточки\n" +
-                               "Пример: повторить матан";
+                              "Ответьте этой командой на название карточки\n" +
+                              "Пример: повторить матан";
 
         public async Task ExecuteAsync(Chat chat, Message message, TelegramBotClient botClient)
         {

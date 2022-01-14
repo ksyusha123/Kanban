@@ -1,3 +1,10 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Threading.Tasks;
+using Application;
+using Domain;
+using Telegram.Bot;
+using Telegram.Bot.Types;
 using Chat = Domain.Chat;
 
 namespace Kanban
@@ -9,14 +16,15 @@ namespace Kanban
 
         public AddBoardCommand(IRepository<Chat, long> chatRepository, IEnumerable<IApplication> apps) =>
             (_chatRepository, _apps) = (chatRepository, apps);
+
         public string Name => "/addboard";
         public string Help => "Добавляет существующую доску в бот";
         public bool NeedBoard => false;
         public bool NeedReply => true;
 
         public string Hint => "Недостаточно аргументов :(\n" +
-                               "Ответьте этой командой на сообщение вида: приложение идентификатор_доски\n" +
-                               "Пример: trello 123456789101112131415160";
+                              "Ответьте этой командой на сообщение вида: приложение идентификатор_доски\n" +
+                              "Пример: trello 123456789101112131415160";
 
         public async Task ExecuteAsync(Chat chat1, Message message, TelegramBotClient botClient)
         {

@@ -1,4 +1,16 @@
-﻿namespace Kanban
+﻿using System;
+using System.IO;
+using System.Reflection;
+using Application;
+using Domain;
+using Infrastructure;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
+using Persistence;
+using SimpleInjector;
+using TrelloApi;
+
+namespace Kanban
 {
     internal static class Program
     {
@@ -9,10 +21,7 @@
             var container = new Container();
             container.RegisterSingleton<IConfiguration>(() =>
                 new ConfigurationBuilder()
-                    .AddJsonFile(
-                        Path.Combine(Directory.GetParent(Directory.GetCurrentDirectory())!.Parent!.Parent!.FullName,
-                            "config.json"),
-                        true)
+                    .AddJsonFile(Path.Combine(Environment.CurrentDirectory, "config.json"), true)
                     .Build());
             container.Register(() =>
                 new TrelloClient(container.GetInstance<IConfiguration>().GetSection("token").Value,

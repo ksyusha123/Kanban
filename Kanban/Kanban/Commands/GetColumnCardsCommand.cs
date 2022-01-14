@@ -1,4 +1,11 @@
-﻿using Chat = Domain.Chat;
+﻿using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
+using Application;
+using Domain;
+using Telegram.Bot;
+using Telegram.Bot.Types;
+using Chat = Domain.Chat;
 
 namespace Kanban
 {
@@ -12,6 +19,7 @@ namespace Kanban
         public string Help => "Получает все карточки из данной колонки";
         public bool NeedBoard => true;
         public bool NeedReply => true;
+
         public string Hint => "Недостаточно аргументов :(\n" +
                               "Ответьте этой командой на сообщение с названием колонки\n" +
                               "Пример: ToDo";

@@ -1,4 +1,11 @@
-﻿using Chat = Domain.Chat;
+﻿using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
+using Application;
+using Domain;
+using Telegram.Bot;
+using Telegram.Bot.Types;
+using Chat = Domain.Chat;
 
 namespace Kanban
 {
@@ -18,6 +25,7 @@ namespace Kanban
                               "Пример:\n" +
                               "повторить матан\n" +
                               "повторить теорему Стокса";
+
         public async Task ExecuteAsync(Chat chat, Message message, TelegramBotClient botClient)
         {
             var splitted = message.ReplyToMessage.Text.Split('\n');
@@ -26,8 +34,10 @@ namespace Kanban
                 await botClient.SendTextMessageAsync(chat.Id, Hint);
                 return;
             }
+
             var oldCardName = splitted[0];
-            var card = (await _apps[chat.App].CardInteractor.GetCardsAsync(oldCardName, chat.BoardId)).SingleOrDefault();
+            var card = (await _apps[chat.App].CardInteractor.GetCardsAsync(oldCardName, chat.BoardId))
+                .SingleOrDefault();
             var newCardName = splitted[1];
             await _apps[chat.App].CardInteractor.EditCardNameAsync(card.Id, newCardName);
             await botClient.SendTextMessageAsync(chat.Id, $"Поменял {oldCardName} на {newCardName}");

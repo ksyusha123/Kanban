@@ -1,4 +1,11 @@
-﻿using Chat = Domain.Chat;
+﻿using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
+using Application;
+using Domain;
+using Telegram.Bot;
+using Telegram.Bot.Types;
+using Chat = Domain.Chat;
 
 namespace Kanban
 {
@@ -11,7 +18,7 @@ namespace Kanban
         public string Help => "Вывести все колонки";
         public bool NeedBoard => true;
         public bool NeedReply => false;
-        public string Hint { get; }
+        public string Hint => null;
 
         public async Task ExecuteAsync(Chat chat, Message message, TelegramBotClient botClient)
         {

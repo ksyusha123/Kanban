@@ -1,4 +1,11 @@
-﻿using Chat = Domain.Chat;
+﻿using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
+using Application;
+using Domain;
+using Telegram.Bot;
+using Telegram.Bot.Types;
+using Chat = Domain.Chat;
 
 namespace Kanban
 {
@@ -12,6 +19,7 @@ namespace Kanban
         public string Help => "Переместить карточку в другую колонку";
         public bool NeedBoard => true;
         public bool NeedReply => true;
+
         public string Hint => "Недостаточно аргументов :(\n" +
                               "Ответьте этой командой на сообщение вида:\n" +
                               "часть_названия_карточки\n" +
@@ -28,6 +36,7 @@ namespace Kanban
                 await botClient.SendTextMessageAsync(chat.Id, Hint);
                 return;
             }
+
             var cardName = splitted[0];
             var app = _apps[chat.App];
             var card = (await app.CardInteractor.GetCardsAsync(cardName, chat.BoardId)).SingleOrDefault();

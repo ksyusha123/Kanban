@@ -1,3 +1,11 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
+using Application;
+using Domain;
+using Telegram.Bot;
+using Telegram.Bot.Types;
 using Chat = Domain.Chat;
 
 namespace Kanban
@@ -13,8 +21,9 @@ namespace Kanban
         public bool NeedReply => true;
 
         public string Hint => "Недостаточно аргументов :(\n" +
-                               "Ответьте этой командой на сообщение с перечислением идентификаторов аккаунтов через пробел\n" +
-                               "Пример: user1 user2 user3";
+                              "Ответьте этой командой на сообщение с перечислением идентификаторов аккаунтов через пробел\n" +
+                              "Пример: user1 user2 user3";
+
         public async Task ExecuteAsync(Chat chat, Message message, TelegramBotClient botClient)
         {
             var membersToAdd = message.ReplyToMessage.Text.Split(' ', StringSplitOptions.RemoveEmptyEntries);
