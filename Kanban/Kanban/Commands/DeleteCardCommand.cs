@@ -15,7 +15,7 @@ namespace Kanban
 
         public DeleteCardCommand(IEnumerable<IApplication> apps) => _apps = apps.ToDictionary(a => a.App);
         public string Name => "/deletecard";
-        public string Help => "Удаляет задачу";
+        public string Help => "удаляет карточку";
         public bool NeedBoard => true;
         public bool NeedReply => true;
 

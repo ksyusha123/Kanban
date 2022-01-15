@@ -16,7 +16,7 @@ namespace Kanban
         public GetColumnCardsCommand(IEnumerable<IApplication> apps) => _apps = apps.ToDictionary(a => a.App);
 
         public string Name => "/getcolumncards";
-        public string Help => "Получает все карточки из данной колонки";
+        public string Help => "получает все карточки из данной колонки";
         public bool NeedBoard => true;
         public bool NeedReply => true;
 

@@ -16,7 +16,7 @@ namespace Kanban
             _supportedApps = string.Join(", ", apps.Select(a => a.Name));
 
         public string Name => "/start";
-        public string Help => "Выводит текст просто так";
+        public string Help => "выводит текст просто так";
         public bool NeedBoard => false;
         public bool NeedReply => false;
         public string Hint => null;

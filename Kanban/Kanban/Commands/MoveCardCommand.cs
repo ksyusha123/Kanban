@@ -16,7 +16,7 @@ namespace Kanban
         public MoveCardCommand(IEnumerable<IApplication> apps) => _apps = apps.ToDictionary(a => a.App);
 
         public string Name => "/movecard";
-        public string Help => "Переместить карточку в другую колонку";
+        public string Help => "перемещает карточку в другую колонку";
         public bool NeedBoard => true;
         public bool NeedReply => true;
 

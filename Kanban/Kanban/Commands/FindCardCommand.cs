@@ -15,7 +15,7 @@ namespace Kanban
 
         public FindCardCommand(IEnumerable<IApplication> apps) => _apps = apps.ToDictionary(a => a.App);
         public string Name => "/findcard";
-        public string Help => "Дает боту частичный текст задачи для поиска задачи на доске";
+        public string Help => "ищет карточку на доске по части названия";
         public bool NeedBoard => true;
         public bool NeedReply => true;
 

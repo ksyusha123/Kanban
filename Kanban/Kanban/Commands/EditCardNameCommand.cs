@@ -15,7 +15,7 @@ namespace Kanban
 
         public EditCardNameCommand(IEnumerable<IApplication> apps) => _apps = apps.ToDictionary(a => a.App);
         public string Name => "/editcardname";
-        public string Help => "Изменяет название карточки";
+        public string Help => "меняет название карточки";
         public bool NeedBoard => true;
         public bool NeedReply => true;
 
