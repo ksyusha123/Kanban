@@ -32,10 +32,10 @@ namespace Kanban
                 .UseNpgsql(container.GetInstance<IConfiguration>().GetSection("connectionString").Value)
                 .Options);
             container.Register<KanbanDbContext>();
-            container.Register<IRepository<Board, string>, Repository<Board, string>>();
-            container.Register<IRepository<Chat, long>, Repository<Chat, long>>();
-            container.Register<IRepository<Card, string>, Repository<Card, string>>();
-            container.Register<IRepository<Executor, Guid>, Repository<Executor, Guid>>();
+            container.Register<IRepository<Board>, Repository<Board>>();
+            container.Register<IRepository<Chat>, Repository<Chat>>();
+            container.Register<IRepository<Card>, Repository<Card>>();
+            container.Register<IRepository<Executor>, Repository<Executor>>();
             container.Register<IDateTimeProvider, StandardDateTimeProvider>();
             container.Register<TelegramBot>();
             container.RegisterInitializer<TelegramBot>(bot => bot.Start());

@@ -3,7 +3,7 @@ using Infrastructure;
 
 namespace Domain
 {
-    public class Column : IEntity<string>
+    public class Column : IEntity
     {
         // ReSharper disable once UnusedMember.Local
         private Column()

@@ -38,7 +38,7 @@ namespace Kanban
                 return;
             }
 
-            var chatId = message.Chat.Id;
+            var chatId = message.Chat.Id.ToString();
 
             var splitted = message.ReplyToMessage.Text.Split(' ', 2, StringSplitOptions.RemoveEmptyEntries);
             if (splitted.Length < 2)

@@ -7,7 +7,7 @@ using Task = System.Threading.Tasks.Task;
 
 namespace Persistence
 {
-    public class Repository<T, TId> : IRepository<T, TId> where T : class, IEntity<TId>
+    public class Repository<T> : IRepository<T> where T : class, IEntity
     {
         private readonly KanbanDbContext _context;
 
@@ -25,7 +25,7 @@ namespace Persistence
             await _context.SaveChangesAsync();
         }
 
-        public async Task<T> GetAsync(TId id) => await _context.Set<T>().FirstOrDefaultAsync(e => e.Id.Equals(id));
+        public async Task<T> GetAsync(string id) => await _context.Set<T>().FirstOrDefaultAsync(e => e.Id.Equals(id));
 
         public async Task UpdateAsync(T entity)
         {

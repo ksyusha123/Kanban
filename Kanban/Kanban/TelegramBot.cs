@@ -42,7 +42,7 @@ namespace Kanban
             {
                 if (_commands.TryGetValue(commandSplitted[0], out var command))
                 {
-                    var chat = await _chatInteractor.GetChatAsync(message.Chat.Id);
+                    var chat = await _chatInteractor.GetChatAsync(message.Chat.Id.ToString());
                     if (command.NeedBoard && chat is null)
                     {
                         await _client.SendTextMessageAsync(message.Chat.Id,

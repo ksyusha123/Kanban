@@ -11,10 +11,10 @@ namespace Kanban
 {
     public class AddBoardCommand : ICommand
     {
-        private readonly IRepository<Chat, long> _chatRepository;
+        private readonly IRepository<Chat> _chatRepository;
         private readonly IEnumerable<IApplication> _apps;
 
-        public AddBoardCommand(IRepository<Chat, long> chatRepository, IEnumerable<IApplication> apps) =>
+        public AddBoardCommand(IRepository<Chat> chatRepository, IEnumerable<IApplication> apps) =>
             (_chatRepository, _apps) = (chatRepository, apps);
 
         public string Name => "/addboard";
@@ -28,7 +28,7 @@ namespace Kanban
 
         public async Task ExecuteAsync(Chat chat1, Message message, TelegramBotClient botClient)
         {
-            var chatId = message.Chat.Id;
+            var chatId = message.Chat.Id.ToString();
             var chat = await _chatRepository.GetAsync(chatId);
 
             if (chat is { })

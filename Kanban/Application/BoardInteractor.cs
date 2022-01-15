@@ -7,10 +7,10 @@ namespace Application
 {
     public class BoardInteractor : IBoardInteractor
     {
-        private readonly IRepository<Board, string> _boardRepository;
-        private readonly IRepository<Card, string> _cardRepository;
+        private readonly IRepository<Board> _boardRepository;
+        private readonly IRepository<Card> _cardRepository;
 
-        public BoardInteractor(IRepository<Board, string> boardRepository, IRepository<Card, string> cardRepository) =>
+        public BoardInteractor(IRepository<Board> boardRepository, IRepository<Card> cardRepository) =>
             (_boardRepository, _cardRepository) = (boardRepository, cardRepository);
 
         public async Task<Board> CreateBoardAsync(string name)

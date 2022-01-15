@@ -2,10 +2,10 @@
 
 namespace Infrastructure
 {
-    public interface IEntity<T> : IEquatable<IEntity<T>>
+    public interface IEntity : IEquatable<IEntity>
     {
-        T Id { get; }
+        string Id { get; }
 
-        bool IEquatable<IEntity<T>>.Equals(IEntity<T> other) => other is { } && Id.Equals(other.Id);
+        bool IEquatable<IEntity>.Equals(IEntity other) => other is { } && Id.Equals(other.Id);
     }
 }
