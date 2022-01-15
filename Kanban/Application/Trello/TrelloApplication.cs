@@ -2,7 +2,7 @@
 using Infrastructure;
 using TrelloApi;
 
-namespace Application
+namespace Application.Trello
 {
     class TrelloApplication : IApplication
     {
@@ -11,7 +11,7 @@ namespace Application
             BoardInteractor = new TrelloBoardInteractor(trelloClient, dateTimeProvider);
             CardInteractor = new TrelloCardInteractor(trelloClient, dateTimeProvider);
         }
-        public string Name => "Trello";
+        public string Name => nameof(App.Trello);
         public App App => App.Trello;
         public IBoardInteractor BoardInteractor { get; }
         public ICardInteractor CardInteractor { get; }

@@ -22,8 +22,7 @@ namespace Kanban
 
         public async Task ExecuteAsync(Chat chat, Message message, TelegramBotClient botClient)
         {
-            var boardInteractor = _apps[chat.App].BoardInteractor;
-            var columns = await boardInteractor.GetAllColumnsAsync(chat.BoardId);
+            var columns = await _apps[chat.App].BoardInteractor.GetAllColumnsAsync(chat.BoardId);
             await botClient.SendTextMessageAsync(chat.Id,
                 string.Join('\n', columns.OrderBy(c => c.OrderNumber).Select(c => c.Name)));
         }

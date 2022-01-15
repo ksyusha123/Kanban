@@ -2,7 +2,6 @@
 using System.IO;
 using System.Reflection;
 using Application;
-using Domain;
 using Infrastructure;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
@@ -32,10 +31,7 @@ namespace Kanban
                 .UseNpgsql(container.GetInstance<IConfiguration>().GetSection("connectionString").Value)
                 .Options);
             container.Register<KanbanDbContext>();
-            container.Register<IRepository<Board>, Repository<Board>>();
-            container.Register<IRepository<Chat>, Repository<Chat>>();
-            container.Register<IRepository<Card>, Repository<Card>>();
-            container.Register<IRepository<Executor>, Repository<Executor>>();
+            container.Register(typeof(IRepository<>), typeof(Repository<>));
             container.Register<IDateTimeProvider, StandardDateTimeProvider>();
             container.Register<TelegramBot>();
             container.RegisterInitializer<TelegramBot>(bot => bot.Start());

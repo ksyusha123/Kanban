@@ -1,6 +1,6 @@
 ﻿using Application;
 using Microsoft.EntityFrameworkCore;
-using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using Infrastructure;
 using Task = System.Threading.Tasks.Task;
@@ -19,9 +19,21 @@ namespace Persistence
             await _context.SaveChangesAsync();
         }
 
+        public async Task AddAsync(IEnumerable<T> entities)
+        {
+            await _context.Set<T>().AddRangeAsync(entities);
+            await _context.SaveChangesAsync();
+        }
+
         public async Task DeleteAsync(T entity)
         {
             _context.Set<T>().Remove(entity);
+            await _context.SaveChangesAsync();
+        }
+
+        public async Task DeleteAsync(IEnumerable<T> entities)
+        {
+            _context.Set<T>().RemoveRange(entities);
             await _context.SaveChangesAsync();
         }
 

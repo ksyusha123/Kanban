@@ -6,7 +6,7 @@ using Domain;
 using Infrastructure;
 using TrelloApi;
 
-namespace Application
+namespace Application.Trello
 {
     public class TrelloCardInteractor : ICardInteractor
     {

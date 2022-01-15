@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 using Domain;
 using Infrastructure;
 
-namespace Application
+namespace Application.OwnKanban
 {
     public class CardInteractor : ICardInteractor
     {
