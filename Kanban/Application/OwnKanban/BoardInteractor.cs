@@ -1,17 +1,21 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Domain;
 
-namespace Application
+namespace Application.OwnKanban
 {
     public class BoardInteractor : IBoardInteractor
     {
         private readonly IRepository<Board> _boardRepository;
         private readonly IRepository<Card> _cardRepository;
+        private readonly IRepository<Column> _columnRepository;
 
-        public BoardInteractor(IRepository<Board> boardRepository, IRepository<Card> cardRepository) =>
-            (_boardRepository, _cardRepository) = (boardRepository, cardRepository);
+        public BoardInteractor(IRepository<Board> boardRepository, IRepository<Card> cardRepository,
+            IRepository<Column> columnRepository) =>
+            (_boardRepository, _cardRepository, _columnRepository) =
+            (boardRepository, cardRepository, columnRepository);
 
         public async Task<Board> CreateBoardAsync(string name)
         {
