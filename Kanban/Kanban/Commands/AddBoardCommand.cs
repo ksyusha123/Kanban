@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using Application;
 using Domain;
@@ -12,13 +13,14 @@ namespace Kanban
     public class AddBoardCommand : ICommand
     {
         private readonly IRepository<Chat> _chatRepository;
-        private readonly IEnumerable<IApplication> _apps;
+        private readonly Dictionary<App, IApplication> _apps;
 
         public AddBoardCommand(IRepository<Chat> chatRepository, IEnumerable<IApplication> apps) =>
-            (_chatRepository, _apps) = (chatRepository, apps);
+            (_chatRepository, _apps) = (chatRepository, apps.ToDictionary(a => a.App));
 
         public string Name => "/addboard";
-        public string Help => "Добавляет существующую доску в бот";
+        public string Help => "добавляет существующую доску в бот\n" +
+                              "Если доска приватная в стороннем приложении, то сначала добавьте superfiitbot@gmail.com на доску";
         public bool NeedBoard => false;
         public bool NeedReply => true;
 
@@ -33,7 +35,7 @@ namespace Kanban
 
             if (chat is { })
             {
-                await botClient.SendTextMessageAsync(chatId, "у вас уже есть доска!!!");
+                await botClient.SendTextMessageAsync(chatId, "У вас уже есть доска");
                 return;
             }
 
@@ -48,9 +50,22 @@ namespace Kanban
 
             var app = splitted[0].ToLower() == "trello" ? App.Trello : App.OwnKanban;
 
+            Board board;
+            try
+            {
+                board = await _apps[app].BoardInteractor.GetBoardAsync(splitted[1]);
+            }
+            catch (System.Net.WebException)
+            {
+                await botClient.SendTextMessageAsync(chatId, $"Не нашел такую доску :(\n" +
+                                                             $"Проверьте приложение и id");
+                return;
+            }
+
             chat = new Chat(chatId, app, splitted[1]);
             await _chatRepository.AddAsync(chat);
-            await botClient.SendTextMessageAsync(chatId, $"я добавиль {splitted[1]}!");
+            await botClient.SendTextMessageAsync(chatId, $"Я добавил {board.Name}\n" +
+                                                         $"Удачи в создании проекта!");
         }
     }
 }

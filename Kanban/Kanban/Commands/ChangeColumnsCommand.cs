@@ -17,7 +17,7 @@ namespace Kanban
         public ChangeColumnsCommand(IEnumerable<IApplication> apps) => _apps = apps.ToDictionary(a => a.App);
 
         public string Name => "/changecolumns";
-        public string Help => "Изменить существущие колонки";
+        public string Help => "меняет существущие колонки";
         public bool NeedBoard => true;
         public bool NeedReply => true;
 

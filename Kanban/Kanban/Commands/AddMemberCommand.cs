@@ -16,7 +16,7 @@ namespace Kanban
 
         public AddMemberCommand(IEnumerable<IApplication> apps) => _apps = apps.ToDictionary(a => a.App);
         public string Name => "/addmember";
-        public string Help => "Добавляет участника в доску проекта";
+        public string Help => "добавляет участника в доску проекта";
         public bool NeedBoard => true;
         public bool NeedReply => true;
 

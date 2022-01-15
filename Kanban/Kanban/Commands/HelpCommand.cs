@@ -13,7 +13,7 @@ namespace Kanban
             _text = string.Join('\n', commands.Append(this).Select(c => $"{c.Name} - {c.Help}"));
 
         public string Name => "/help";
-        public string Help => "Выводит данную подсказку";
+        public string Help => "выводит данную подсказку";
         public bool NeedBoard => false;
         public bool NeedReply => false;
         public string Hint => null!;

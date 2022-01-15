@@ -15,7 +15,7 @@ namespace Kanban
 
         public GetAllColumnsCommand(IEnumerable<IApplication> apps) => _apps = apps.ToDictionary(a => a.App);
         public string Name => "/getallcolumns";
-        public string Help => "Вывести все колонки";
+        public string Help => "выводит все колонки";
         public bool NeedBoard => true;
         public bool NeedReply => false;
         public string Hint => null;

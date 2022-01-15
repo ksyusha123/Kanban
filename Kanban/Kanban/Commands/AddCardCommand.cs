@@ -16,7 +16,7 @@ namespace Kanban
         public AddCardCommand(IEnumerable<IApplication> apps) => _apps = apps.ToDictionary(a => a.App);
 
         public string Name => "/addcard";
-        public string Help => "Добавляет новую карточку на доску";
+        public string Help => "добавляет новую карточку на доску";
         public bool NeedBoard => true;
         public bool NeedReply => true;
 

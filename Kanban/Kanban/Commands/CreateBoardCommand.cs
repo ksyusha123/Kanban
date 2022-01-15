@@ -22,7 +22,7 @@ namespace Kanban
         }
 
         public string Name => "/createboard";
-        public string Help => "Создает новую доску и добавляет её в бот";
+        public string Help => "создает новую доску и добавляет её в бот";
         public bool NeedBoard => false;
         public bool NeedReply => true;
 

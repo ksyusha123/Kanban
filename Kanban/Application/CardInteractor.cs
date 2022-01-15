@@ -32,12 +32,15 @@ namespace Application
             return card;
         }
 
-        public async Task<IEnumerable<Card>> GetCardsAsync(string nameQuery, string boardId)
+        public async Task<IEnumerable<Card>> GetCardsAsync(IEnumerable<string> nameTokens, string boardId)
         {
             var board = await _boardRepository.GetAsync(boardId);
-            var nameTokens = nameQuery.Split(' ');
             return board.Cards.Where(c => nameTokens.Any(t => c.Name.Contains(t, StringComparison.OrdinalIgnoreCase)));
         }
+
+        public async Task<Card> GetCard(string name, string boardId) =>
+            (await _boardRepository.GetAsync(boardId)).Cards
+            .FirstOrDefault(c => c.Name == name);
 
         public async Task EditCardNameAsync(string cardId, string name)
         {
