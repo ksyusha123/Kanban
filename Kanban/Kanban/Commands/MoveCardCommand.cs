@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Application;
@@ -37,17 +38,15 @@ namespace Kanban
                 return;
             }
 
-            var cardName = splitted[0];
             var app = _apps[chat.App];
-            var card = (await app.CardInteractor.GetCardsAsync(cardName, chat.BoardId)).SingleOrDefault();
+            var card = await app.CardInteractor.GetCard(splitted[0], chat.BoardId);
             if (card is null)
             {
-                // не найдено карточек или их несколько. надо шото написать юзерам. возможно, стоит разделить 2 случая:
-                // в случае нескольких карт вывести их список и попросить уточнить,
-                // а в случае, когда ничего не нашли просто сказать об этом
+                await botClient.SendTextMessageAsync(chat.Id,
+                    $"Я не нашёл карточку {splitted[0]} :(\n" +
+                    "Воспользуйтесь командой /findcard, чтобы уточнить запрос");
                 return;
             }
-
             var columnName = splitted[1];
             var column = (await app.BoardInteractor.GetAllColumnsAsync(chat.BoardId))
                 .FirstOrDefault(c => c.Name == columnName);

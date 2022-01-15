@@ -19,7 +19,8 @@ namespace Kanban
             (_chatRepository, _apps) = (chatRepository, apps.ToDictionary(a => a.App));
 
         public string Name => "/addboard";
-        public string Help => "добавляет существующую доску в бот";
+        public string Help => "добавляет существующую доску в бот\n" +
+                              "Если доска приватная в стороннем приложении, то сначала добавьте superfiitbot@gmail.com на доску";
         public bool NeedBoard => false;
         public bool NeedReply => true;
 
@@ -34,7 +35,7 @@ namespace Kanban
 
             if (chat is { })
             {
-                await botClient.SendTextMessageAsync(chatId, "у вас уже есть доска!!!");
+                await botClient.SendTextMessageAsync(chatId, "У вас уже есть доска");
                 return;
             }
 

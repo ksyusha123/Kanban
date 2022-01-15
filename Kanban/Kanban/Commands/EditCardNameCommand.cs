@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Application;
@@ -36,8 +37,15 @@ namespace Kanban
             }
 
             var oldCardName = splitted[0];
-            var card = (await _apps[chat.App].CardInteractor.GetCardsAsync(oldCardName, chat.BoardId))
-                .SingleOrDefault();
+            var app = _apps[chat.App];
+            var card = await app.CardInteractor.GetCard(oldCardName, chat.BoardId);
+            if (card is null)
+            {
+                await botClient.SendTextMessageAsync(chat.Id,
+                    $"Я не нашёл карточку {oldCardName} :(\n" +
+                    "Воспользуйтесь командой /findcard, чтобы уточнить запрос");
+                return;
+            }
             var newCardName = splitted[1];
             await _apps[chat.App].CardInteractor.EditCardNameAsync(card.Id, newCardName);
             await botClient.SendTextMessageAsync(chat.Id, $"Поменял {oldCardName} на {newCardName}");

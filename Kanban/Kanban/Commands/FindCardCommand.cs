@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Application;
@@ -25,8 +26,9 @@ namespace Kanban
 
         public async Task ExecuteAsync(Chat chat, Message message, TelegramBotClient botClient)
         {
-            var cardName = message.ReplyToMessage.Text.Trim();
-            var cards = (await _apps[chat.App].CardInteractor.GetCardsAsync(cardName, chat.BoardId)).ToArray();
+            var nameTokens = message.ReplyToMessage.Text.Split(' ', StringSplitOptions.RemoveEmptyEntries)
+                .Select(s => s.Trim());
+            var cards = (await _apps[chat.App].CardInteractor.GetCardsAsync(nameTokens, chat.BoardId)).ToArray();
 
             if (!cards.Any())
             {

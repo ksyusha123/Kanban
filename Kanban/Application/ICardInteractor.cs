@@ -10,6 +10,7 @@ namespace Application
         Task EditCardNameAsync(string cardId, string name);
         Task AssignCardExecutorAsync(string cardId, string executorId);
         Task ChangeColumnAsync(string cardId, Column column);
-        Task<IEnumerable<Card>> GetCardsAsync(string nameQuery, string boardId);
+        Task<IEnumerable<Card>> GetCardsAsync(IEnumerable<string> nameTokens, string boardId);
+        Task<Card> GetCard(string name, string boardId);
     }
 }
