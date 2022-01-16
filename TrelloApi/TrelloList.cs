@@ -55,5 +55,12 @@ namespace TrelloApi
                 new[] { ("Accept", "application/json") });
             return client.DeserializeJson<IEnumerable<TrelloCard>>(response);
         }
+
+        public async Task Rename(string id, string name)
+        {
+            await Task.Run(() =>
+                client.GetResponseByWebRequest($"https://api.trello.com/1/lists/{id}", "PUT", null,
+                    new[] {("name", name)}));
+        }
     }
 }
