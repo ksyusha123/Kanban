@@ -59,5 +59,11 @@ namespace Application.OwnKanban
         {
             throw new System.NotImplementedException();
         }
+
+        public async Task DeleteBoardAsync(string boardId)
+        {
+            var board = await _boardRepository.GetAsync(boardId);
+            await _boardRepository.DeleteAsync(board);
+        }
     }
 }

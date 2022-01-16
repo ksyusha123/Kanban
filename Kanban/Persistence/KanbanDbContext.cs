@@ -20,10 +20,10 @@ namespace Persistence
             modelBuilder.Entity<Card>().HasMany(c => c.Comments).WithOne();
             modelBuilder.Entity<Card>().Property(c => c.CreationTime);
 
-            modelBuilder.Entity<Executor>().HasKey(e => e.Id);
+            modelBuilder.Entity<Executor>().HasKey(e => e.TelegramUsername);
             modelBuilder.Entity<Executor>().Property(e => e.Id).ValueGeneratedNever();
             modelBuilder.Entity<Executor>().Property(e => e.Name).HasMaxLength(100);
-            modelBuilder.Entity<Executor>().Property(e => e.TelegramUsername).HasMaxLength(100);
+            modelBuilder.Entity<Executor>().Property(e => e.Id);
 
             modelBuilder.Entity<Column>().HasKey(c => c.Id);
             modelBuilder.Entity<Column>().Property(c => c.Id).ValueGeneratedNever();

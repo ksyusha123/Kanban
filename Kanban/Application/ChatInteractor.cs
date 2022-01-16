@@ -16,5 +16,11 @@ namespace Application
             var chat = new Chat(chatId, app, boardId);
             await _chatRepository.AddAsync(chat);
         }
+
+        public async Task DeleteChatAsync(string chatId)
+        {
+            var chat = await _chatRepository.GetAsync(chatId);
+            await _chatRepository.DeleteAsync(chat);
+        }
     }
 }
