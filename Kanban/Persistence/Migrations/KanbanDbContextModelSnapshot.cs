@@ -53,7 +53,7 @@ namespace Persistence.Migrations
                         .HasMaxLength(250)
                         .HasColumnType("character varying(250)");
 
-                    b.Property<string>("ExecutorTelegramUsername")
+                    b.Property<string>("ExecutorId")
                         .HasColumnType("text");
 
                     b.Property<string>("Name")
@@ -65,7 +65,7 @@ namespace Persistence.Migrations
 
                     b.HasIndex("BoardId");
 
-                    b.HasIndex("ExecutorTelegramUsername");
+                    b.HasIndex("ExecutorId");
 
                     b.ToTable("Card");
                 });
@@ -114,7 +114,7 @@ namespace Persistence.Migrations
                     b.Property<string>("Id")
                         .HasColumnType("text");
 
-                    b.Property<string>("AuthorTelegramUsername")
+                    b.Property<string>("AuthorId")
                         .IsRequired()
                         .HasColumnType("text");
 
@@ -131,7 +131,7 @@ namespace Persistence.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("AuthorTelegramUsername");
+                    b.HasIndex("AuthorId");
 
                     b.HasIndex("CardId");
 
@@ -140,10 +140,10 @@ namespace Persistence.Migrations
 
             modelBuilder.Entity("Domain.Executor", b =>
                 {
-                    b.Property<string>("TelegramUsername")
+                    b.Property<string>("Id")
                         .HasColumnType("text");
 
-                    b.Property<string>("Id")
+                    b.Property<string>("AppUsername")
                         .IsRequired()
                         .HasColumnType("text");
 
@@ -152,7 +152,7 @@ namespace Persistence.Migrations
                         .HasMaxLength(100)
                         .HasColumnType("character varying(100)");
 
-                    b.HasKey("TelegramUsername");
+                    b.HasKey("Id");
 
                     b.ToTable("Executor");
                 });
@@ -165,7 +165,7 @@ namespace Persistence.Migrations
 
                     b.HasOne("Domain.Executor", "Executor")
                         .WithMany()
-                        .HasForeignKey("ExecutorTelegramUsername");
+                        .HasForeignKey("ExecutorId");
 
                     b.Navigation("Executor");
                 });
@@ -181,7 +181,7 @@ namespace Persistence.Migrations
                 {
                     b.HasOne("Domain.Executor", "Author")
                         .WithMany()
-                        .HasForeignKey("AuthorTelegramUsername")
+                        .HasForeignKey("AuthorId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 

@@ -1,18 +1,19 @@
 ﻿using System;
+using Infrastructure;
 
 namespace Domain
 {
-    public class Executor : IExecutor
+    public class Executor : IEntity
     {
-        public Executor(string name, string telegramUsername) : this(Guid.NewGuid().ToString(), name, telegramUsername)
+        public Executor(string name, string id) : this(id, name, Guid.NewGuid().ToString())
         {
         }
 
-        public Executor(string id, string name, string telegramUsername) =>
-            (Id, Name, TelegramUsername) = (id, name, telegramUsername);
+        public Executor(string id, string name, string appUsername) =>
+            (Id, Name, AppUsername) = (id, name, appUsername);
 
-        public string Id { get; }
+        public string Id { get; } // telegramusername
         public string Name { get; set; }
-        public string TelegramUsername { get; set; }
+        public string AppUsername { get; set; }
     }
 }

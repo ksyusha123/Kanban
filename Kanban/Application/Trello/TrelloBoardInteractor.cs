@@ -41,7 +41,7 @@ namespace Application.Trello
             foreach (var column in columns)
             foreach (var card in
                 (await _trelloListClient.GetAllCardsAsync(column.Id))
-                .Select(c => new Card(c.Id, c.Name, c.Desc, new Executor("", ""),
+                .Select(c => new Card(c.Id, c.Name, c.Desc,
                     column.Id, _dateTimeProvider)))
                 board.AddCard(card);
             return board; 
