@@ -58,7 +58,8 @@ namespace Kanban
             catch (System.Net.WebException)
             {
                 await botClient.SendTextMessageAsync(chatId, $"Не нашел такую доску :(\n" +
-                                                             $"Проверьте приложение и id");
+                                                             $"Проверьте приложение и id\n" +
+                                                             $"Возможно, вы забыли добавить superfiitbot@gmail.com на приватную доску");
                 return;
             }
 

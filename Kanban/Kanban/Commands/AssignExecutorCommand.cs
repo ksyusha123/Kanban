@@ -12,8 +12,14 @@ namespace Kanban
     public class AssignExecutorCommand : ICommand
     {
         private readonly IDictionary<App, IApplication> _apps;
+        private readonly ExecutorInteractor _executorInteractor;
 
-        public AssignExecutorCommand(IEnumerable<IApplication> apps) => _apps = apps.ToDictionary(a => a.App);
+        public AssignExecutorCommand(IEnumerable<IApplication> apps, ExecutorInteractor executorInteractor)
+        {
+            _executorInteractor = executorInteractor;
+            _apps = apps.ToDictionary(a => a.App);
+        }
+
         public string Name => "/assignexecutor";
         public string Help => "назначает исполнителя задачи";
         public bool NeedBoard => true;
@@ -25,7 +31,7 @@ namespace Kanban
                               "ник_исполнителя_задачи_в_телеграме\n" +
                               "Пример:\n" +
                               "пофиксить changecolumns\n" +
-                              "Themplarer";
+                              "@Themplarer";
         public async Task ExecuteAsync(Chat chat, Message message, TelegramBotClient botClient)
         {
             var splitted = message.ReplyToMessage.Text.Split('\n')
@@ -45,8 +51,10 @@ namespace Kanban
                     "Воспользуйтесь командой /findcard, чтобы уточнить запрос");
                 return;
             }
-            
-            // app.CardInteractor.AssignCardExecutorAsync(card.Id, ) 
+
+            var executor = await _executorInteractor.GetExecutor(splitted[1].TrimStart('@'));
+            await app.CardInteractor.AssignCardExecutorAsync(card.Id, executor.Id);
+            await botClient.SendTextMessageAsync(chat.Id, $"Теперь задачу {card.Name} должен делать {splitted[1]}");
         }
     }
 }
