@@ -74,5 +74,8 @@ namespace Application.Trello
 
         public async Task AddMemberAsync(string boardId, string userId) => 
             await _trelloBoardClient.AddMemberAsync(boardId, TrelloMemberTypes.Normal, userId);
+
+        public async Task DeleteBoardAsync(string boardId) => 
+            await _trelloBoardClient.DeleteAsync(boardId);
     }
 }
