@@ -59,17 +59,25 @@ namespace TrelloApi
         
         public async Task AddMemberAsync(string id, string memberId)
         {
-            //TODO
+            await Task.Run(() => client.GetResponseByWebRequest($"https://api.trello.com/1/cards/{id}/idMembers", "POST", null,
+                new[] {("value", memberId)}));
         }
 
         public async Task RemoveMember(string id, string memberId)
         {
-            //TODO
+            await Task.Run(() => client.GetResponseByWebRequest($"https://api.trello.com/1/cards/{id}/idMembers/{memberId}", "DELETE"));
         }
 
-        public async Task GetAllMembers(string id)
+        public async Task<IEnumerable<TrelloMember>> GetAllMembers(string id)
         {
-            //TODO
+            var response = await Task.Run(() => client.GetResponseByWebRequest($"https://api.trello.com/1/cards/{id}/members", "GET"));
+            return client.DeserializeJson<IEnumerable<TrelloMember>>(response);
+        }
+
+        public async Task UpdateDescription(string id, string desc)
+        {
+            await Task.Run(() => client.GetResponseByWebRequest($"https://api.trello.com/1/cards/{id}", "PUT",
+                new[] {("Accept", "application/json")}, new[] {("desc", desc)}));
         }
     }
 }
