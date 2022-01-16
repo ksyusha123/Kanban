@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using Application;
 using Microsoft.Extensions.Configuration;
 using Telegram.Bot;
@@ -41,7 +42,7 @@ namespace Kanban
             {
                 if (_commands.TryGetValue(commandSplitted[0], out var command))
                 {
-                    var chat = await _chatInteractor.GetChatAsync(message.Chat.Id);
+                    var chat = await _chatInteractor.GetChatAsync(message.Chat.Id.ToString());
                     if (command.NeedBoard && chat is null)
                     {
                         await _client.SendTextMessageAsync(message.Chat.Id,
@@ -69,7 +70,9 @@ namespace Kanban
         private static Dictionary<string, ICommand> FillCommandsDictionary(IEnumerable<ICommand> commands)
         {
             var dict = new Dictionary<string, ICommand>();
-            foreach (var command in commands)
+            var commandsList = commands as List<ICommand> ?? commands.ToList();
+            commandsList.Add(new HelpCommand(commandsList));
+            foreach (var command in commandsList)
             {
                 dict[command.Name] = command;
                 dict[$"{command.Name}@AgileBoardBot"] = command;

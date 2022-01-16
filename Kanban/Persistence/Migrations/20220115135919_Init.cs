@@ -23,7 +23,7 @@ namespace Persistence.Migrations
                 name: "Chat",
                 columns: table => new
                 {
-                    Id = table.Column<long>(type: "bigint", nullable: false),
+                    Id = table.Column<string>(type: "text", nullable: false),
                     App = table.Column<int>(type: "integer", nullable: false),
                     BoardId = table.Column<string>(type: "text", nullable: false)
                 },
@@ -36,7 +36,7 @@ namespace Persistence.Migrations
                 name: "Executor",
                 columns: table => new
                 {
-                    Id = table.Column<Guid>(type: "uuid", nullable: false),
+                    Id = table.Column<string>(type: "text", nullable: false),
                     Name = table.Column<string>(type: "character varying(100)", maxLength: 100, nullable: false),
                     TelegramUsername = table.Column<string>(type: "character varying(100)", maxLength: 100, nullable: false)
                 },
@@ -51,7 +51,7 @@ namespace Persistence.Migrations
                 {
                     Id = table.Column<string>(type: "text", nullable: false),
                     Name = table.Column<string>(type: "text", nullable: false),
-                    OrderNumber = table.Column<int>(type: "integer", nullable: false),
+                    OrderNumber = table.Column<double>(type: "double precision", nullable: false),
                     BoardId = table.Column<string>(type: "text", nullable: true)
                 },
                 constraints: table =>
@@ -72,7 +72,7 @@ namespace Persistence.Migrations
                     Id = table.Column<string>(type: "text", nullable: false),
                     Name = table.Column<string>(type: "character varying(100)", maxLength: 100, nullable: false),
                     Description = table.Column<string>(type: "character varying(250)", maxLength: 250, nullable: false),
-                    ExecutorId = table.Column<Guid>(type: "uuid", nullable: true),
+                    ExecutorId = table.Column<string>(type: "text", nullable: true),
                     ColumnId = table.Column<string>(type: "text", nullable: false),
                     CreationTime = table.Column<DateTime>(type: "timestamp without time zone", nullable: false),
                     BoardId = table.Column<string>(type: "text", nullable: true)
@@ -98,8 +98,8 @@ namespace Persistence.Migrations
                 name: "Comment",
                 columns: table => new
                 {
-                    Id = table.Column<Guid>(type: "uuid", nullable: false),
-                    AuthorId = table.Column<Guid>(type: "uuid", nullable: false),
+                    Id = table.Column<string>(type: "text", nullable: false),
+                    AuthorId = table.Column<string>(type: "text", nullable: false),
                     Message = table.Column<string>(type: "character varying(250)", maxLength: 250, nullable: false),
                     CreationTime = table.Column<DateTime>(type: "timestamp without time zone", nullable: false),
                     CardId = table.Column<string>(type: "text", nullable: true)

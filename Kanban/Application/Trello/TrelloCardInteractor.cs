@@ -6,7 +6,7 @@ using Domain;
 using Infrastructure;
 using TrelloApi;
 
-namespace Application
+namespace Application.Trello
 {
     public class TrelloCardInteractor : ICardInteractor
     {
@@ -42,7 +42,7 @@ namespace Application
         public async Task ChangeColumnAsync(string cardId, Column column) =>
             await _trelloCardClient.ReplaceToListAsync(cardId, column.Id);
 
-        public async Task<IEnumerable<Card>> GetCardsAsync(string nameQuery, string boardId)
+        public async Task<IEnumerable<Card>> GetCardsAsync(IEnumerable<string> nameTokens, string boardId)
         {
             var columns = await _trelloBoardClient.GetAllListsAsync(boardId);
             var cards = Enumerable.Empty<Card>();
@@ -52,10 +52,21 @@ namespace Application
                     .Select(c => new Card(c.Id, c.Name, c.Desc, new Executor("", ""), column.Id, _dateTimeProvider));
                 cards = cards.Concat(trelloCards);
             }
-            var nameTokens = nameQuery.Split(' ', StringSplitOptions.RemoveEmptyEntries);
             return cards
                 .Where(c => nameTokens.Any(t => c.Name.Contains(t, StringComparison.OrdinalIgnoreCase)))
                 .ToList();
+        }
+
+        public async Task<Card> GetCard(string name, string boardId)
+        {
+            var columns = await _trelloBoardClient.GetAllListsAsync(boardId);
+            foreach (var column in columns)
+            foreach (var card in await _trelloListClient.GetAllCardsAsync(column.Id))
+                if (card.Name == name)
+                    return new Card(card.Id, card.Name, card.Desc, 
+                        new Executor("", ""), column.Id, _dateTimeProvider);
+
+            return null;
         }
     }
 }

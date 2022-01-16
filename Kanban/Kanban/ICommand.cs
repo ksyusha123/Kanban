@@ -7,11 +7,12 @@ namespace Kanban
 {
     public interface ICommand
     {
-        public string Name { get; }
-        public bool NeedBoard { get; }
-        public bool NeedReply { get; }
-        public string Hint { get; }
+        string Name { get; }
+        string Help { get; }
+        bool NeedBoard { get; }
+        bool NeedReply { get; }
+        string Hint { get; }
 
-        public Task ExecuteAsync(Chat chat, Message message, TelegramBotClient botClient);
+        Task ExecuteAsync(Chat chat, Message message, TelegramBotClient botClient);
     }
 }

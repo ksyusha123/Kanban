@@ -5,17 +5,17 @@ using System.Threading.Tasks;
 using Domain;
 using Infrastructure;
 
-namespace Application
+namespace Application.OwnKanban
 {
     public class CardInteractor : ICardInteractor
     {
-        private readonly IRepository<Card, string> _cardRepository;
-        private readonly IRepository<Executor, Guid> _executorRepository;
-        private readonly IRepository<Board, string> _boardRepository;
+        private readonly IRepository<Card> _cardRepository;
+        private readonly IRepository<Executor> _executorRepository;
+        private readonly IRepository<Board> _boardRepository;
         private readonly IDateTimeProvider _dateTimeProvider;
 
-        public CardInteractor(IRepository<Card, string> cardRepository, IRepository<Executor, Guid> executorRepository,
-            IRepository<Board, string> boardRepository, IDateTimeProvider dateTimeProvider)
+        public CardInteractor(IRepository<Card> cardRepository, IRepository<Executor> executorRepository,
+            IRepository<Board> boardRepository, IDateTimeProvider dateTimeProvider)
         {
             _cardRepository = cardRepository;
             _executorRepository = executorRepository;
@@ -32,12 +32,15 @@ namespace Application
             return card;
         }
 
-        public async Task<IEnumerable<Card>> GetCardsAsync(string nameQuery, string boardId)
+        public async Task<IEnumerable<Card>> GetCardsAsync(IEnumerable<string> nameTokens, string boardId)
         {
             var board = await _boardRepository.GetAsync(boardId);
-            var nameTokens = nameQuery.Split(' ');
             return board.Cards.Where(c => nameTokens.Any(t => c.Name.Contains(t, StringComparison.OrdinalIgnoreCase)));
         }
+
+        public async Task<Card> GetCard(string name, string boardId) =>
+            (await _boardRepository.GetAsync(boardId)).Cards
+            .FirstOrDefault(c => c.Name == name);
 
         public async Task EditCardNameAsync(string cardId, string name)
         {
@@ -48,7 +51,7 @@ namespace Application
 
         public async Task AssignCardExecutorAsync(string cardId, string executorId)
         {
-            var executor = await _executorRepository.GetAsync(new Guid(executorId));
+            var executor = await _executorRepository.GetAsync(executorId);
             var card = await _cardRepository.GetAsync(cardId);
             card.Executor = executor;
             await _cardRepository.UpdateAsync(card);

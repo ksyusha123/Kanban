@@ -3,14 +3,14 @@ using Infrastructure;
 
 namespace Domain
 {
-    public class Column : IEntity<string>
+    public class Column : IEntity
     {
         // ReSharper disable once UnusedMember.Local
         private Column()
         {
         }
         
-        public Column(string id, string name, int orderNumber) => (Id, Name, OrderNumber) = (id, name, orderNumber);
+        public Column(string id, string name, double orderNumber) => (Id, Name, OrderNumber) = (id, name, orderNumber);
 
         public Column(string name, int orderNumber) : this(Guid.NewGuid().ToString(), name, orderNumber)
         {
@@ -20,6 +20,6 @@ namespace Domain
 
         public string Name { get; } = null!;
 
-        public int OrderNumber { get; }
+        public double OrderNumber { get; }
     }
 }

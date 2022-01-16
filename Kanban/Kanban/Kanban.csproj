@@ -29,9 +29,10 @@
     </ItemGroup>
 
     <ItemGroup>
-      <None Update="config.json">
+      <None Remove="config.json" />
+      <Content Include="config.json">
         <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-      </None>
+      </Content>
     </ItemGroup>
 
 </Project>

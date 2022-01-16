@@ -3,18 +3,18 @@ using Infrastructure;
 
 namespace Domain
 {
-    public class ExecutorsWithRights : IEntity<Guid>
+    public class ExecutorsWithRights : IEntity
     {
-        public ExecutorsWithRights(Guid executorId, AccessRights rights) =>
-            (Id, ExecutorId, Rights) = (Guid.NewGuid(), executorId, rights);
+        public ExecutorsWithRights(string executorId, AccessRights rights) =>
+            (Id, ExecutorId, Rights) = (Guid.NewGuid().ToString(), executorId, rights);
 
         // ReSharper disable once UnusedMember.Local
         private ExecutorsWithRights()
         {
         }
 
-        public Guid Id { get; }
-        public Guid ExecutorId { get; }
+        public string Id { get; }
+        public string ExecutorId { get; }
         public AccessRights Rights { get; }
     }
 }

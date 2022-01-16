@@ -16,8 +16,10 @@ namespace Kanban
         public GetColumnCardsCommand(IEnumerable<IApplication> apps) => _apps = apps.ToDictionary(a => a.App);
 
         public string Name => "/getcolumncards";
+        public string Help => "получает все карточки из данной колонки";
         public bool NeedBoard => true;
         public bool NeedReply => true;
+
         public string Hint => "Недостаточно аргументов :(\n" +
                               "Ответьте этой командой на сообщение с названием колонки\n" +
                               "Пример: ToDo";

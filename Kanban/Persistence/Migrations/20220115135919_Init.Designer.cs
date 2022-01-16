@@ -10,7 +10,7 @@ using Persistence;
 namespace Persistence.Migrations
 {
     [DbContext(typeof(KanbanDbContext))]
-    [Migration("20220108133620_Init")]
+    [Migration("20220115135919_Init")]
     partial class Init
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -55,8 +55,8 @@ namespace Persistence.Migrations
                         .HasMaxLength(250)
                         .HasColumnType("character varying(250)");
 
-                    b.Property<Guid?>("ExecutorId")
-                        .HasColumnType("uuid");
+                    b.Property<string>("ExecutorId")
+                        .HasColumnType("text");
 
                     b.Property<string>("Name")
                         .IsRequired()
@@ -74,8 +74,8 @@ namespace Persistence.Migrations
 
             modelBuilder.Entity("Domain.Chat", b =>
                 {
-                    b.Property<long>("Id")
-                        .HasColumnType("bigint");
+                    b.Property<string>("Id")
+                        .HasColumnType("text");
 
                     b.Property<int>("App")
                         .HasColumnType("integer");
@@ -101,8 +101,8 @@ namespace Persistence.Migrations
                         .IsRequired()
                         .HasColumnType("text");
 
-                    b.Property<int>("OrderNumber")
-                        .HasColumnType("integer");
+                    b.Property<double>("OrderNumber")
+                        .HasColumnType("double precision");
 
                     b.HasKey("Id");
 
@@ -113,11 +113,12 @@ namespace Persistence.Migrations
 
             modelBuilder.Entity("Domain.Comment", b =>
                 {
-                    b.Property<Guid>("Id")
-                        .HasColumnType("uuid");
+                    b.Property<string>("Id")
+                        .HasColumnType("text");
 
-                    b.Property<Guid>("AuthorId")
-                        .HasColumnType("uuid");
+                    b.Property<string>("AuthorId")
+                        .IsRequired()
+                        .HasColumnType("text");
 
                     b.Property<string>("CardId")
                         .HasColumnType("text");
@@ -141,8 +142,8 @@ namespace Persistence.Migrations
 
             modelBuilder.Entity("Domain.Executor", b =>
                 {
-                    b.Property<Guid>("Id")
-                        .HasColumnType("uuid");
+                    b.Property<string>("Id")
+                        .HasColumnType("text");
 
                     b.Property<string>("Name")
                         .IsRequired()

@@ -1,10 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 using System.Reflection;
 using Application;
-using Domain;
 using Infrastructure;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
@@ -23,13 +20,10 @@ namespace Kanban
             var container = new Container();
             container.RegisterSingleton<IConfiguration>(() =>
                 new ConfigurationBuilder()
-                    .AddJsonFile(
-                        Path.Combine(Directory.GetParent(Directory.GetCurrentDirectory())!.Parent!.Parent!.FullName,
-                            "config.json"),
-                        true)
+                    .AddJsonFile(Path.Combine(Environment.CurrentDirectory, "config.json"), true)
                     .Build());
-            container.Register(() => 
-                new TrelloClient(container.GetInstance<IConfiguration>().GetSection("token").Value, 
+            container.Register(() =>
+                new TrelloClient(container.GetInstance<IConfiguration>().GetSection("token").Value,
                     container.GetInstance<IConfiguration>().GetSection("api-key").Value));
             container.RegisterApplications();
             container.RegisterCommands();
@@ -37,14 +31,11 @@ namespace Kanban
                 .UseNpgsql(container.GetInstance<IConfiguration>().GetSection("connectionString").Value)
                 .Options);
             container.Register<KanbanDbContext>();
-            container.Register<IRepository<Board, string>, Repository<Board, string>>();
-            container.Register<IRepository<Chat, long>, Repository<Chat, long>>();
-            container.Register<IRepository<Card, string>, Repository<Card, string>>();
-            container.Register<IRepository<Executor, Guid>, Repository<Executor, Guid>>();
+            container.Register(typeof(IRepository<>), typeof(Repository<>));
             container.Register<IDateTimeProvider, StandardDateTimeProvider>();
             container.Register<TelegramBot>();
             container.RegisterInitializer<TelegramBot>(bot => bot.Start());
-            
+
             container.Register<ChatInteractor>();
             return container;
         }
@@ -52,7 +43,7 @@ namespace Kanban
         private static void RegisterCommands(this Container container) =>
             container.Collection.Register<ICommand>(Assembly.GetCallingAssembly());
 
-        private static void RegisterApplications(this Container container) => 
+        private static void RegisterApplications(this Container container) =>
             container.Collection.Register<IApplication>(typeof(IApplication).Assembly);
     }
 }
