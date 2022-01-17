@@ -20,7 +20,8 @@ namespace Kanban
 
         public string Name => "/addboard";
         public string Help => "добавляет существующую доску в бот\n" +
-                              "Если доска приватная в стороннем приложении, то сначала добавьте superfiitbot@gmail.com на доску";
+                              "Если доска приватная в стороннем приложении, то сначала добавьте superfiitbot@gmail.com на доску.\n" +
+                              "Чтобы все команды работали корректно, выдайте боту права администратора.";
         public bool NeedBoard => false;
         public bool NeedReply => true;
 
