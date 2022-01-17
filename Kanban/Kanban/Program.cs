@@ -37,6 +37,7 @@ namespace Kanban
             container.RegisterInitializer<TelegramBot>(bot => bot.Start());
 
             container.Register<ChatInteractor>();
+            container.Register<ExecutorInteractor>();
             return container;
         }
 

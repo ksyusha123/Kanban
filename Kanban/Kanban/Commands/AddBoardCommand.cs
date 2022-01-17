@@ -12,15 +12,16 @@ namespace Kanban
 {
     public class AddBoardCommand : ICommand
     {
-        private readonly IRepository<Chat> _chatRepository;
+        private readonly ChatInteractor _chatInteractor;
         private readonly Dictionary<App, IApplication> _apps;
 
-        public AddBoardCommand(IRepository<Chat> chatRepository, IEnumerable<IApplication> apps) =>
-            (_chatRepository, _apps) = (chatRepository, apps.ToDictionary(a => a.App));
+        public AddBoardCommand(ChatInteractor chatInteractor, IEnumerable<IApplication> apps) =>
+            (_chatInteractor, _apps) = (chatInteractor, apps.ToDictionary(a => a.App));
 
         public string Name => "/addboard";
         public string Help => "добавляет существующую доску в бот\n" +
-                              "Если доска приватная в стороннем приложении, то сначала добавьте superfiitbot@gmail.com на доску";
+                              "Если доска приватная в стороннем приложении, то сначала добавьте superfiitbot@gmail.com на доску.\n" +
+                              "Чтобы все команды работали корректно, выдайте боту права администратора.";
         public bool NeedBoard => false;
         public bool NeedReply => true;
 
@@ -31,7 +32,7 @@ namespace Kanban
         public async Task ExecuteAsync(Chat chat1, Message message, TelegramBotClient botClient)
         {
             var chatId = message.Chat.Id.ToString();
-            var chat = await _chatRepository.GetAsync(chatId);
+            var chat = await _chatInteractor.GetChatAsync(chatId);
 
             if (chat is { })
             {
@@ -58,12 +59,12 @@ namespace Kanban
             catch (System.Net.WebException)
             {
                 await botClient.SendTextMessageAsync(chatId, $"Не нашел такую доску :(\n" +
-                                                             $"Проверьте приложение и id");
+                                                             $"Проверьте приложение и id\n" +
+                                                             $"Возможно, вы забыли добавить superfiitbot@gmail.com на приватную доску");
                 return;
             }
 
-            chat = new Chat(chatId, app, splitted[1]);
-            await _chatRepository.AddAsync(chat);
+            await _chatInteractor.AddChatAsync(chatId, app, board.Id);
             await botClient.SendTextMessageAsync(chatId, $"Я добавил {board.Name}\n" +
                                                          $"Удачи в создании проекта!");
         }

@@ -41,7 +41,7 @@ namespace Application.Trello
             foreach (var column in columns)
             foreach (var card in
                 (await _trelloListClient.GetAllCardsAsync(column.Id))
-                .Select(c => new Card(c.Id, c.Name, c.Desc, new Executor("", ""),
+                .Select(c => new Card(c.Id, c.Name, c.Desc,
                     column.Id, _dateTimeProvider)))
                 board.AddCard(card);
             return board; 
@@ -64,8 +64,8 @@ namespace Application.Trello
                 var cards = await _trelloListClient.GetAllCardsAsync(oldColumn.Id);
                 foreach (var card in cards)
                     await _trelloCardClient.ReplaceToListAsync(card.Id, newColumns[oldColumn.Name].Id);
-                if (newColumns.ContainsKey(oldColumn.Name)) 
-                    await _trelloListClient.ArchiveAsync(oldColumn.Id);
+                // if (newColumns.ContainsKey(oldColumn.Name)) 
+                await _trelloListClient.ArchiveAsync(oldColumn.Id);
             }
         }
 
@@ -74,5 +74,8 @@ namespace Application.Trello
 
         public async Task AddMemberAsync(string boardId, string userId) => 
             await _trelloBoardClient.AddMemberAsync(boardId, TrelloMemberTypes.Normal, userId);
+
+        public async Task DeleteBoardAsync(string boardId) => 
+            await _trelloBoardClient.DeleteAsync(boardId);
     }
 }

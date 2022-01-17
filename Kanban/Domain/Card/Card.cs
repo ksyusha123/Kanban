@@ -13,14 +13,14 @@ namespace Domain
         {
         }
 
-        public Card(string id, string name, string description, Executor executor, string columnId,
+        public Card(string id, string name, string description, string columnId,
             IDateTimeProvider dateTimeProvider) =>
-            (Id, Name, Description, Executor, ColumnId, CreationTime) =
-            (id, name, description, executor, columnId, dateTimeProvider.GetCurrent());
+            (Id, Name, Description, ColumnId, CreationTime) =
+            (id, name, description, columnId, dateTimeProvider.GetCurrent());
 
-        public Card(string name, string description, Executor executor, string columnId,
+        public Card(string name, string description, string columnId,
             IDateTimeProvider dateTimeProvider) 
-            : this(Guid.NewGuid().ToString(), name, description, executor, columnId, dateTimeProvider)
+            : this(Guid.NewGuid().ToString(), name, description, columnId, dateTimeProvider)
         {
         }
 
