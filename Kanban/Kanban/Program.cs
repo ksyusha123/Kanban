@@ -5,6 +5,7 @@ using Application;
 using Infrastructure;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Hosting;
 using Persistence;
 using SimpleInjector;
 using TrelloApi;
@@ -20,6 +21,7 @@ namespace Kanban
             var container = new Container();
             container.RegisterSingleton<IConfiguration>(() =>
                 new ConfigurationBuilder()
+                    .AddEnvironmentVariables("agile-board-bot")
                     .AddJsonFile(Path.Combine(Environment.CurrentDirectory, "config.json"), true)
                     .Build());
             container.Register(() =>
