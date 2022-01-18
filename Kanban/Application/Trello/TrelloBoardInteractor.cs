@@ -64,7 +64,6 @@ namespace Application.Trello
                 var cards = await _trelloListClient.GetAllCardsAsync(oldColumn.Id);
                 foreach (var card in cards)
                     await _trelloCardClient.ReplaceToListAsync(card.Id, newColumns[oldColumn.Name].Id);
-                // if (newColumns.ContainsKey(oldColumn.Name)) 
                 await _trelloListClient.ArchiveAsync(oldColumn.Id);
             }
         }
