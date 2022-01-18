@@ -32,7 +32,7 @@ namespace Kanban
             container.Register(() => new DbContextOptionsBuilder<KanbanDbContext>()
                 .UseNpgsql(container.GetInstance<IConfiguration>().GetSection("connectionString").Value)
                 .Options);
-            container.Register<KanbanDbContext>();
+            container.Register<KanbanDbContext>(Lifestyle.Scoped);
             container.Register(typeof(IRepository<>), typeof(Repository<>));
             container.Register<IDateTimeProvider, StandardDateTimeProvider>();
             container.Register<TelegramBot>();
