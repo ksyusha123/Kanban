@@ -25,12 +25,6 @@
     </ItemGroup>
 
     <ItemGroup>
-      <Reference Include="TrelloApi, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null">
-        <HintPath>..\..\TrelloApi\bin\Debug\netstandard2.0\TrelloApi.dll</HintPath>
-      </Reference>
-    </ItemGroup>
-
-    <ItemGroup>
       <None Remove="config.json" />
       <Content Include="config.json">
         <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
