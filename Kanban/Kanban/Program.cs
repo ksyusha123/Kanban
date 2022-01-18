@@ -21,8 +21,8 @@ namespace Kanban
             var container = new Container();
             container.RegisterSingleton<IConfiguration>(() =>
                 new ConfigurationBuilder()
-                    .AddEnvironmentVariables("agile-board-bot")
-                    .AddJsonFile(Path.Combine(Environment.CurrentDirectory, "config.json"), true)
+                    .AddEnvironmentVariables()
+                    // .AddJsonFile(Path.Combine(Environment.CurrentDirectory, "config.json"), true)
                     .Build());
             container.Register(() =>
                 new TrelloClient(container.GetInstance<IConfiguration>().GetSection("token").Value,
