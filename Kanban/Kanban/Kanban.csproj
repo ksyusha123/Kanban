@@ -24,11 +24,4 @@
       <PackageReference Include="Telegram.Bot" Version="15.7.1" />
     </ItemGroup>
 
-    <ItemGroup>
-      <None Remove="config.json" />
-      <Content Include="config.json">
-        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-      </Content>
-    </ItemGroup>
-
 </Project>
