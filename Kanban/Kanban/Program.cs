@@ -21,7 +21,8 @@ namespace Kanban
             var container = new Container();
             container.RegisterSingleton<IConfiguration>(() =>
                 new ConfigurationBuilder()
-                    .AddEnvironmentVariables()
+                    // .AddEnvironmentVariables()
+                    .AddUserSecrets("620464b3-2a11-4b61-9c29-bd4fc4c26733")
                     // .AddJsonFile(Path.Combine(Environment.CurrentDirectory, "config.json"), true)
                     .Build());
             container.RegisterSingleton(() =>

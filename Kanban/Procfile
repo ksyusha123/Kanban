@@ -1,0 +1,1 @@
+worker: dotnet run --project ./Kanban/Kanban.csproj
