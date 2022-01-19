@@ -19,21 +19,20 @@ namespace Kanban
         private static Container ConfigureContainer()
         {
             var container = new Container();
-            container.Options.DefaultScopedLifestyle = ScopedLifestyle.Flowing;
             container.RegisterSingleton<IConfiguration>(() =>
                 new ConfigurationBuilder()
                     .AddEnvironmentVariables()
                     // .AddJsonFile(Path.Combine(Environment.CurrentDirectory, "config.json"), true)
                     .Build());
-            container.Register(() =>
+            container.RegisterSingleton(() =>
                 new TrelloClient(container.GetInstance<IConfiguration>().GetSection("token").Value,
                     container.GetInstance<IConfiguration>().GetSection("api-key").Value));
             container.RegisterApplications();
             container.RegisterCommands();
-            container.Register(() => new DbContextOptionsBuilder<KanbanDbContext>()
+            container.RegisterSingleton(() => new DbContextOptionsBuilder<KanbanDbContext>()
                 .UseNpgsql(container.GetInstance<IConfiguration>().GetSection("connectionString").Value)
                 .Options);
-            container.Register<KanbanDbContext>();
+            container.RegisterSingleton<KanbanDbContext>();
             container.Register(typeof(IRepository<>), typeof(Repository<>));
             container.Register<IDateTimeProvider, StandardDateTimeProvider>();
             container.Register<TelegramBot>();
