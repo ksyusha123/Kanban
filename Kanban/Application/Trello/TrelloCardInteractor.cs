@@ -66,5 +66,10 @@ namespace Application.Trello
 
             return null;
         }
+
+        public Task AddComment(string cardId, string comment, string executorId)
+        {
+            throw new NotImplementedException();
+        }
     }
 }
