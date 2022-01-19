@@ -27,34 +27,34 @@ namespace TrelloApi
         
         public async Task<TrelloCard> LoadAsync(string id)
         {
-            var response = client.GetResponseByWebRequest($"https://api.trello.com/1/cards/{id}", "GET",
-                new List<(string title, string value)> { ("Accept", "application/json") });
+            var response = await Task.Run(()=> client.GetResponseByWebRequest($"https://api.trello.com/1/cards/{id}", "GET",
+                new List<(string title, string value)> { ("Accept", "application/json") }));
             return client.DeserializeJson<TrelloCard>(response);
         }
 
         public async Task<TrelloCard> ReplaceToListAsync(string id, string listId)
         {
-            var response = client.GetResponseByWebRequest($"https://api.trello.com/1/cards/{id}", "PUT",
-                new[] { ("Accept", "application/json") }, new[] { ("idList", listId) });
+            var response = await Task.Run(() => client.GetResponseByWebRequest($"https://api.trello.com/1/cards/{id}", "PUT",
+                new[] { ("Accept", "application/json") }, new[] { ("idList", listId) }));
             return client.DeserializeJson<TrelloCard>(response);
         }
 
         public async Task DeleteAsync(string id)
         {
-            client.GetResponseByWebRequest($"https://api.trello.com/1/cards/{id}", "DELETE");
+            await Task.Run(() => client.GetResponseByWebRequest($"https://api.trello.com/1/cards/{id}", "DELETE"));
         }
 
-        public async Task<TrelloCard> Create(string listId, string name)
+        public async Task<TrelloCard> CreateAsync(string listId, string name)
         {
-            var response = client.GetResponseByWebRequest("https://api.trello.com/1/cards", "POST",
-                new[] { ("Accept", "application/json") }, new[] { ("idList", listId), ("name", name) });
+            var response = await Task.Run(() => client.GetResponseByWebRequest("https://api.trello.com/1/cards", "POST",
+                new[] { ("Accept", "application/json") }, new[] { ("idList", listId), ("name", name) }));
             return client.DeserializeJson<TrelloCard>(response);
         }
 
-        public async Task Rename(string id, string name)
+        public async Task RenameAsync(string id, string name)
         {
-            client.GetResponseByWebRequest($"https://api.trello.com/1/cards/{id}", "PUT",
-                new[] { ("Accept", "application/json") }, new[] { ("name", name) });
+            await Task.Run(() => client.GetResponseByWebRequest($"https://api.trello.com/1/cards/{id}", "PUT",
+                new[] { ("Accept", "application/json") }, new[] { ("name", name) }));
         }
         
         public async Task AddMemberAsync(string id, string memberUsername)
@@ -80,6 +80,12 @@ namespace TrelloApi
         {
             await Task.Run(() => client.GetResponseByWebRequest($"https://api.trello.com/1/cards/{id}", "PUT",
                 new[] {("Accept", "application/json")}, new[] {("desc", desc)}));
+        }
+
+        public async Task AddCommentAsync(string id, string text)
+        {
+            await Task.Run(() =>  client.GetResponseByWebRequest($"https://api.trello.com/1/cards/{id}/actions/comments", "POST",
+                new[] {("Accept", "application/json")}, new[] {("text", $"{text}")}));
         }
     }
 }
