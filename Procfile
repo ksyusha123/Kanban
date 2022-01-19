@@ -1,0 +1,1 @@
+bot: dotnet run --project ./Kanban/Kanban/Kanban.csproj
