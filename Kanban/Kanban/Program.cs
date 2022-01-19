@@ -19,6 +19,7 @@ namespace Kanban
         private static Container ConfigureContainer()
         {
             var container = new Container();
+            container.Options.DefaultScopedLifestyle = ScopedLifestyle.Flowing;
             container.RegisterSingleton<IConfiguration>(() =>
                 new ConfigurationBuilder()
                     .AddEnvironmentVariables()
