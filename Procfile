@@ -1,1 +1,0 @@
-worker: cd $HOME/heroku_output/Kanban && dotnet ./Kanban.dll
