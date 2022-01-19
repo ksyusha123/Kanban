@@ -23,6 +23,7 @@ namespace Kanban
 
         public void Start()
         {
+            Environment.Exit(100500);
             _client.StartReceiving();
             _client.OnMessage += ClientOnMessage;
             Console.ReadLine();
