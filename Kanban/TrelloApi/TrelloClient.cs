@@ -54,19 +54,22 @@ namespace TrelloApi
 
         internal T DeserializeJson<T>(string json)
         {
-            var builderJson = new StringBuilder();
-            builderJson.Append(json[0].ToString() + json[1].ToString());
-            for (var i = 2; i < json.Length; i++)
-            {
-                var now = json[i];
-                if (json[i - 1] == '"' && (json[i - 2] == ',' || json[i - 2] == '{'))
-                    now = char.ToUpper(now);
-                builderJson.Append(now);
-            }
+            //var builderJson = new StringBuilder();
+            //builderJson.Append(json[0].ToString() + json[1].ToString());
+            //for (var i = 2; i < json.Length; i++)
+            //{
+            //    var now = json[i];
+            //    if (json[i - 1] == '"' && (json[i - 2] == ',' || json[i - 2] == '{'))
+            //        now = char.ToUpper(now);
+            //    builderJson.Append(now);
+            //}
 
-            var settings = new JsonSerializerSettings();
-            settings.ConstructorHandling = ConstructorHandling.AllowNonPublicDefaultConstructor;
-            return JsonConvert.DeserializeObject<T>(builderJson.ToString(), settings);
+            var settings = new JsonSerializerSettings
+            {
+                ConstructorHandling = ConstructorHandling.AllowNonPublicDefaultConstructor,
+                TypeNameHandling = TypeNameHandling.All
+            };
+            return JsonConvert.DeserializeObject<T>(json, settings);
         }
 
         internal void Copy<T>(T fromObject, T toObject)
