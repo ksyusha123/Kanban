@@ -3,6 +3,7 @@
     <PropertyGroup>
         <OutputType>Exe</OutputType>
         <TargetFramework>net5.0</TargetFramework>
+        <UserSecretsId>620464b3-2a11-4b61-9c29-bd4fc4c26733</UserSecretsId>
     </PropertyGroup>
 
     <ItemGroup>
@@ -26,7 +27,7 @@
     </ItemGroup>
 
     <ItemGroup>
-      <None Update="config.json">
+      <None Update="appsettings.json">
         <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       </None>
     </ItemGroup>
