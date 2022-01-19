@@ -63,10 +63,7 @@ namespace Application.OwnKanban
         public async Task AddMemberAsync(string boardId, string userId) => 
             await _executorInteractor.AddExecutorAsync(userId);
 
-        public async Task DeleteBoardAsync(string boardId)
-        {
-            var board = await _boardRepository.GetAsync(boardId);
-            await _boardRepository.DeleteAsync(board);
-        }
+        public async Task DeleteBoardAsync(string boardId) =>
+            await _boardRepository.DeleteAsync(await _boardRepository.GetAsync(boardId));
     }
 }

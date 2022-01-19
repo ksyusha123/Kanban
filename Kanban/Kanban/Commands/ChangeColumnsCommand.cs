@@ -22,7 +22,8 @@ namespace Kanban
         public bool NeedReply => true;
 
         public string Hint => "Недостаточно аргументов :(\n" +
-                              "Ответьте этой командой на сообщение с перечислением новых названий колонок через символ переноса строки\n" +
+                              "Ответьте этой командой на сообщение с перечислением новых названий колонок через " +
+                              "символ переноса строки\n" +
                               "Пример:\nПервая колонка\nВторая колонка\nТретья колонка";
 
         public async Task ExecuteAsync(Chat chat, Message message, TelegramBotClient botClient)
