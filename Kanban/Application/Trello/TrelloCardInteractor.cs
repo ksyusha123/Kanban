@@ -28,12 +28,12 @@ namespace Application.Trello
             var startColumn = (await _trelloBoardClient.GetAllListsAsync(boardId))
                 .OrderBy(t => t.Pos)
                 .First();
-            var card = await _trelloCardClient.Create(startColumn.Id, name);
+            var card = await _trelloCardClient.CreateAsync(startColumn.Id, name);
             return new Card(card.Id, name, "", startColumn.Id, _dateTimeProvider);
         }
 
         public async Task EditCardNameAsync(string cardId, string name) => 
-            await _trelloCardClient.Rename(cardId, name);
+            await _trelloCardClient.RenameAsync(cardId, name);
 
         public async Task AssignCardExecutorAsync(string cardId, string executorId) => 
             await _trelloCardClient.AddMemberAsync(cardId, executorId);
@@ -67,9 +67,7 @@ namespace Application.Trello
             return null;
         }
 
-        public Task AddComment(string cardId, string comment, string executorId)
-        {
-            throw new NotImplementedException();
-        }
+        public async Task AddComment(string cardId, string comment, string authorId) =>
+            await _trelloCardClient.AddCommentAsync(cardId, $"{comment}. Комментатор: {authorId}");
     }
 }
