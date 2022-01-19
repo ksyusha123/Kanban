@@ -5,6 +5,7 @@ using Application;
 using Infrastructure;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Hosting;
 using Persistence;
 using SimpleInjector;
 using TrelloApi;
@@ -20,23 +21,25 @@ namespace Kanban
             var container = new Container();
             container.RegisterSingleton<IConfiguration>(() =>
                 new ConfigurationBuilder()
-                    .AddJsonFile(Path.Combine(Environment.CurrentDirectory, "config.json"), true)
+                    .AddEnvironmentVariables()
+                    // .AddJsonFile(Path.Combine(Environment.CurrentDirectory, "config.json"), true)
                     .Build());
-            container.Register(() =>
+            container.RegisterSingleton(() =>
                 new TrelloClient(container.GetInstance<IConfiguration>().GetSection("token").Value,
                     container.GetInstance<IConfiguration>().GetSection("api-key").Value));
             container.RegisterApplications();
             container.RegisterCommands();
-            container.Register(() => new DbContextOptionsBuilder<KanbanDbContext>()
+            container.RegisterSingleton(() => new DbContextOptionsBuilder<KanbanDbContext>()
                 .UseNpgsql(container.GetInstance<IConfiguration>().GetSection("connectionString").Value)
                 .Options);
-            container.Register<KanbanDbContext>();
+            container.RegisterSingleton<KanbanDbContext>();
             container.Register(typeof(IRepository<>), typeof(Repository<>));
             container.Register<IDateTimeProvider, StandardDateTimeProvider>();
             container.Register<TelegramBot>();
             container.RegisterInitializer<TelegramBot>(bot => bot.Start());
 
             container.Register<ChatInteractor>();
+            container.Register<ExecutorInteractor>();
             return container;
         }
 

@@ -12,5 +12,6 @@ namespace Application
         Task ChangeColumnsAsync(string boardId, string[] newColumnsNames);
         Task<IEnumerable<Column>> GetAllColumnsAsync(string boardId);
         Task AddMemberAsync(string boardId, string userId);
+        Task DeleteBoardAsync(string boardId);
     }
 }

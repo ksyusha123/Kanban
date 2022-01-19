@@ -26,7 +26,7 @@ namespace Application.OwnKanban
         public async Task<Card> CreateCardAsync(string name, string boardId)
         {
             var board = await _boardRepository.GetAsync(boardId);
-            var card = new Card(name, "", new Executor("", ""), board.StartColumn.Id, _dateTimeProvider);
+            var card = new Card(name, "", board.StartColumn.Id, _dateTimeProvider);
             board.AddCard(card);
             await _boardRepository.UpdateAsync(board);
             return card;

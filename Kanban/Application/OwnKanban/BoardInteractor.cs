@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Domain;
@@ -45,10 +44,15 @@ namespace Application.OwnKanban
 
             var columns = newColumnsNames.Select((c, i) => new Column(c, i)).ToList();
             var newColumnsDict = columns.ToDictionary(c => c.Name);
-            var oldColumnsDict = board.Columns.ToDictionary(c => c.Id);
+            var oldColumnsDict = board.Columns.ToDictionary(c => c.Id, c => c.Name);
+            var oldColumns = board.Columns.Select(c => c).ToArray();
 
-            foreach (var card in board.Cards) card.ColumnId = newColumnsDict[oldColumnsDict[card.ColumnId].Name].Id;
-            board.Columns = columns;
+            foreach (var card in board.Cards) card.ColumnId = newColumnsDict[oldColumnsDict[card.ColumnId]].Id;
+
+            board.Columns.Clear();
+            board.Columns.AddRange(columns);
+
+            await _columnRepository.DeleteAsync(oldColumns);
             await _boardRepository.UpdateAsync(board);
         }
 
@@ -58,6 +62,12 @@ namespace Application.OwnKanban
         public Task AddMemberAsync(string boardId, string userId)
         {
             throw new System.NotImplementedException();
+        }
+
+        public async Task DeleteBoardAsync(string boardId)
+        {
+            var board = await _boardRepository.GetAsync(boardId);
+            await _boardRepository.DeleteAsync(board);
         }
     }
 }

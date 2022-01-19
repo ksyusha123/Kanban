@@ -29,15 +29,14 @@ namespace Application.Trello
                 .OrderBy(t => t.Pos)
                 .First();
             var card = await _trelloCardClient.Create(startColumn.Id, name);
-            return new Card(card.Id, name, "", new Executor("", ""), startColumn.Id, _dateTimeProvider);
+            return new Card(card.Id, name, "", startColumn.Id, _dateTimeProvider);
         }
 
-        public async Task EditCardNameAsync(string cardId, string name) => await _trelloCardClient.Rename(cardId, name);
+        public async Task EditCardNameAsync(string cardId, string name) => 
+            await _trelloCardClient.Rename(cardId, name);
 
-        public async Task AssignCardExecutorAsync(string cardId, string executorId)
-        {
-            throw new System.NotImplementedException();
-        }
+        public async Task AssignCardExecutorAsync(string cardId, string executorId) => 
+            await _trelloCardClient.AddMemberAsync(cardId, executorId);
 
         public async Task ChangeColumnAsync(string cardId, Column column) =>
             await _trelloCardClient.ReplaceToListAsync(cardId, column.Id);
@@ -49,7 +48,7 @@ namespace Application.Trello
             foreach (var column in columns)
             {
                 var trelloCards = (await _trelloListClient.GetAllCardsAsync(column.Id))
-                    .Select(c => new Card(c.Id, c.Name, c.Desc, new Executor("", ""), column.Id, _dateTimeProvider));
+                    .Select(c => new Card(c.Id, c.Name, c.Desc, column.Id, _dateTimeProvider));
                 cards = cards.Concat(trelloCards);
             }
             return cards
@@ -63,8 +62,7 @@ namespace Application.Trello
             foreach (var column in columns)
             foreach (var card in await _trelloListClient.GetAllCardsAsync(column.Id))
                 if (card.Name == name)
-                    return new Card(card.Id, card.Name, card.Desc, 
-                        new Executor("", ""), column.Id, _dateTimeProvider);
+                    return new Card(card.Id, card.Name, card.Desc, column.Id, _dateTimeProvider);
 
             return null;
         }
