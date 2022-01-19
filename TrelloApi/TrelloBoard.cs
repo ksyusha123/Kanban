@@ -29,40 +29,39 @@ namespace TrelloApi
 
         public async Task<TrelloBoard> LoadAsync(string id)
         {
-            var response = client.GetResponseByWebRequest($"https://api.trello.com/1/boards/{id}", "GET",
-                new List<(string title, string value)> { ("Accept", "application/json") });
+            var response = await Task.Run(() => client.GetResponseByWebRequest($"https://api.trello.com/1/boards/{id}", "GET",
+                new List<(string title, string value)> { ("Accept", "application/json") }));
             return client.DeserializeJson<TrelloBoard>(response);
         }
 
         public async Task DeleteAsync(string id)
         {
-            client.GetResponseByWebRequest($"https://api.trello.com/1/boards/{id}", "DELETE");
+           await Task.Run(() =>  client.GetResponseByWebRequest($"https://api.trello.com/1/boards/{id}", "DELETE"));
         }
 
         public async Task<IEnumerable<TrelloList>> GetAllListsAsync(string id)
         {
-            var response = client.GetResponseByWebRequest($"https://api.trello.com/1/boards/{id}/lists", "GET",
-                        new List<(string title, string value)> { ("Accept", "application/json") });
-            var result = client.DeserializeJson<List<TrelloList>>(response);
-            return result;
+            var response = await Task.Run(() =>  client.GetResponseByWebRequest($"https://api.trello.com/1/boards/{id}/lists", "GET",
+                        new List<(string title, string value)> { ("Accept", "application/json") }));
+            return client.DeserializeJson<List<TrelloList>>(response);
         }
 
-        public async Task<TrelloBoard> CreatedAsync(string name)
+        public async Task<TrelloBoard> CreateAsync(string name)
         {
-            var response = client.GetResponseByWebRequest("https://api.trello.com/1/boards/", "POST",
-                parameters: new[] { ("name", name) });
+            var response = await Task.Run(() => client.GetResponseByWebRequest("https://api.trello.com/1/boards/", "POST",
+                parameters: new[] { ("name", name) }));
             return client.DeserializeJson<TrelloBoard>(response);
         }
 
         public async Task<IEnumerable<TrelloAction>> GetAllActionsAsync(string id)
         {
-            var response = client.GetResponseByWebRequest($"https://api.trello.com/1/boards/{id}/actions", "GET");
+            var response = await Task.Run(() => client.GetResponseByWebRequest($"https://api.trello.com/1/boards/{id}/actions", "GET"));
             return client.DeserializeJson<IEnumerable<TrelloAction>>(response);
         }
 
         public async Task<IEnumerable<TrelloMember>> GetAllMembersAsync(string id)
         {
-            var response = client.GetResponseByWebRequest($"https://api.trello.com/1/boards/{id}/members", "GET");
+            var response = await Task.Run(() => client.GetResponseByWebRequest($"https://api.trello.com/1/boards/{id}/members", "GET"));
             return client.DeserializeJson<IEnumerable<TrelloMember>>(response);
         }
 
@@ -84,18 +83,18 @@ namespace TrelloApi
 
             try
             {
-                client.GetResponseByWebRequest($"https://api.trello.com/1/boards/{boardId}/members/{memberId}", "PUT", parameters: prms);
+                await Task.Run(()=> client.GetResponseByWebRequest($"https://api.trello.com/1/boards/{boardId}/members/{memberId}", "PUT", parameters: prms));
             }
             catch (WebException)
             {
-                throw new ArgumentException();
+                throw new ArgumentException("Privilege level unavailable");
             }
         }
 
         public async Task DeleteMemberAsync(string boardId, string memberId)
         {
-            client.GetResponseByWebRequest($"https://api.trello.com/1/boards/{boardId}/members/{memberId}",
-                "DELETE");
+            await Task.Run(() => client.GetResponseByWebRequest($"https://api.trello.com/1/boards/{boardId}/members/{memberId}",
+                "DELETE"));
         }
     }
 }
