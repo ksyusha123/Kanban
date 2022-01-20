@@ -46,7 +46,7 @@ namespace Kanban
                     if (command.NeedBoard && chat is null)
                     {
                         await _client.SendTextMessageAsync(message.Chat.Id,
-                            "Не найдена доска проекта. Сначала введите /addboard или /help");
+                            "Не найдена доска проекта. Сначала введите /createboard, /addboard или /help");
                         return;
                     }
 

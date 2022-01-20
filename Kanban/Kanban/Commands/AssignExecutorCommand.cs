@@ -53,7 +53,7 @@ namespace Kanban
             }
 
             var executor = await _executorInteractor.GetExecutor(splitted[1].TrimStart('@'));
-            await app.CardInteractor.AssignCardExecutorAsync(card.Id, executor.Id);
+            await app.CardInteractor.AssignCardExecutorAsync(card.Id, executor.AppUsername);
             await botClient.SendTextMessageAsync(chat.Id, $"Теперь задачу {card.Name} должен делать {splitted[1]}");
         }
     }
