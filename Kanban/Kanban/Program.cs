@@ -14,7 +14,7 @@ namespace Kanban
 {
     internal static class Program
     {
-        private static void Main(string[] args) => ConfigureContainer().GetInstance<TelegramBot>();
+        private static void Main(string[] args) => ConfigureContainer().GetInstance<TelegramBot>().Start();
 
         private static Container ConfigureContainer()
         {
@@ -36,7 +36,7 @@ namespace Kanban
             container.Register(typeof(IRepository<>), typeof(Repository<>));
             container.Register<IDateTimeProvider, StandardDateTimeProvider>();
             container.Register<TelegramBot>();
-            container.RegisterInitializer<TelegramBot>(bot => bot.Start());
+            // container.RegisterInitializer<TelegramBot>(bot => bot.Start());
 
             container.Register<ChatInteractor>();
             container.Register<ExecutorInteractor>();
