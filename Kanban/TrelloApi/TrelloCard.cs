@@ -87,5 +87,12 @@ namespace TrelloApi
             await Task.Run(() =>  client.GetResponseByWebRequest($"https://api.trello.com/1/cards/{id}/actions/comments", "POST",
                 new[] {("Accept", "application/json")}, new[] {("text", $"{text}")}));
         }
+
+        public async Task<IEnumerable<TrelloAction>> GetAllCommentsAsync(string id)
+        {
+            return await Task.Run(() =>
+                client.DeserializeJson<IEnumerable<TrelloAction>>(client.GetResponseByWebRequest($"https://api.trello.com/1/cards/{id}/actions?filter=commentCard", "GET",
+                    new[] { ("Accept", "application/json") })));
+        }
     }
 }
