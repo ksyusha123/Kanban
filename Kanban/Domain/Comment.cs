@@ -17,5 +17,6 @@ namespace Domain
         public Executor Author { get; } = null!;
         public string Message { get; } = null!;
         public DateTime CreationTime { get; }
+        public override string ToString() => $"{Author.Id} [{CreationTime}]: {Message}";
     }
 }

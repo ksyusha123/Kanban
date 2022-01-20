@@ -68,6 +68,11 @@ namespace Application.Trello
         }
 
         public async Task AddComment(string cardId, string comment, string authorId) =>
-            await _trelloCardClient.AddCommentAsync(cardId, $"{comment}. Комментатор: {authorId}");
+            await _trelloCardClient.AddCommentAsync(cardId, $"{comment}. Автор: {authorId}");
+
+        public Task<IEnumerable<Comment>> GetComments(string cardId)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

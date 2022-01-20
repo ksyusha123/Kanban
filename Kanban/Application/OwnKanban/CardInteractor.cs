@@ -72,5 +72,11 @@ namespace Application.OwnKanban
             card.AddComment(new Comment(author, comment, _dateTimeProvider));
             await _cardRepository.UpdateAsync(card);
         }
+
+        public async Task<IEnumerable<Comment>> GetComments(string cardId)
+        {
+            var card = await _cardRepository.GetAsync(cardId);
+            return card.Comments;
+        }
     }
 }
