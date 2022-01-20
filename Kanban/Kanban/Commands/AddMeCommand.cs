@@ -24,17 +24,31 @@ namespace Kanban
         public string Help => "то же самое, что и /addmember, но не нужно указывать свой ник";
 
         public bool NeedBoard => true;
-        public bool NeedReply => true;
+        public bool NeedReply => false;
 
         public string Hint => "Недосаточно аргументов :(\n" +
                               "Ответьте этой командой на сообщение со своим ником в сторннем приложении\n" +
                               "Пример: user1";
         public async Task ExecuteAsync(Chat chat, Message message, TelegramBotClient botClient)
         {
-            var appId = message.ReplyToMessage.Text.Trim();
+            var reply = message.ReplyToMessage;
+            var app = _apps[chat.App];
             var sender = message.From.Username;
-            await _executorInteractor.AddExecutorAsync(appId, sender);
-            await _apps[chat.App].BoardInteractor.AddMemberAsync(chat.BoardId, appId);
+            string appId;
+            if (chat.App != App.OwnKanban)
+            {
+                if (reply is null)
+                {
+                    await botClient.SendTextMessageAsync(chat.Id, Hint);
+                    return;
+                }
+                appId = reply.Text.Trim();
+                await _executorInteractor.AddExecutorAsync(appId, sender);
+            }
+            else
+                appId = sender;
+            
+            await app.BoardInteractor.AddMemberAsync(chat.BoardId, appId);
             await botClient.SendTextMessageAsync(chat.Id, $"Добавил {sender} на доску");
         }
     }

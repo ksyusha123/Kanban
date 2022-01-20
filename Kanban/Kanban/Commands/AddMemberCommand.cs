@@ -27,24 +27,50 @@ namespace Kanban
         public bool NeedReply => true;
 
         public string Hint => "Недостаточно аргументов :(\n" +
-                              "Ответьте этой командой на сообщение с перечислением пар: ник_в_телеграме ник_в_приложении\n" +
+                              "Ответьте этой командой на сообщение с перечислением: ник_в_телеграме ник_в_приложении (если используете стороннее приложение)\n" +
                               "Пример:\n" +
                               "@user1 user1\n" +
                               "@user2 user2\n";
 
         public async Task ExecuteAsync(Chat chat, Message message, TelegramBotClient botClient)
         {
-            var membersToAdd = message.ReplyToMessage.Text.Split('\n', StringSplitOptions.RemoveEmptyEntries)
-                .Select(p => (p.Split(' ')[0].TrimStart('@'), p.Split(' ')[1]))
-                .ToList();
+            var app = _apps[chat.App];
             var boardInteractor = _apps[chat.App].BoardInteractor;
+            var membersToAdd = message.ReplyToMessage.Text.Split('\n', StringSplitOptions.RemoveEmptyEntries);
             var telegramUsernames = new List<string>();
-            foreach (var (telegramUsername, appUsername) in membersToAdd)
+            if (chat.App == App.OwnKanban)
             {
-                await _executorInteractor.AddExecutorAsync(appUsername, telegramUsername);
-                await boardInteractor.AddMemberAsync(chat.BoardId, appUsername);
-                telegramUsernames.Add(telegramUsername);
+                membersToAdd = membersToAdd.Select(p => p.TrimStart('@')).ToArray();
+                foreach (var member in membersToAdd)
+                {
+                    await _executorInteractor.AddExecutorAsync(member);
+                    await boardInteractor.AddMemberAsync(chat.BoardId, member);
+                    telegramUsernames.Add(member);
+                }
             }
+            else
+            {
+                List<(string, string)> membersWithIdToAdd;
+                try
+                {
+                    membersWithIdToAdd = membersToAdd
+                        .Select(p => (p.Split(' ')[0].TrimStart('@'), p.Split(' ')[1]))
+                        .ToList();
+                }
+                catch (IndexOutOfRangeException)
+                {
+                    await botClient.SendTextMessageAsync(chat.Id, Hint);
+                    return;
+                }
+            
+                foreach (var (telegramUsername, appUsername) in membersWithIdToAdd)
+                {
+                    await _executorInteractor.AddExecutorAsync(appUsername, telegramUsername);
+                    await boardInteractor.AddMemberAsync(chat.BoardId, appUsername);
+                    telegramUsernames.Add(telegramUsername);
+                }
+            }
+            
             await botClient.SendTextMessageAsync(chat.Id, $"Добавил {string.Join(' ', telegramUsernames)} на доску");
         }
     }

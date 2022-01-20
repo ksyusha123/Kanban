@@ -7,9 +7,9 @@ namespace Application.OwnKanban
     {
         public OwnKanbanApplication(IRepository<Board> boardRepository, IRepository<Card> cardRepository,
             IRepository<Executor> executorRepository, IRepository<Column> columnRepository,
-            IDateTimeProvider dateTimeProvider)
+            IDateTimeProvider dateTimeProvider, ExecutorInteractor executorInteractor)
         {
-            BoardInteractor = new BoardInteractor(boardRepository, cardRepository, columnRepository);
+            BoardInteractor = new BoardInteractor(boardRepository, cardRepository, columnRepository, executorInteractor);
             CardInteractor = new CardInteractor(cardRepository, executorRepository, boardRepository, dateTimeProvider);
         }
 

@@ -65,11 +65,11 @@ namespace Application.OwnKanban
             await _cardRepository.UpdateAsync(card);
         }
 
-        public async Task AddComment(string cardId, string comment, string executorId)
+        public async Task AddComment(string cardId, string comment, string authorId)
         {
             var card = await _cardRepository.GetAsync(cardId);
-            var executor = await _executorRepository.GetAsync(executorId);
-            card.AddComment(new Comment(executor, comment, _dateTimeProvider));
+            var author = await _executorRepository.GetAsync(authorId);
+            card.AddComment(new Comment(author, comment, _dateTimeProvider));
             await _cardRepository.UpdateAsync(card);
         }
     }

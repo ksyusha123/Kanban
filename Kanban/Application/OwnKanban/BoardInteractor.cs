@@ -10,11 +10,12 @@ namespace Application.OwnKanban
         private readonly IRepository<Board> _boardRepository;
         private readonly IRepository<Card> _cardRepository;
         private readonly IRepository<Column> _columnRepository;
+        private readonly ExecutorInteractor _executorInteractor;
 
         public BoardInteractor(IRepository<Board> boardRepository, IRepository<Card> cardRepository,
-            IRepository<Column> columnRepository) =>
-            (_boardRepository, _cardRepository, _columnRepository) =
-            (boardRepository, cardRepository, columnRepository);
+            IRepository<Column> columnRepository, ExecutorInteractor executorInteractor) =>
+            (_boardRepository, _cardRepository, _columnRepository, _executorInteractor) =
+            (boardRepository, cardRepository, columnRepository, executorInteractor);
 
         public async Task<Board> CreateBoardAsync(string name)
         {
@@ -59,10 +60,8 @@ namespace Application.OwnKanban
         public async Task<IEnumerable<Column>> GetAllColumnsAsync(string boardId) =>
             (await _boardRepository.GetAsync(boardId)).Columns;
 
-        public Task AddMemberAsync(string boardId, string userId)
-        {
-            throw new System.NotImplementedException();
-        }
+        public async Task AddMemberAsync(string boardId, string userId) => 
+            await _executorInteractor.AddExecutorAsync(userId);
 
         public async Task DeleteBoardAsync(string boardId)
         {
