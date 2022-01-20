@@ -13,11 +13,13 @@ namespace Application.Trello
         private readonly TrelloCardClient _trelloCardClient;
         private readonly TrelloBoardClient _trelloBoardClient;
         private readonly TrelloListClient _trelloListClient;
+        private readonly TrelloMemberClient _trelloMemberClient;
         private readonly IDateTimeProvider _dateTimeProvider;
 
         public TrelloCardInteractor(TrelloClient trelloClient, IDateTimeProvider dateTimeProvider)
         {
             _dateTimeProvider = dateTimeProvider;
+            _trelloMemberClient = new TrelloMemberClient(trelloClient);
             _trelloBoardClient = new TrelloBoardClient(trelloClient);
             _trelloCardClient = new TrelloCardClient(trelloClient);
             _trelloListClient = new TrelloListClient(trelloClient);
@@ -70,8 +72,17 @@ namespace Application.Trello
         public async Task AddComment(string cardId, string comment, string authorId) =>
             await _trelloCardClient.AddCommentAsync(cardId, $"{comment}. Автор: {authorId}");
 
-        public async Task<IEnumerable<Comment>> GetComments(string cardId) =>
-            (await _trelloCardClient.GetAllCommentsAsync(cardId))
-            .Select(a => new Comment(new Executor(a.IdMemberCreator), a.Data.Text, _dateTimeProvider));
+        public async Task<IEnumerable<Comment>> GetComments(string cardId)
+        {
+            var trelloComments = await _trelloCardClient.GetAllCommentsAsync(cardId);
+            var comments = new List<Comment>();
+            foreach (var trelloComment in trelloComments)
+            {
+                var author = (await _trelloMemberClient.LoadAsync(trelloComment.IdMemberCreator)).Username;
+                comments.Add(new Comment(new Executor(author), trelloComment.Data.Text, _dateTimeProvider));
+            }
+
+            return comments;
+        }
     }
 }
