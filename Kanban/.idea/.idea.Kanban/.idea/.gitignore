@@ -7,7 +7,7 @@
 /modules.xml
 /.idea.Kanban.iml
 # Datasource local storage ignored files
-/../../../../../../../../../../:\Users\Пользователь\OneDrive\Рабочий стол\Kanban\Kanban\.idea\.idea.Kanban\.idea/dataSources/
+/dataSources/
 /dataSources.local.xml
 # Editor-based HTTP Client requests
 /httpRequests/

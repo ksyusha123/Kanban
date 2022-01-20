@@ -22,7 +22,7 @@ namespace Kanban
         public string Hint => "Недостаточно аргументов :(\n" +
                               "Ответьте этой командой на сообщение с названием карточки\n" +
                               "Пример: повторить матан";
-        public async Task ExecuteAsync(Chat chat, Message message, TelegramBotClient botClient)
+        public async Task ExecuteAsync(Chat chat, Message message, ITelegramBotClient botClient)
         {
             var cardName = message.ReplyToMessage.Text.Trim();
             var cardInteractor = _apps[chat.App].CardInteractor;
