@@ -34,7 +34,7 @@ Telegram бот для упрощения и ускорения взаимоде
 * Добавление новых досок для взаимодействеия, помимо Trello  
 
 ## Разделение на слои  
-![alt tag](https://ibb.co/xC3zk9Q)
+![alt tag](https://i.postimg.cc/2jKJWxfK/image.png)
 
 &nbsp;
 
