@@ -14,4 +14,14 @@
       <ProjectReference Include="..\Infrastructure\Infrastructure.csproj" />
     </ItemGroup>
 
+    <ItemGroup>
+      <Folder Include="Board" />
+      <Folder Include="Card" />
+      <Folder Include="Executor" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <Compile Remove="Card\Column.cs" />
+    </ItemGroup>
+
 </Project>

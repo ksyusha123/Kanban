@@ -12,5 +12,7 @@ namespace Application
         Task ChangeColumnAsync(string cardId, Column column);
         Task<IEnumerable<Card>> GetCardsAsync(IEnumerable<string> nameTokens, string boardId);
         Task<Card> GetCard(string name, string boardId);
+        Task AddComment(string cardId, string comment, string authorId);
+        Task<IEnumerable<Comment>> GetComments(string cardId);
     }
 }

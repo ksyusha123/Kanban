@@ -11,7 +11,10 @@ namespace Application
             _executorRepository = executorRepository;
 
         public async Task AddExecutorAsync(string appUsername, string telegramUsername) => 
-            await _executorRepository.AddAsync(new Executor(telegramUsername, "", appUsername));
+            await _executorRepository.AddAsync(new Executor(telegramUsername, appUsername));
+        
+        public async Task AddExecutorAsync(string telegramUsername) => 
+            await _executorRepository.AddAsync(new Executor(telegramUsername));
 
         public async Task<Executor> GetExecutor(string telegramId) => 
             await _executorRepository.GetAsync(telegramId);

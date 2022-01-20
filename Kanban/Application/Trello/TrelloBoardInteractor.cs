@@ -24,7 +24,7 @@ namespace Application.Trello
 
         public async Task<Board> CreateBoardAsync(string name)
         {
-            var trelloBoard = await _trelloBoardClient.CreatedAsync(name);
+            var trelloBoard = await _trelloBoardClient.CreateAsync(name);
             var columns = (await _trelloBoardClient.GetAllListsAsync(trelloBoard.Id))
                 .Select(t => new Column(t.Id, t.Name, t.Pos))
                 .ToList();

@@ -12,8 +12,14 @@ namespace Kanban
     public class CommentCardCommand : ICommand
     {
         private readonly IDictionary<App, IApplication> _apps;
+        private readonly ExecutorInteractor _executorInteractor;
 
-        public CommentCardCommand(IEnumerable<IApplication> apps) => _apps = apps.ToDictionary(a => a.App);
+        public CommentCardCommand(IEnumerable<IApplication> apps, ExecutorInteractor executorInteractor)
+        {
+            _executorInteractor = executorInteractor;
+            _apps = apps.ToDictionary(a => a.App);
+        }
+
         public string Name => "/comment";
         public string Help => "оставляет комментарий к задаче";
         public bool NeedBoard => true;
@@ -36,7 +42,8 @@ namespace Kanban
             }
 
             var app = _apps[chat.App];
-            var card = await app.CardInteractor.GetCard(splitted[0], chat.BoardId);
+            var cardName = splitted[0];
+            var card = await app.CardInteractor.GetCard(cardName, chat.BoardId);
             if (card is null)
             {
                 await botClient.SendTextMessageAsync(chat.Id,
@@ -44,6 +51,10 @@ namespace Kanban
                     "Воспользуйтесь командой /findcard, чтобы уточнить запрос");
                 return;
             }
+
+            var comment = splitted[1].Trim();
+            await _apps[chat.App].CardInteractor.AddComment(card.Id, comment, message.From.Username);
+            await botClient.SendTextMessageAsync(chat.Id, $"Добавил комментарий {comment} к карточке {cardName}");
         }
     }
 }
