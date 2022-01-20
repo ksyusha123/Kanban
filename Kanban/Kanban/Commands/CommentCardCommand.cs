@@ -42,12 +42,12 @@ namespace Kanban
             }
 
             var app = _apps[chat.App];
-            var cardName = splitted[0];
+            var cardName = splitted[0].Trim();
             var card = await app.CardInteractor.GetCard(cardName, chat.BoardId);
             if (card is null)
             {
                 await botClient.SendTextMessageAsync(chat.Id,
-                    $"Я не нашёл карточку {splitted[0]} :(\n" +
+                    $"Я не нашёл карточку {cardName} :(\n" +
                     "Воспользуйтесь командой /findcard, чтобы уточнить запрос");
                 return;
             }
