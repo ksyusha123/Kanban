@@ -8,5 +8,7 @@ namespace TrelloApi
     {
         public TrelloBoard Board { get; set; }
         public TrelloList List { get; set; }
+        public TrelloCard Card { get; set; }
+        public string Text { get; set; }
     }
 }
