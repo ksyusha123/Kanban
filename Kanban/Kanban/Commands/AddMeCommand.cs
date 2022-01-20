@@ -29,7 +29,7 @@ namespace Kanban
         public string Hint => "Недосаточно аргументов :(\n" +
                               "Ответьте этой командой на сообщение со своим ником в сторннем приложении\n" +
                               "Пример: user1";
-        public async Task ExecuteAsync(Chat chat, Message message, TelegramBotClient botClient)
+        public async Task ExecuteAsync(Chat chat, Message message, ITelegramBotClient botClient)
         {
             var reply = message.ReplyToMessage;
             var app = _apps[chat.App];

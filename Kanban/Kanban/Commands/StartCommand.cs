@@ -28,7 +28,7 @@ namespace Kanban
                                "/createboard, чтобы создать новую, или же наберите команду /help, чтобы узнать " +
                                "о прочих возможностях";
 
-        public async Task ExecuteAsync(Chat chat, Message message, TelegramBotClient botClient) =>
+        public async Task ExecuteAsync(Chat chat, Message message, ITelegramBotClient botClient) =>
             await botClient.SendTextMessageAsync(message.Chat.Id, Text);
     }
 }

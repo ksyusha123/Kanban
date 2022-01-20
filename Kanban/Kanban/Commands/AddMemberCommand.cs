@@ -32,7 +32,7 @@ namespace Kanban
                               "@user1 user1\n" +
                               "@user2 user2\n";
 
-        public async Task ExecuteAsync(Chat chat, Message message, TelegramBotClient botClient)
+        public async Task ExecuteAsync(Chat chat, Message message, ITelegramBotClient botClient)
         {
             var app = _apps[chat.App];
             var boardInteractor = _apps[chat.App].BoardInteractor;

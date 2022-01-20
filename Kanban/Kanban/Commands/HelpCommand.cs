@@ -20,7 +20,7 @@ namespace Kanban
 
         private readonly string _text;
 
-        public async Task ExecuteAsync(Chat chat, Message message, TelegramBotClient botClient) =>
+        public async Task ExecuteAsync(Chat chat, Message message, ITelegramBotClient botClient) =>
             await botClient.SendTextMessageAsync(message.Chat.Id, _text);
     }
 }

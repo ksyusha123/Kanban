@@ -29,7 +29,7 @@ namespace Kanban
                               "матан\n" +
                               "Готово";
 
-        public async Task ExecuteAsync(Chat chat, Message message, TelegramBotClient botClient)
+        public async Task ExecuteAsync(Chat chat, Message message, ITelegramBotClient botClient)
         {
             var splitted = message.ReplyToMessage.Text.Split("\n");
             if (splitted.Length < 2)

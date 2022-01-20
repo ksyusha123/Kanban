@@ -24,7 +24,7 @@ namespace Kanban
                               "Ответьте этой командой на название карточки\n" +
                               "Пример: повторить матан";
 
-        public async Task ExecuteAsync(Chat chat, Message message, TelegramBotClient botClient)
+        public async Task ExecuteAsync(Chat chat, Message message, ITelegramBotClient botClient)
         {
             var cardName = message.ReplyToMessage.Text.Trim();
             var card = await _apps[chat.App].CardInteractor.CreateCardAsync(cardName, chat.BoardId);

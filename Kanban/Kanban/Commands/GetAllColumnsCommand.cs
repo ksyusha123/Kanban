@@ -20,7 +20,7 @@ namespace Kanban
         public bool NeedReply => false;
         public string Hint => null;
 
-        public async Task ExecuteAsync(Chat chat, Message message, TelegramBotClient botClient)
+        public async Task ExecuteAsync(Chat chat, Message message, ITelegramBotClient botClient)
         {
             var columns = await _apps[chat.App].BoardInteractor.GetAllColumnsAsync(chat.BoardId);
             await botClient.SendTextMessageAsync(chat.Id,

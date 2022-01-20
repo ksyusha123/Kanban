@@ -25,7 +25,7 @@ namespace Kanban
                               "которую вы хотите удалить\n" +
                               "Пример: повторить";
 
-        public async Task ExecuteAsync(Chat chat, Message message, TelegramBotClient botClient)
+        public async Task ExecuteAsync(Chat chat, Message message, ITelegramBotClient botClient)
         {
             var cardName = message.ReplyToMessage.Text.Trim();
             var app = _apps[chat.App];
