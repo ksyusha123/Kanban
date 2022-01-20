@@ -38,16 +38,17 @@ namespace Kanban
                 return;
             }
 
+            var cardName = splitted[0].Trim();
             var app = _apps[chat.App];
-            var card = await app.CardInteractor.GetCard(splitted[0], chat.BoardId);
+            var card = await app.CardInteractor.GetCard(cardName, chat.BoardId);
             if (card is null)
             {
                 await botClient.SendTextMessageAsync(chat.Id,
-                    $"Я не нашёл карточку {splitted[0]} :(\n" +
+                    $"Я не нашёл карточку {cardName} :(\n" +
                     "Воспользуйтесь командой /findcard, чтобы уточнить запрос");
                 return;
             }
-            var columnName = splitted[1];
+            var columnName = splitted[1].Trim();
             var column = (await app.BoardInteractor.GetAllColumnsAsync(chat.BoardId))
                 .FirstOrDefault(c => c.Name == columnName);
             if (column is null)
