@@ -26,7 +26,7 @@ namespace Kanban
                               "символ переноса строки\n" +
                               "Пример:\nПервая колонка\nВторая колонка\nТретья колонка";
 
-        public async Task ExecuteAsync(Chat chat, Message message, TelegramBotClient botClient)
+        public async Task ExecuteAsync(Chat chat, Message message, ITelegramBotClient botClient)
         {
             var newColumns = message.ReplyToMessage.Text
                 .Split('\n', StringSplitOptions.RemoveEmptyEntries)

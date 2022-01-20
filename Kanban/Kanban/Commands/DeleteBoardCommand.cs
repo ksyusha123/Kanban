@@ -28,7 +28,7 @@ namespace Kanban
         public bool NeedBoard => true;
         public bool NeedReply => false;
         public string Hint { get; }
-        public async Task ExecuteAsync(Chat chat, Message message, TelegramBotClient botClient)
+        public async Task ExecuteAsync(Chat chat, Message message, ITelegramBotClient botClient)
         {
             var app = _apps[chat.App];
             try

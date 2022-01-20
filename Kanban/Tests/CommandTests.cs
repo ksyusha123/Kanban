@@ -1,4 +1,5 @@
-﻿using Application.OwnKanban;
+﻿using Application;
+using Application.OwnKanban;
 using Domain;
 using Infrastructure;
 using Moq;
@@ -16,7 +17,7 @@ namespace Tests
         protected TestRepository<Executor> ExecutorRepository;
         protected TestRepository<Column> ColumnRepository;
         protected OwnKanbanApplication[] Apps;
-        protected Mock<TelegramBotClient> Client;
+        protected Mock<ITelegramBotClient> Client;
         protected Mock<Message> Message;
         protected string _boardId;
         protected Chat _chat;
@@ -31,9 +32,9 @@ namespace Tests
             Apps = new[]
             {
                 new OwnKanbanApplication(BoardRepository, CardRepository, ExecutorRepository, ColumnRepository,
-                    new StandardDateTimeProvider())
+                    new StandardDateTimeProvider(), new ExecutorInteractor(ExecutorRepository))
             };
-            Client = new Mock<TelegramBotClient>();
+            Client = new Mock<ITelegramBotClient>();
             Message = new Mock<Message>();
 
             _boardId = "1";

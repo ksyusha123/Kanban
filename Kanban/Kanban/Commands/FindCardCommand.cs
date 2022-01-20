@@ -24,7 +24,7 @@ namespace Kanban
                               "Ответьте этой командой на сообщение с частью названия карточки\n" +
                               "Пример: матан";
 
-        public async Task ExecuteAsync(Chat chat, Message message, TelegramBotClient botClient)
+        public async Task ExecuteAsync(Chat chat, Message message, ITelegramBotClient botClient)
         {
             var nameTokens = message.ReplyToMessage.Text.Split(' ', StringSplitOptions.RemoveEmptyEntries)
                 .Select(s => s.Trim());

@@ -32,7 +32,7 @@ namespace Kanban
                               "Пример:\n" +
                               "пофиксить changecolumns\n" +
                               "@Themplarer";
-        public async Task ExecuteAsync(Chat chat, Message message, TelegramBotClient botClient)
+        public async Task ExecuteAsync(Chat chat, Message message, ITelegramBotClient botClient)
         {
             var splitted = message.ReplyToMessage.Text.Split('\n')
                 .Select(t => t.Trim())

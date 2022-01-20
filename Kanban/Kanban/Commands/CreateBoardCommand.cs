@@ -30,7 +30,7 @@ namespace Kanban
                               "Ответьте этой командой на сообщение вида: приложение название_доски\n" +
                               "Пример: trello проект";
 
-        public async Task ExecuteAsync(Chat chat, Message message, TelegramBotClient botClient)
+        public async Task ExecuteAsync(Chat chat, Message message, ITelegramBotClient botClient)
         {
             if (chat is { })
             {

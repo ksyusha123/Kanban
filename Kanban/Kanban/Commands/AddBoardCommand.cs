@@ -29,7 +29,7 @@ namespace Kanban
                               "Ответьте этой командой на сообщение вида: приложение идентификатор_доски\n" +
                               "Пример: trello 123456789101112131415160";
 
-        public async Task ExecuteAsync(Chat chat1, Message message, TelegramBotClient botClient)
+        public async Task ExecuteAsync(Chat chat1, Message message, ITelegramBotClient botClient)
         {
             var chatId = message.Chat.Id.ToString();
             var chat = await _chatInteractor.GetChatAsync(chatId);

@@ -24,7 +24,7 @@ namespace Kanban
                               "Ответьте этой командой на сообщение с названием колонки\n" +
                               "Пример: ToDo";
 
-        public async Task ExecuteAsync(Chat chat, Message message, TelegramBotClient botClient)
+        public async Task ExecuteAsync(Chat chat, Message message, ITelegramBotClient botClient)
         {
             var columnName = message.ReplyToMessage.Text.Trim();
             var board = await _apps[chat.App].BoardInteractor.GetBoardAsync(chat.BoardId);

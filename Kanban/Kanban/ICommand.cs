@@ -13,6 +13,6 @@ namespace Kanban
         bool NeedReply { get; }
         string Hint { get; }
 
-        Task ExecuteAsync(Chat chat, Message message, TelegramBotClient botClient);
+        Task ExecuteAsync(Chat chat, Message message, ITelegramBotClient botClient);
     }
 }

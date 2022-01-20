@@ -32,7 +32,7 @@ namespace Kanban
                               "Пример:\n" +
                               "сделать методы асинхронными\n" +
                               "через Task.Run()";
-        public async Task ExecuteAsync(Chat chat, Message message, TelegramBotClient botClient)
+        public async Task ExecuteAsync(Chat chat, Message message, ITelegramBotClient botClient)
         {
             var splitted = message.ReplyToMessage.Text.Split('\n');
             if (splitted.Length < 2)
