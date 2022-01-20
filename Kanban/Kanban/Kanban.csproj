@@ -30,8 +30,4 @@
       </None>
     </ItemGroup>
 
-    <ItemGroup>
-      <Compile Remove="DesignTimeDbContextFactory.cs" />
-    </ItemGroup>
-
 </Project>

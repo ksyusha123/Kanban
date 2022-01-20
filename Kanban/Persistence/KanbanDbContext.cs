@@ -19,10 +19,12 @@ namespace Persistence
             modelBuilder.Entity<Card>().Property(c => c.ColumnId);
             modelBuilder.Entity<Card>().HasMany(c => c.Comments).WithOne();
             modelBuilder.Entity<Card>().Property(c => c.CreationTime);
+            
+            modelBuilder.Entity<Card>().HasMany<Comment>("_comments").WithOne();
+            modelBuilder.Entity<Card>().Navigation("_comments").AutoInclude();
 
             modelBuilder.Entity<Executor>().HasKey(e => e.Id);
             modelBuilder.Entity<Executor>().Property(e => e.Id).ValueGeneratedNever();
-            modelBuilder.Entity<Executor>().Property(e => e.Name).HasMaxLength(100);
             modelBuilder.Entity<Executor>().Property(e => e.AppUsername);
 
             modelBuilder.Entity<Column>().HasKey(c => c.Id);
